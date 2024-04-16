@@ -1,0 +1,24 @@
+Messages:
+  No_Permission: "&4You don't have permission to perform this command!"
+  Enable_Glow: "&aNow you are glowing!"
+  Disable_Glow: "&cYou aren't glowing anymore!"
+  Glow_Status_False: "&cYou are not glowing ❌"
+  Glow_Status_True: "&a✔ Glowing! &7Click here to disable"
+
+Inventory:
+  Tittle: "&0Select a glow color!"
+  Items:
+    Aqua_Glow_Name: "&3Aqua"
+    Red_Glow_Name: "&4Red"
+    Blue_Glow_Name: "&1Blue"
+    Lime_Glow_Name: "&2Lime"
+    Pink_Glow_Name: "&dPink"
+    Black_Glow_Name: "&8Black"
+    White_Glow_Name: "&fWhite"
+    Color_Lore: "&7Click me to start glowing!"
+    Fill_Material_Name: "&7Click on a color!"
+    Player_Head:
+      Name: "&7Your glowing status:"
+      Lore: "&f%glow_status%"
+
+

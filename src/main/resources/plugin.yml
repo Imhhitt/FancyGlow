@@ -1,0 +1,12 @@
+name: FancyGlow
+author: hhitt
+version: '1.0'
+main: hhitt.org.example.fancyglow.FancyGlow
+api-version: '1.20'
+commands:
+  menu:
+    description: open a menu
+    usage: /<command>w
+  glow:
+    description: enable or disable your glow mode
+    usage: /<command>
