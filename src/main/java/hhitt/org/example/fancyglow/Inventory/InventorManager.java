@@ -46,55 +46,125 @@ public class InventorManager implements CommandExecutor {
 
                 // Botones
                 ItemStack aqua = new ItemStack(Material.LEATHER_CHESTPLATE);
-                ItemStack red = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack darkAqua = new ItemStack(Material.LEATHER_CHESTPLATE);
                 ItemStack blue = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack darkBlue = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack red = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack darkRed = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack yellow = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack gold = new ItemStack(Material.LEATHER_CHESTPLATE);
                 ItemStack lime = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack green = new ItemStack(Material.LEATHER_CHESTPLATE);
                 ItemStack pink = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack purple = new ItemStack(Material.LEATHER_CHESTPLATE);
                 ItemStack black = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack gray = new ItemStack(Material.LEATHER_CHESTPLATE);
+                ItemStack darkGray = new ItemStack(Material.LEATHER_CHESTPLATE);
                 ItemStack white = new ItemStack(Material.LEATHER_CHESTPLATE);
                 ItemStack fill = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
                 // Datos de botones.
                 LeatherArmorMeta aquaMeta = (LeatherArmorMeta) aqua.getItemMeta();
-                LeatherArmorMeta redMeta = (LeatherArmorMeta) red.getItemMeta();
+                LeatherArmorMeta darkAquaMeta = (LeatherArmorMeta) darkAqua.getItemMeta();
                 LeatherArmorMeta blueMeta = (LeatherArmorMeta) blue.getItemMeta();
+                LeatherArmorMeta darkBlueMeta = (LeatherArmorMeta) darkBlue.getItemMeta();
+                LeatherArmorMeta redMeta = (LeatherArmorMeta) red.getItemMeta();
+                LeatherArmorMeta darkRedMeta = (LeatherArmorMeta) darkRed.getItemMeta();
+                LeatherArmorMeta yellowMeta = (LeatherArmorMeta) yellow.getItemMeta();
+                LeatherArmorMeta goldMeta = (LeatherArmorMeta) gold.getItemMeta();
                 LeatherArmorMeta limeMeta = (LeatherArmorMeta) lime.getItemMeta();
+                LeatherArmorMeta greenMeta = (LeatherArmorMeta) green.getItemMeta();
                 LeatherArmorMeta pinkMeta = (LeatherArmorMeta) pink.getItemMeta();
+                LeatherArmorMeta purpleMeta = (LeatherArmorMeta) purple.getItemMeta();
                 LeatherArmorMeta blackMeta = (LeatherArmorMeta) black.getItemMeta();
+                LeatherArmorMeta darkGrayMeta = (LeatherArmorMeta) darkGray.getItemMeta();
+                LeatherArmorMeta grayMeta = (LeatherArmorMeta) gray.getItemMeta();
                 LeatherArmorMeta whiteMeta = (LeatherArmorMeta) white.getItemMeta();
                 ItemMeta fillMeta = fill.getItemMeta();
 
                 // Ocultar atributos y poner lore
+                assert aquaMeta != null;
                 aquaMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 aquaMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 aquaMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
-                redMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-                redMeta.addItemFlags(ItemFlag.HIDE_DYE);
-                redMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                assert darkAquaMeta != null;
+                darkAquaMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                darkAquaMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                darkAquaMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
+                assert blueMeta != null;
                 blueMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 blueMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 blueMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
+                assert darkBlueMeta != null;
+                darkBlueMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                darkBlueMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                darkBlueMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert redMeta != null;
+                redMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                redMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                redMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert darkRedMeta != null;
+                darkRedMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                darkRedMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                darkRedMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert yellowMeta != null;
+                yellowMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                yellowMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                yellowMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert goldMeta != null;
+                goldMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                goldMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                goldMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert limeMeta != null;
                 limeMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 limeMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 limeMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
+                assert greenMeta != null;
+                greenMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                greenMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                greenMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert pinkMeta != null;
                 pinkMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 pinkMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 pinkMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
+                assert purpleMeta != null;
+                purpleMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                purpleMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                purpleMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert blackMeta != null;
                 blackMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 blackMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 blackMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
+                assert darkGrayMeta != null;
+                darkGrayMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                darkGrayMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                darkGrayMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert grayMeta != null;
+                grayMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                grayMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                grayMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
+                        plugin.getMainConfigManager().getColorLore())));
+                assert whiteMeta != null;
                 whiteMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 whiteMeta.addItemFlags(ItemFlag.HIDE_DYE);
                 whiteMeta.setLore(Collections.singletonList(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getColorLore())));
 
-                // Nombres de los destellos
+                // Nombres de los destellos y color del armor
                 aquaMeta.setDisplayName(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getAquaName()));
                 aquaMeta.setColor(Color.AQUA);
 
@@ -116,6 +186,7 @@ public class InventorManager implements CommandExecutor {
                 whiteMeta.setDisplayName(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getWhiteName()));
                 whiteMeta.setColor(Color.WHITE);
 
+                assert fillMeta != null;
                 fillMeta.setDisplayName(MessageUtils.getColoredMessages(
                         plugin.getMainConfigManager().getFillMaterialName()));
 
