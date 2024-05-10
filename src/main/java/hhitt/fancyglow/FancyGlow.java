@@ -1,6 +1,7 @@
 package hhitt.fancyglow;
 
 import hhitt.fancyglow.commands.MainCommand;
+import hhitt.fancyglow.commands.SubcommandTabSuggestion;
 import hhitt.fancyglow.config.MainConfigManager;
 import hhitt.fancyglow.config.ReloadConfigCommand;
 import hhitt.fancyglow.listeners.HeadClickListener;
@@ -24,6 +25,7 @@ public final class FancyGlow extends JavaPlugin {
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
+        getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
         Objects.requireNonNull(this.getCommand("glowreload")).setExecutor(new ReloadConfigCommand(this));
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);

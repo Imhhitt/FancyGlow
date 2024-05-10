@@ -3,6 +3,7 @@ hhitt\fancyglow\commands\MainCommand.class
 hhitt\fancyglow\listeners\PlayerQuitListener.class
 hhitt\fancyglow\utils\IsGlowingVariable.class
 hhitt\fancyglow\utils\MessageUtils.class
+hhitt\fancyglow\commands\SubcommandTabSuggestion.class
 hhitt\fancyglow\utils\PlayerGlowingColor.class
 hhitt\fancyglow\config\MainConfig.class
 hhitt\fancyglow\listeners\MenuClickListener.class

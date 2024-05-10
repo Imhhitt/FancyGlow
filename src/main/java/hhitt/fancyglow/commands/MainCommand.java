@@ -56,7 +56,11 @@ public class MainCommand implements CommandExecutor {
                         team.removeEntry(player.getName());
                     }
                 }
-                sender.sendMessage(MessageUtils.getColoredMessages(this.plugin.getMainConfigManager().getDisableGlow()));
+                if(!player.isGlowing()){
+                    player.sendMessage(MessageUtils.getColoredMessages(plugin.getConfig().getString("Messages.Not_Glowing")));
+                }else{
+                    player.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getDisableGlow()));
+                }
                 ((Player) sender).setGlowing(false);
                 return true;
             }
