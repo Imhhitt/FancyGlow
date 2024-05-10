@@ -1,4 +1,4 @@
-package hhitt.org.example.fancyglow.Utils;
+package hhitt.fancyglow.utils;
 
 import org.bukkit.ChatColor;
 

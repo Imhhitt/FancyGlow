@@ -1,7 +1,7 @@
 name: FancyGlow
 author: hhitt
 version: '1.1'
-main: hhitt.org.example.fancyglow.FancyGlow
+main: hhitt.fancyglow.FancyGlow
 api-version: '1.20'
 softdepend: [PlaceholderAPI]
 commands:

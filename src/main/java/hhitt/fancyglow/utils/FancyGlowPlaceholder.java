@@ -1,6 +1,6 @@
-package hhitt.org.example.fancyglow.Utils;
+package hhitt.fancyglow.utils;
 
-import hhitt.org.example.fancyglow.FancyGlow;
+import hhitt.fancyglow.FancyGlow;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;

@@ -1,8 +1,8 @@
-package hhitt.org.example.fancyglow.Inventory;
+package hhitt.fancyglow.inventory;
 
-import hhitt.org.example.fancyglow.FancyGlow;
-import hhitt.org.example.fancyglow.Utils.IsGlowingVariable;
-import hhitt.org.example.fancyglow.Utils.MessageUtils;
+import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.utils.IsGlowingVariable;
+import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,11 +26,11 @@ public class CreatingInventory implements InventoryHolder {
 
     public CreatingInventory(FancyGlow plugin, Player sender){
         this.plugin = plugin;
-        this.inventory = plugin.getServer().createInventory(this, 54,
+        this.inventory = plugin.getServer().createInventory(this, 45,
                 MessageUtils.getColoredMessages(plugin.getMainConfigManager().getInventoryTittle()));
 
         ItemStack playerHead = getPlayerHead((Player) sender);
-        inventory.setItem(49, playerHead);
+        inventory.setItem(40, playerHead);
 
         // Botones
         ItemStack red = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -282,7 +282,7 @@ public class CreatingInventory implements InventoryHolder {
         inventory.setItem(28, fill);
         inventory.setItem(29, fill);
         inventory.setItem(30, fill);
-        inventory.setItem(31, rainbow);
+        inventory.setItem(31, fill);
         inventory.setItem(32, fill);
         inventory.setItem(33, fill);
         inventory.setItem(34, fill);
@@ -291,19 +291,11 @@ public class CreatingInventory implements InventoryHolder {
         inventory.setItem(37, fill);
         inventory.setItem(38, fill);
         inventory.setItem(39, fill);
-        inventory.setItem(40, fill);
         inventory.setItem(41, fill);
         inventory.setItem(42, fill);
         inventory.setItem(43, fill);
         inventory.setItem(44, fill);
-        inventory.setItem(45, fill);
-        inventory.setItem(46, fill);
-        inventory.setItem(47, fill);
-        inventory.setItem(48, fill);
-        inventory.setItem(50, fill);
-        inventory.setItem(51, fill);
-        inventory.setItem(52, fill);
-        inventory.setItem(53, fill);
+
     }
 
     @Override

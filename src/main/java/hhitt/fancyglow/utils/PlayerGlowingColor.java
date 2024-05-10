@@ -1,6 +1,6 @@
-package hhitt.org.example.fancyglow.Utils;
+package hhitt.fancyglow.utils;
 
-import hhitt.org.example.fancyglow.FancyGlow;
+import hhitt.fancyglow.FancyGlow;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;

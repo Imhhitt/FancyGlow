@@ -1,7 +1,7 @@
-package hhitt.org.example.fancyglow.Config;
+package hhitt.fancyglow.config;
 
-import hhitt.org.example.fancyglow.FancyGlow;
-import hhitt.org.example.fancyglow.Utils.MessageUtils;
+import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

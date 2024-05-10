@@ -1,6 +1,6 @@
-package hhitt.org.example.fancyglow.Utils;
+package hhitt.fancyglow.utils;
 
-import hhitt.org.example.fancyglow.FancyGlow;
+import hhitt.fancyglow.FancyGlow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;

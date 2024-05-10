@@ -1,9 +1,21 @@
+# ______                        _____ _
+# |  ____|                      / ____| |
+# | |__ __ _ _ __   ___ _   _  | |  __| | _____      __
+# |  __/ _` | '_ \ / __| | | | | | |_ | |/ _ \ \ /\ / /
+# | | | (_| | | | | (__| |_| | | |__| | | (_) \ V  V /
+# |_|  \__,_|_| |_|\___|\__, |  \_____|_|\___/ \_/\_/
+# Useful links:
+# Documentation: https://hhitt-1.gitbook.io/fancy-glow-documentation
+# Discord for support, suggestions & more: https://discord.com/invite/W7R3mPXzQ7
+
 Messages:
   # All Fancy Glow Messages translation.
   No_Permission: "&4You don't have permission to perform this!"
   Reload_Message: "&bPlugin configuration file reloaded successfully!"
   Enable_Glow: "&aNow you are glowing!"
   Disable_Glow: "&cYou aren't glowing anymore!"
+  Disable_Glow_Others: "You have disabled glow of %player_name%"
+  Not_Glowing: "&cYou are not glowing!"
 
   # Message that player gets when enter on a disabled world
   Disabled_World_Message: "&cIn this world glow is disabled!"

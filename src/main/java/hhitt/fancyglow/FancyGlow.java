@@ -1,12 +1,15 @@
-package hhitt.org.example.fancyglow;
+package hhitt.fancyglow;
 
-import hhitt.org.example.fancyglow.Config.MainConfigManager;
-import hhitt.org.example.fancyglow.Config.ReloadConfigCommand;
-import hhitt.org.example.fancyglow.Inventory.InventorManager;
-import hhitt.org.example.fancyglow.Listeners.*;
-import hhitt.org.example.fancyglow.Utils.FancyGlowPlaceholder;
-import hhitt.org.example.fancyglow.Utils.IsGlowingVariable;
-import hhitt.org.example.fancyglow.Utils.PlayerGlowingColor;
+import hhitt.fancyglow.commands.MainCommand;
+import hhitt.fancyglow.config.MainConfigManager;
+import hhitt.fancyglow.config.ReloadConfigCommand;
+import hhitt.fancyglow.listeners.HeadClickListener;
+import hhitt.fancyglow.listeners.MenuClickListener;
+import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
+import hhitt.fancyglow.listeners.PlayerQuitListener;
+import hhitt.fancyglow.utils.FancyGlowPlaceholder;
+import hhitt.fancyglow.utils.IsGlowingVariable;
+import hhitt.fancyglow.utils.PlayerGlowingColor;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -15,13 +18,13 @@ import java.util.Objects;
 public final class FancyGlow extends JavaPlugin {
 
     private MainConfigManager mainConfigManager;
-    private PlayerGlowingColor playerGlowingColor;
+
     @Override
     public void onEnable() {
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
-        playerGlowingColor = new PlayerGlowingColor(this);
-        Objects.requireNonNull(getCommand("glow")).setExecutor(new InventorManager(this));
+        PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
+        Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
         Objects.requireNonNull(this.getCommand("glowreload")).setExecutor(new ReloadConfigCommand(this));
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);

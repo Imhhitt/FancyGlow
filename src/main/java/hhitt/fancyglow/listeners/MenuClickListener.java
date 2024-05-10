@@ -1,7 +1,7 @@
-package hhitt.org.example.fancyglow.Listeners;
-import hhitt.org.example.fancyglow.FancyGlow;
-import hhitt.org.example.fancyglow.Inventory.CreatingInventory;
-import hhitt.org.example.fancyglow.Utils.MessageUtils;
+package hhitt.fancyglow.listeners;
+import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.inventory.CreatingInventory;
+import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

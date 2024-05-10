@@ -1,7 +1,7 @@
-package hhitt.org.example.fancyglow.Listeners;
+package hhitt.fancyglow.listeners;
 
-import hhitt.org.example.fancyglow.FancyGlow;
-import hhitt.org.example.fancyglow.Utils.MessageUtils;
+import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.utils.MessageUtils;
 import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
