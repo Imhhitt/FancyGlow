@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainConfig {
+
+    // Config methods
     private final FancyGlow plugin;
     private final String fileName;
     private FileConfiguration fileConfiguration = null;

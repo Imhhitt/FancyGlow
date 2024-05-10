@@ -2,15 +2,15 @@ package hhitt.org.example.fancyglow.Utils;
 
 import hhitt.org.example.fancyglow.FancyGlow;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
 
 public class IsGlowingVariable implements Listener {
+
+    // Management for the %fancyglow_status%
     private static PlayerGlowManager glowManager;
 
     public IsGlowingVariable(FancyGlow plugin) {
@@ -19,7 +19,7 @@ public class IsGlowingVariable implements Listener {
 
     public String replaceVariables(String message, Player player) {
         // Reemplazar %glow_status% con el estado de brillo real
-        return message.replace("%glow_status%", glowManager.getPlayerGlowingStatus(player));
+        return message.replace("fancyglow_status%", glowManager.getPlayerGlowingStatus(player));
     }
 
     public static void updateItemLore(ItemStack item, Player player) {
@@ -29,7 +29,7 @@ public class IsGlowingVariable implements Listener {
             if (lore != null) {
                 for (int i = 0; i < lore.size(); i++) {
                     String line = lore.get(i);
-                    line = line.replace("%glow_status%", glowManager.getPlayerGlowingStatus(player));
+                    line = line.replace("%fancyglow_status%", glowManager.getPlayerGlowingStatus(player));
                     lore.set(i, line);
                 }
                 meta.setLore(lore);

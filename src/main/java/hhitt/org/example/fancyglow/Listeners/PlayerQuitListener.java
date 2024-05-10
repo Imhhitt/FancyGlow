@@ -9,10 +9,13 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public class PlayerQuitListener implements Listener {
+
+    private FancyGlow plugin;
     public PlayerQuitListener(FancyGlow plugin) {
+        this.plugin = plugin;
     }
 
-    // Eliminar al jugador del equipo al salir del server para evitar problemas y/o bugs.
+    // Quit the player of the Scoreboard team on server quit to avoid problems
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
@@ -25,5 +28,6 @@ public class PlayerQuitListener implements Listener {
             }
         }
         player.setGlowing(false);
+
     }
 }

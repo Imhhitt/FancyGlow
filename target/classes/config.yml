@@ -1,24 +1,46 @@
 Messages:
-  No_Permission: "&4You don't have permission to perform this command!"
+  # All Fancy Glow Messages translation.
+  No_Permission: "&4You don't have permission to perform this!"
+  Reload_Message: "&bPlugin configuration file reloaded successfully!"
   Enable_Glow: "&aNow you are glowing!"
   Disable_Glow: "&cYou aren't glowing anymore!"
+
+  # Message that player gets when enter on a disabled world
+  Disabled_World_Message: "&cIn this world glow is disabled!"
+
+  # %fancyglow_status% translation, for true or false:
   Glow_Status_False: "&cYou are not glowing ❌"
   Glow_Status_True: "&a✔ Glowing! &7Click here to disable"
 
+# List of worlds where players glow will be disabled
+Disabled_Worlds:
+  - "Example"
+  - "DisabledGlowWorld"
+
 Inventory:
+  # For translate the menu
   Tittle: "&0Select a glow color!"
   Items:
-    Aqua_Glow_Name: "&3Aqua"
-    Red_Glow_Name: "&4Red"
-    Blue_Glow_Name: "&1Blue"
-    Lime_Glow_Name: "&2Lime"
+    Dark_Red_Glow_Name: "&4Dark red"
+    Red_Glow_Name: "&cRed"
+    Gold_Glow_Name: "&6Gold"
+    Yellow_Glow_Name: "&eYellow"
+    Dark_Green_Glow_Name: "&2Dark green"
+    Green_Glow_Name: "&aGreen"
+    Aqua_Glow_Name: "&bAqua"
+    Dark_Aqua_Glow_Name: "&3Dark aqua"
+    Dark_Blue_Glow_Name: "&1Dark Blue"
+    Blue_Glow_Name: "&9Blue"
     Pink_Glow_Name: "&dPink"
+    Purple_Glow_Name: "&5Purple"
+    Dark_Gray_Glow_Name: "&8Dark gray"
+    Gray_Glow_Name: "&7Gray"
     Black_Glow_Name: "&8Black"
     White_Glow_Name: "&fWhite"
-    Color_Lore: "&7Click me to start glowing!"
+    Color_Lore: "&7Click me to choose that color!"
+    Ender_Eye_Name: "&fRainbow Mode!!!"
+    Ender_Eye_Lore: "&fClick me to alternate all colors"
     Fill_Material_Name: "&7Click on a color!"
     Player_Head:
       Name: "&7Your glowing status:"
-      Lore: "&f%glow_status%"
-
-
+      Lore: "&f%fancyglow_status%"

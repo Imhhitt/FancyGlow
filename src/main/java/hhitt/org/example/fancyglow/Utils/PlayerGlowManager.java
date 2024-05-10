@@ -11,6 +11,8 @@ public class PlayerGlowManager {
         this.plugin = plugin;
     }
 
+    // Used to manage the placeholder of status at gui
+
     public String getPlayerGlowingStatus(Player player) {
         if (player.isGlowing()) {
             return MessageUtils.getColoredMessages(plugin.getMainConfigManager().getGlowStatusTrue());

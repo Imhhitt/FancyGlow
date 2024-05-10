@@ -1,11 +1,15 @@
-C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Listeners\PlayerQuitListener.java
-C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Utils\MessageUtils.java
+C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Utils\FancyGlowPlaceholder.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Listeners\HeadClickListener.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Config\MainConfigManager.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Inventory\CreatingInventory.java
+C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Utils\PlayerGlowingColor.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Utils\IsGlowingVariable.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Config\MainConfig.java
+C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Config\ReloadConfigCommand.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Inventory\InventorManager.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\FancyGlow.java
+C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Listeners\PlayerQuitListener.java
+C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Utils\MessageUtils.java
+C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Listeners\PlayerChangeWorldListener.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Listeners\MenuClickListener.java
 C:\Users\diego\Desktop\Programación\FancyGlow\src\main\java\hhitt\org\example\fancyglow\Utils\PlayerGlowManager.java

@@ -1,36 +1,37 @@
 package hhitt.org.example.fancyglow.Listeners;
-
 import hhitt.org.example.fancyglow.FancyGlow;
 import hhitt.org.example.fancyglow.Inventory.CreatingInventory;
 import hhitt.org.example.fancyglow.Utils.MessageUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
-
 
 public class MenuClickListener implements Listener {
 
-    private final FancyGlow plugin;
-    private Team glowTeamAqua;
-    private Team glowTeamBlue;
-    private Team glowTeamRed;
-    private Team glowTeamLime;
-    private Team glowTeamPink;
-    private Team glowTeamWhite;
-    private Team glowTeamBlack;
+    // Gui click listener to manage plugin actions
 
+    private FancyGlow plugin;
+    private final Map<ChatColor, Team> glowTeams;
     public MenuClickListener(FancyGlow plugin) {
+
         this.plugin = plugin;
+        this.glowTeams = new HashMap<>();
     }
+
+
+
 
 
     @EventHandler
@@ -49,31 +50,28 @@ public class MenuClickListener implements Listener {
         }
 
         ItemStack clickedItem = e.getCurrentItem();
-        if (clickedItem == null || !clickedItem.hasItemMeta() || !Objects.requireNonNull(clickedItem.getItemMeta()).hasDisplayName()) {
+        if (clickedItem == null || clickedItem.getType() != Material.LEATHER_CHESTPLATE) {
             return;
         }
 
-        String itemName = ChatColor.stripColor(clickedItem.getItemMeta().getDisplayName());
-        toggleGlow(p, itemName);
-    }
-
-
-
-    private void toggleGlow(Player player, String colorName) {
-        ChatColor color;
-        switch (colorName.toLowerCase()) {
-            case "aqua" -> color = ChatColor.AQUA;
-            case "blue" -> color = ChatColor.BLUE;
-            case "red" -> color = ChatColor.RED;
-            case "lime" -> color = ChatColor.GREEN;
-            case "pink" -> color = ChatColor.LIGHT_PURPLE;
-            case "black" -> color = ChatColor.BLACK;
-            case "white" -> color = ChatColor.WHITE;
-            default -> {
-                return;
-            }
+        LeatherArmorMeta meta = (LeatherArmorMeta) clickedItem.getItemMeta();
+        if (meta == null) {
+            return;
         }
 
+        ChatColor color = getColorFromArmorColor(meta.getColor());
+        if (!(color != null && hasGlowPermission(p, color) || color != null && p.hasPermission("fancyglow.all_colors"))) {
+            p.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getNoPermissionMessage()));
+            p.closeInventory();
+        } else {
+            toggleGlow(p, color);
+        }
+
+
+
+    }
+
+    private void toggleGlow(Player player, ChatColor color) {
         Team glowTeam = getOrCreateTeam(color);
         if (glowTeam != null) {
             if (glowTeam.hasEntry(player.getName())) {
@@ -90,59 +88,62 @@ public class MenuClickListener implements Listener {
         }
     }
 
-    private Team getOrCreateTeam(ChatColor color) {
-        switch (color) {
-            case AQUA -> {
-                if (glowTeamAqua == null) {
-                    glowTeamAqua = createTeam("aquaTeam", ChatColor.AQUA);
-                }
-                return glowTeamAqua;
-            }
-            case BLUE -> {
-                if (glowTeamBlue == null) {
-                    glowTeamBlue = createTeam("blueTeam", ChatColor.BLUE);
-                }
-                return glowTeamBlue;
-            }
-            case RED -> {
-                if (glowTeamRed == null) {
-                    glowTeamRed = createTeam("redTeam", ChatColor.RED);
-                }
-                return glowTeamRed;
-            }
-            case GREEN -> {
-                if (glowTeamLime == null) {
-                    glowTeamLime = createTeam("limeTeam", ChatColor.GREEN);
-                }
-                return glowTeamLime;
-            }
-            case LIGHT_PURPLE -> {
-                if (glowTeamPink == null) {
-                    glowTeamPink = createTeam("pinkTeam", ChatColor.LIGHT_PURPLE);
-                }
-                return glowTeamPink;
-            }
-            case BLACK -> {
-                if (glowTeamBlack == null) {
-                    glowTeamBlack = createTeam("blackTeam", ChatColor.BLACK);
-                }
-                return glowTeamBlack;
-            }
-            case WHITE -> {
-                if (glowTeamWhite == null) {
-                    glowTeamWhite = createTeam("whiteTeam", ChatColor.WHITE);
-                }
-                return glowTeamWhite;
-            }
-            default -> {
-                return null;
-            }
+    private boolean hasGlowPermission(Player player, ChatColor color){
+        return player.hasPermission("fancyglow."+ color.name().toLowerCase());
+    }
+
+    private ChatColor getColorFromArmorColor(org.bukkit.Color armorColor) {
+        // Implementación para la lógica para mapear los colores de la armadura de cuero a los colores
+
+        if (armorColor.equals(Color.BLACK)) {
+            return ChatColor.BLACK;
+        } else if (armorColor.equals(Color.BLUE)) {
+            return ChatColor.BLUE;
+        } else if (armorColor.equals(Color.LIME)) {
+            return ChatColor.GREEN;
+        } else if (armorColor.equals(Color.AQUA)) {
+            return ChatColor.AQUA;
+        } else if (armorColor.equals(Color.RED)) {
+            return ChatColor.RED;
+        } else if (armorColor.equals(Color.FUCHSIA)) {
+            return ChatColor.LIGHT_PURPLE;
+        } else if (armorColor.equals(Color.YELLOW)) {
+            return ChatColor.YELLOW;
+        } else if (armorColor.equals(Color.WHITE)) {
+            return ChatColor.WHITE;
+        } else if (armorColor.equals(Color.SILVER)) {
+            return ChatColor.GRAY;
+        } else if (armorColor.equals(Color.GRAY)) {
+            return ChatColor.DARK_GRAY;
+        } else if (armorColor.equals(Color.NAVY)) {
+            return ChatColor.DARK_BLUE;
+        } else if (armorColor.equals(Color.GREEN)) {
+            return ChatColor.DARK_GREEN;
+        } else if (armorColor.equals(Color.TEAL)) {
+            return ChatColor.DARK_AQUA;
+        } else if (armorColor.equals(Color.MAROON)) {
+            return ChatColor.DARK_RED;
+        } else if (armorColor.equals(Color.PURPLE)) {
+            return ChatColor.DARK_PURPLE;
+        } else if (armorColor.equals(Color.ORANGE)){
+            return ChatColor.GOLD;
+        } else {
+            return null;
         }
     }
 
-    private Team createTeam(String teamName, ChatColor color) {
-        Scoreboard board = Objects.requireNonNull(Bukkit.getScoreboardManager()).getMainScoreboard();
-        Team team = board.registerNewTeam(teamName);
+    private Team getOrCreateTeam(ChatColor color) {
+        Team glowTeam = glowTeams.get(color);
+        if (glowTeam == null) {
+            glowTeam = createTeam(color);
+            glowTeams.put(color, glowTeam);
+        }
+        return glowTeam;
+    }
+
+    private Team createTeam(ChatColor color) {
+        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
+        Team team = board.registerNewTeam(color.name());
         team.setColor(color);
         return team;
     }
