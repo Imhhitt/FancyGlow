@@ -11,6 +11,5 @@ hhitt\fancyglow\listeners\PlayerChangeWorldListener.class
 hhitt\fancyglow\utils\FancyGlowPlaceholder.class
 hhitt\fancyglow\config\MainConfigManager.class
 hhitt\fancyglow\listeners\HeadClickListener.class
-hhitt\fancyglow\config\ReloadConfigCommand.class
 hhitt\fancyglow\FancyGlow.class
 hhitt\fancyglow\inventory\CreatingInventory.class

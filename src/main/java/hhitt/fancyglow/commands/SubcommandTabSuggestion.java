@@ -14,14 +14,20 @@ public class SubcommandTabSuggestion implements TabCompleter {
 
     @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
         //Suggest the player "disable" con tab completion
-        if(args.length == 1){
+        if(args.length == 1 && sender.hasPermission("fancyglow.command")){
             List<String> completions = new ArrayList<>();
             completions.add("disable");
             return completions;
+        }
 
+        if(args.length == 1 && sender.hasPermission("fancyglow.admin")){
+            List<String> completions = new ArrayList<>();
+            completions.add("disable");
+            completions.add("reload");
+            return completions;
         }
         return Collections.emptyList();
     }
