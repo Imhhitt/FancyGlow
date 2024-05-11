@@ -17,7 +17,7 @@ public class SubcommandTabSuggestion implements TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
         //Suggest the player "disable" con tab completion
-        if(args.length == 1 && sender.hasPermission("fancyglow.command")){
+        if(args.length == 1 && sender.hasPermission("fancyglow.command") && !sender.hasPermission("fancyglow.admin")){
             List<String> completions = new ArrayList<>();
             completions.add("disable");
             return completions;

@@ -15,19 +15,23 @@ public class PlayerQuitListener implements Listener {
         this.plugin = plugin;
     }
 
-    // Quit the player of the Scoreboard team on server quit to avoid problems
-
+    // Actions of persistant mode
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
-        Scoreboard scoreboard = player.getScoreboard();
 
-        for (Team team : scoreboard.getTeams()) {
-            if (team.hasEntry(player.getName())) {
-                team.removeEntry(player.getName());
+        if(!plugin.getConfig().getBoolean("Persistant-Mode")){
+
+            Player player = e.getPlayer();
+            Scoreboard scoreboard = player.getScoreboard();
+            for (Team team : scoreboard.getTeams()) {
+                if (team.hasEntry(player.getName())) {
+                    team.removeEntry(player.getName());
+                }
             }
+            player.setGlowing(false);
+
         }
-        player.setGlowing(false);
+
 
     }
 }
