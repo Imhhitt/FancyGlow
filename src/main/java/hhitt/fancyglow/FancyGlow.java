@@ -3,7 +3,6 @@ package hhitt.fancyglow;
 import hhitt.fancyglow.commands.MainCommand;
 import hhitt.fancyglow.commands.SubcommandTabSuggestion;
 import hhitt.fancyglow.config.MainConfigManager;
-import hhitt.fancyglow.config.ReloadConfigCommand;
 import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
@@ -27,7 +26,6 @@ public final class FancyGlow extends JavaPlugin {
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
         getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
-        Objects.requireNonNull(this.getCommand("glowreload")).setExecutor(new ReloadConfigCommand(this));
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new IsGlowingVariable(this), this);
