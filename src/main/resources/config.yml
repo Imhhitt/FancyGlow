@@ -34,7 +34,7 @@ Disabled_Worlds:
   - "DisabledGlowWorld"
 
 Inventory:
-  # For translate the menu
+  # For translate the gui
   Tittle: "&0Select a glow color!"
   Items:
     Dark_Red_Glow_Name: "&4Dark red"
