@@ -8,6 +8,10 @@
 # Documentation: https://hhitt-1.gitbook.io/fancy-glow-documentation
 # Discord for support, suggestions & more: https://discord.com/invite/W7R3mPXzQ7
 
+#While a player leave the server should the glow mode persist?
+# true = yes // false = no
+Persistant-Mode: true
+
 Messages:
   # All Fancy Glow Messages translation.
   No_Permission: "&4You don't have permission to perform this!"

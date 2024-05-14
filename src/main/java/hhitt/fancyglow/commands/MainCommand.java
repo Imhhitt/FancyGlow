@@ -33,6 +33,7 @@ public class MainCommand implements CommandExecutor {
         //Users commands
         if (!sender.hasPermission("fancyglow.command")) {
             sender.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getNoPermissionMessage()));
+            return true;
         } else{
 
             //Logic for /glow
