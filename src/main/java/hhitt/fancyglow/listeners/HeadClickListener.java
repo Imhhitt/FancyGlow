@@ -1,22 +1,27 @@
-package hhitt.org.example.fancyglow.Listeners;
+package hhitt.fancyglow.listeners;
 
-import hhitt.org.example.fancyglow.FancyGlow;
-import hhitt.org.example.fancyglow.Inventory.CreatingInventory;
+import hhitt.fancyglow.inventory.CreatingInventory;
+import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.net.http.WebSocket;
 
 public class HeadClickListener implements Listener {
 
+    // Head on gui logic
+
+
+    private FancyGlow plugin;
     public HeadClickListener(FancyGlow plugin) {
+
+        this.plugin = plugin;
     }
 
     @EventHandler
@@ -33,7 +38,15 @@ public class HeadClickListener implements Listener {
                         team.removeEntry(player.getName());
                     }
                 }
+                if(!player.isGlowing()){
+                    player.sendMessage(MessageUtils.getColoredMessages(plugin.getConfig().getString("Messages.Not_Glowing")));
+                }else{
+                    player.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getDisableGlow()));
+                }
                 player.setGlowing(false);
+                scoreboard.getTeam(player.getName());
+                Team team = player.getScoreboard().getTeam(player.getName());
+                player.getScoreboard().getTeam(player.getName());
                 player.closeInventory();
             }
         }

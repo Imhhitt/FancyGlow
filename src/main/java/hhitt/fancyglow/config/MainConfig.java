@@ -1,6 +1,6 @@
-package hhitt.org.example.fancyglow.Config;
+package hhitt.fancyglow.config;
 
-import hhitt.org.example.fancyglow.FancyGlow;
+import hhitt.fancyglow.FancyGlow;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,6 +9,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainConfig {
+
+    // Config methods
     private final FancyGlow plugin;
     private final String fileName;
     private FileConfiguration fileConfiguration = null;
