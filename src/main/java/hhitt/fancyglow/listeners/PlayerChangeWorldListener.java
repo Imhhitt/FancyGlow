@@ -2,11 +2,12 @@ package hhitt.fancyglow.listeners;
 
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.utils.MessageUtils;
-import java.util.List;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+
+import java.util.List;
 
 public class PlayerChangeWorldListener implements Listener {
 
@@ -24,7 +25,7 @@ public class PlayerChangeWorldListener implements Listener {
         List<String> noAllowedWorlds = this.plugin.getConfig().getStringList("Disabled_Worlds");
         if (noAllowedWorlds.contains(actualWorld)) {
             player.setGlowing(false);
-            player.sendMessage(MessageUtils.getColoredMessages(this.plugin.getMainConfigManager().getDisabledWorldMessage()));
+            player.sendMessage(MessageUtils.miniMessageParse(this.plugin.getMainConfigManager().getDisabledWorldMessage()));
         }
     }
 }

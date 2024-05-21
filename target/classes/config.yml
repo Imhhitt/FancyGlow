@@ -4,9 +4,13 @@
 # |  __/ _` | '_ \ / __| | | | | | |_ | |/ _ \ \ /\ / /
 # | | | (_| | | | | (__| |_| | | |__| | | (_) \ V  V /
 # |_|  \__,_|_| |_|\___|\__, |  \_____|_|\___/ \_/\_/
+#                        __/ |
+#                        |___/
+
 # Useful links:
 # Documentation: https://hhitt-1.gitbook.io/fancy-glow-documentation
 # Discord for support, suggestions & more: https://discord.com/invite/W7R3mPXzQ7
+# MiniMessage tool that make it faster ;) https://webui.advntr.dev/
 
 #While a player leave the server should the glow mode persist?
 # true = yes // false = no
@@ -34,7 +38,7 @@ Disabled_Worlds:
   - "DisabledGlowWorld"
 
 Inventory:
-  # For translate the menu
+  # For translate the gui
   Tittle: "&0Select a glow color!"
   Items:
     Dark_Red_Glow_Name: "&4Dark red"

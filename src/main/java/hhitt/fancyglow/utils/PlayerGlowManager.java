@@ -15,9 +15,9 @@ public class PlayerGlowManager {
 
     public String getPlayerGlowingStatus(Player player) {
         if (player.isGlowing()) {
-            return MessageUtils.getColoredMessages(plugin.getMainConfigManager().getGlowStatusTrue());
+            return MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGlowStatusTrue());
         } else {
-            return MessageUtils.getColoredMessages(plugin.getMainConfigManager().getGlowStatusFalse());
+            return MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGlowStatusFalse());
         }
     }
 }

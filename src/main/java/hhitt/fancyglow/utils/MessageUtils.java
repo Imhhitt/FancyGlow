@@ -1,12 +1,14 @@
 package hhitt.fancyglow.utils;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.md_5.bungee.api.chat.BaseComponent;
 
 public class MessageUtils {
 
-    // Just to translate color codes in all messages
-
-    public static String getColoredMessages(String message){
-        return ChatColor.translateAlternateColorCodes('&', message);
+    //Just a method to translate MiniMessage format
+    //MiniMessage is GOD!!!!
+    public static BaseComponent miniMessageParse (String message) {
+        MiniMessage miniMessage = MiniMessage.miniMessage();
+        return miniMessage.deserialize(message);
     }
 }

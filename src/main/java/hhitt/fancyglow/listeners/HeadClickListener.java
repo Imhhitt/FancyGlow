@@ -39,9 +39,10 @@ public class HeadClickListener implements Listener {
                     }
                 }
                 if(!player.isGlowing()){
-                    player.sendMessage(MessageUtils.getColoredMessages(plugin.getConfig().getString("Messages.Not_Glowing")));
+                    player.spigot().sendMessage(MessageUtils.miniMessageParse(plugin.getConfig().getString("Messages.Not_Glowing")));
+
                 }else{
-                    player.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getDisableGlow()));
+                    player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDisableGlow()));
                 }
                 player.setGlowing(false);
                 scoreboard.getTeam(player.getName());

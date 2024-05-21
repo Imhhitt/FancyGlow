@@ -61,7 +61,7 @@ public class MenuClickListener implements Listener {
 
         ChatColor color = getColorFromArmorColor(meta.getColor());
         if (!(color != null && hasGlowPermission(p, color) || color != null && p.hasPermission("fancyglow.all_colors"))) {
-            p.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getNoPermissionMessage()));
+            p.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getNoPermissionMessage()));
             p.closeInventory();
         } else {
             toggleGlow(p, color);
@@ -77,12 +77,12 @@ public class MenuClickListener implements Listener {
             if (glowTeam.hasEntry(player.getName())) {
                 glowTeam.removeEntry(player.getName());
                 player.setGlowing(false);
-                player.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getDisableGlow()));
+                player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDisableGlow()));
                 player.closeInventory();
             } else {
                 glowTeam.addEntry(player.getName());
                 player.setGlowing(true);
-                player.sendMessage(MessageUtils.getColoredMessages(plugin.getMainConfigManager().getEnableGlow()));
+                player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getEnableGlow()));
                 player.closeInventory();
             }
         }
