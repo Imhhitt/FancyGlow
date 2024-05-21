@@ -39,7 +39,7 @@ public class HeadClickListener implements Listener {
                     }
                 }
                 if(!player.isGlowing()){
-                    player.spigot().sendMessage(MessageUtils.miniMessageParse(plugin.getConfig().getString("Messages.Not_Glowing")));
+                    player.sendMessage(MessageUtils.miniMessageParse(plugin.getConfig().getString("Messages.Not_Glowing")));
 
                 }else{
                     player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDisableGlow()));

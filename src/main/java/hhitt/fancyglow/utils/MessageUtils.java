@@ -9,6 +9,6 @@ public class MessageUtils {
     //MiniMessage is GOD!!!!
     public static BaseComponent miniMessageParse (String message) {
         MiniMessage miniMessage = MiniMessage.miniMessage();
-        return miniMessage.deserialize(message);
+        return (BaseComponent) miniMessage.deserialize(message);
     }
 }
