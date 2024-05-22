@@ -46,16 +46,14 @@ public class MainCommand implements CommandExecutor {
                 }
 
                 //Open the gui
-                if (sender instanceof Player) {
-                    CreatingInventory inventory = new CreatingInventory(plugin, (Player) sender);
-                    ((Player) sender).openInventory(inventory.getInventory());
-                }
+                CreatingInventory inventory = new CreatingInventory(plugin, (Player) sender);
+                ((Player) sender).openInventory(inventory.getInventory());
                 return true;
 
             }
 
             //Logic for /glow disable
-            if(args[0].equalsIgnoreCase("disable")  && sender instanceof Player){
+            if(args[0].equalsIgnoreCase("disable")){
                 Scoreboard scoreboard = ((Player) sender).getScoreboard();
 
                 for (Team team : scoreboard.getTeams()) {
