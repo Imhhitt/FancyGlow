@@ -37,7 +37,6 @@ public class MainConfigManager {
     private String fillMaterialName;
     private String colorLore;
     private String disabledWorldMessage;
-    private boolean nicknameColor;
 
 
     // Cargar la configuración
@@ -50,7 +49,7 @@ public class MainConfigManager {
     // Cargar los mensajes de la config en variables
     public void loadConfig(){
         FileConfiguration configuration = configFile.getConfig();
-        nicknameColor = configuration.getBoolean("Options.Color_Nickname");
+        boolean nicknameColor = configuration.getBoolean("Options.Color_Nickname"); //TODO Use this?
         disabledWorldMessage = configuration.getString("Messages.Disabled_World_Message");
         noPermissionMessage = configuration.getString("Messages.No_Permission");
         reloadConfigMessage = configuration.getString("Messages.Reload_Message");

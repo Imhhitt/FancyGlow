@@ -7,8 +7,8 @@ public class MessageUtils {
 
     //Just a method to translate MiniMessage format
     //MiniMessage is GOD!!!!
-    public static BaseComponent miniMessageParse (String message) {
+    public static String miniMessageParse (String message) {
         MiniMessage miniMessage = MiniMessage.miniMessage();
-        return (BaseComponent) miniMessage.deserialize(message);
+        return String.valueOf(miniMessage.deserialize(message));
     }
 }

@@ -26,12 +26,7 @@ public final class FancyGlow extends JavaPlugin {
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
         getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
-        getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
-        getServer().getPluginManager().registerEvents(new IsGlowingVariable(this), this);
-        getServer().getPluginManager().registerEvents(new HeadClickListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
-
+        registerEvents();
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new FancyGlowPlaceholder(this).register();
         } else {
@@ -43,10 +38,17 @@ public final class FancyGlow extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
     }
 
     public MainConfigManager getMainConfigManager() {
         return mainConfigManager;
+    }
+
+    public void registerEvents() {
+        getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
+        getServer().getPluginManager().registerEvents(new IsGlowingVariable(this), this);
+        getServer().getPluginManager().registerEvents(new HeadClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
     }
 }
