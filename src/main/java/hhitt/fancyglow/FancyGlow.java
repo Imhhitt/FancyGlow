@@ -9,9 +9,12 @@ import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
 import hhitt.fancyglow.utils.IsGlowingVariable;
+import hhitt.fancyglow.utils.MessageUtils;
 import hhitt.fancyglow.utils.PlayerGlowingColor;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
 
@@ -19,8 +22,19 @@ public final class FancyGlow extends JavaPlugin {
 
     private MainConfigManager mainConfigManager;
 
+    private BukkitAudiences adventure;
+
+    public @NonNull BukkitAudiences adventure() {
+        if(this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
+
     @Override
     public void onEnable() {
+        this.adventure = BukkitAudiences.create(this);
+        MessageUtils.setAdventure(this.adventure);
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
@@ -38,6 +52,12 @@ public final class FancyGlow extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        if(this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
+        }
+
     }
 
     public MainConfigManager getMainConfigManager() {

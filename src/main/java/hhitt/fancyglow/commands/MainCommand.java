@@ -32,7 +32,7 @@ public class MainCommand implements CommandExecutor {
 
         //Users commands
         if (!sender.hasPermission("fancyglow.command")) {
-            sender.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getNoPermissionMessage()));
+            MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
             return true;
         } else{
 
@@ -41,7 +41,7 @@ public class MainCommand implements CommandExecutor {
 
                 //Check the world
                 if (noAllowedWorlds.contains(actualWorld)) {
-                    player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDisabledWorldMessage()));
+                    MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisabledWorldMessage());
                     return true;
                 }
 
@@ -64,10 +64,10 @@ public class MainCommand implements CommandExecutor {
 
                 //If the player is not glowing, "exception" error
                 if(!player.isGlowing()){
-                    player.sendMessage(MessageUtils.miniMessageParse(plugin.getConfig().getString("Messages.Not_Glowing")));
+                    MessageUtils.miniMessageSender(player, plugin.getConfig().getString("Messages.Not_Glowing"));
                 }else{
                     //If is glowing, then disabled message
-                    player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDisableGlow()));
+                    MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
                 }
                 ((Player) sender).setGlowing(false);
                 return true;
@@ -77,13 +77,13 @@ public class MainCommand implements CommandExecutor {
 
         //Admin commands
         if(!sender.hasPermission("fancyglow.admin")){
-            sender.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getNoPermissionMessage()));
+            MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
         } else{
 
             // Logic for /glow reload
             if(args.length == 1 && args[0].equalsIgnoreCase("reload")){
                 plugin.getMainConfigManager().reloadConfig();
-                sender.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getReloadConfigMessage()));
+                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getReloadConfigMessage());
                 return true;
             }
 
@@ -98,8 +98,8 @@ public class MainCommand implements CommandExecutor {
                         team.removeEntry(playerToDisable.getName());
                     }
                 }
-                playerToDisable.sendMessage(MessageUtils.miniMessageParse(this.plugin.getMainConfigManager().getDisableGlow()));
-                sender.sendMessage(MessageUtils.miniMessageParse(this.plugin.getConfig().getString("Messages.Disable_Glow_Others")));
+                MessageUtils.miniMessageSender(playerToDisable, this.plugin.getMainConfigManager().getDisableGlow());
+                MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Disable_Glow_Others"));
                 playerToDisable.setGlowing(false);
                 return true;
 

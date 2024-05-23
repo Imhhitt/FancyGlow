@@ -1,4 +1,5 @@
 package hhitt.fancyglow.listeners;
+
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.utils.MessageUtils;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -61,7 +63,7 @@ public class MenuClickListener implements Listener {
 
         ChatColor color = getColorFromArmorColor(meta.getColor());
         if (!(color != null && hasGlowPermission(p, color) || color != null && p.hasPermission("fancyglow.all_colors"))) {
-            p.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getNoPermissionMessage()));
+            MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
             p.closeInventory();
         } else {
             toggleGlow(p, color);
@@ -77,12 +79,12 @@ public class MenuClickListener implements Listener {
             if (glowTeam.hasEntry(player.getName())) {
                 glowTeam.removeEntry(player.getName());
                 player.setGlowing(false);
-                player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDisableGlow()));
+                MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
                 player.closeInventory();
             } else {
                 glowTeam.addEntry(player.getName());
                 player.setGlowing(true);
-                player.sendMessage(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getEnableGlow()));
+                MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
                 player.closeInventory();
             }
         }

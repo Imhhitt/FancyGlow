@@ -25,7 +25,7 @@ public class PlayerChangeWorldListener implements Listener {
         List<String> noAllowedWorlds = this.plugin.getConfig().getStringList("Disabled_Worlds");
         if (noAllowedWorlds.contains(actualWorld)) {
             player.setGlowing(false);
-            player.sendMessage(MessageUtils.miniMessageParse(this.plugin.getMainConfigManager().getDisabledWorldMessage()));
+            MessageUtils.miniMessageSender(player, this.plugin.getMainConfigManager().getDisabledWorldMessage());
         }
     }
 }

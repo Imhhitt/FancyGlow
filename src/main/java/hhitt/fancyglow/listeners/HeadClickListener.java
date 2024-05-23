@@ -1,7 +1,7 @@
 package hhitt.fancyglow.listeners;
 
-import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 
 
 public class HeadClickListener implements Listener {
@@ -40,7 +39,7 @@ public class HeadClickListener implements Listener {
                 String messageKey = player.isGlowing() ? plugin.getMainConfigManager().getDisableGlow()
                         : plugin.getConfig().getString("Messages.Not_Glowing");
 
-                player.sendMessage(MessageUtils.miniMessageParse(messageKey));
+                MessageUtils.miniMessageSender(player, messageKey);
 
                 player.setGlowing(false);
 

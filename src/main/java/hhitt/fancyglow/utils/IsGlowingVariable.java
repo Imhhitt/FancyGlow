@@ -19,7 +19,7 @@ public class IsGlowingVariable implements Listener {
 
     public String replaceVariables(String message, Player player) {
         // Reemplazar %glow_status% con el estado de brillo real
-        return message.replace("fancyglow_status%", glowManager.getPlayerGlowingStatus(player));
+        return message.replace("fancyglow_status%", (CharSequence) glowManager.getPlayerGlowingStatus(player));
     }
 
     public static void updateItemLore(ItemStack item, Player player) {
@@ -29,7 +29,7 @@ public class IsGlowingVariable implements Listener {
             if (lore != null) {
                 for (int i = 0; i < lore.size(); i++) {
                     String line = lore.get(i);
-                    line = line.replace("%fancyglow_status%", glowManager.getPlayerGlowingStatus(player));
+                    line = line.replace("%fancyglow_status%", (CharSequence) glowManager.getPlayerGlowingStatus(player));
                     lore.set(i, line);
                 }
                 meta.setLore(lore);

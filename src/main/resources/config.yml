@@ -18,19 +18,19 @@ Persistant-Mode: true
 
 Messages:
   # All Fancy Glow Messages translation.
-  No_Permission: "&4You don't have permission to perform this!"
-  Reload_Message: "&bPlugin configuration file reloaded successfully!"
-  Enable_Glow: "&aNow you are glowing!"
-  Disable_Glow: "&cYou aren't glowing anymore!"
-  Disable_Glow_Others: "You have disabled glow of %player_name%"
-  Not_Glowing: "&cYou are not glowing!"
+  No_Permission: "<red>You don't have permission to perform this!"
+  Reload_Message: "<blue>Plugin configuration file reloaded successfully!"
+  Enable_Glow: "<green>Now you are glowing!"
+  Disable_Glow: "<red>You aren't glowing anymore!"
+  Disable_Glow_Others: "<red>You have disabled glow of %player_name%"
+  Not_Glowing: "<red>You are not glowing!"
 
   # Message that player gets when enter on a disabled world
-  Disabled_World_Message: "&cIn this world glow is disabled!"
+  Disabled_World_Message: "<red>In this world glow is disabled!"
 
   # %fancyglow_status% translation, for true or false:
-  Glow_Status_False: "&cYou are not glowing ❌"
-  Glow_Status_True: "&a✔ Glowing! &7Click here to disable"
+  Glow_Status_False: "<red>You are not glowing ❌"
+  Glow_Status_True: "<green>✔ Glowing! &7Click here to disable"
 
 # List of worlds where players glow will be disabled
 Disabled_Worlds:
@@ -39,10 +39,10 @@ Disabled_Worlds:
 
 Inventory:
   # For translate the gui
-  Tittle: "&0Select a glow color!"
+  Tittle: "Select a glow color!"
   Items:
-    Dark_Red_Glow_Name: "&4Dark red"
-    Red_Glow_Name: "&cRed"
+    Dark_Red_Glow_Name: "<dark_red>Dark red</dark_red>"
+    Red_Glow_Name: "<red>Red</red>"
     Gold_Glow_Name: "&6Gold"
     Yellow_Glow_Name: "&eYellow"
     Dark_Green_Glow_Name: "&2Dark green"
