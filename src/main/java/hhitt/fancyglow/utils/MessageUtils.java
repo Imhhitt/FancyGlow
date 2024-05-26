@@ -11,22 +11,22 @@ public class MessageUtils {
 
     private static BukkitAudiences adventure;
 
-    public static void setAdventure(BukkitAudiences adventure) {
-        MessageUtils.adventure = adventure;
+    public static void setAdventure(BukkitAudiences adventureInstance) {
+        adventure = adventureInstance;
     }
 
-    public static @NotNull String miniMessageParse(String message){
+    public static @NotNull String miniMessageParse(String message) {
         MiniMessage miniMessage = MiniMessage.miniMessage();
         TextComponent text = (TextComponent) miniMessage.deserialize(message);
-        return LegacyComponentSerializer.legacyAmpersand().serialize(text);
+        return LegacyComponentSerializer.legacySection().serialize(text);
     }
 
-    //Just a method to translate MiniMessage format
-    //MiniMessage is GOD!!
     public static void miniMessageSender(Player player, String message) {
+        if (adventure == null) {
+            throw new IllegalStateException("BukkitAudiences is not initialized.");
+        }
         MiniMessage miniMessage = MiniMessage.miniMessage();
         TextComponent text = (TextComponent) miniMessage.deserialize(message);
         adventure.player(player).sendMessage(text);
-
     }
 }
