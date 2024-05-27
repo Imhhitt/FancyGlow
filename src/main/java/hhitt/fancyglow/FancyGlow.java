@@ -1,5 +1,6 @@
 package hhitt.fancyglow;
 
+import hhitt.fancyglow.commands.ColorCommandLogic;
 import hhitt.fancyglow.commands.MainCommand;
 import hhitt.fancyglow.commands.SubcommandTabSuggestion;
 import hhitt.fancyglow.config.MainConfigManager;
@@ -21,6 +22,7 @@ import java.util.Objects;
 public final class FancyGlow extends JavaPlugin {
 
     private MainConfigManager mainConfigManager;
+    private ColorCommandLogic colorCommandLogic;
 
     private BukkitAudiences adventure;
 
@@ -34,6 +36,7 @@ public final class FancyGlow extends JavaPlugin {
     @Override
     public void onEnable() {
         this.adventure = BukkitAudiences.create(this);
+        this.colorCommandLogic = new ColorCommandLogic(this);
         MessageUtils.setAdventure(this.adventure);
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
@@ -63,6 +66,7 @@ public final class FancyGlow extends JavaPlugin {
     public MainConfigManager getMainConfigManager() {
         return mainConfigManager;
     }
+    public ColorCommandLogic getColorCommandLogic() {return colorCommandLogic;}
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);

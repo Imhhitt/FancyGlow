@@ -33,9 +33,6 @@ public class MenuClickListener implements Listener {
     }
 
 
-
-
-
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
@@ -62,7 +59,9 @@ public class MenuClickListener implements Listener {
         }
 
         ChatColor color = getColorFromArmorColor(meta.getColor());
-        if (!(color != null && hasGlowPermission(p, color) || color != null && p.hasPermission("fancyglow.all_colors"))) {
+        if (!(color != null && hasGlowPermission(p, color) ||
+                color != null && p.hasPermission("fancyglow.all_colors") ||
+                color != null && p.hasPermission("fancyglow.admin"))) {
             MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
             p.closeInventory();
         } else {
@@ -73,7 +72,7 @@ public class MenuClickListener implements Listener {
 
     }
 
-    private void toggleGlow(Player player, ChatColor color) {
+    public void toggleGlow(Player player, ChatColor color) {
         Team glowTeam = getOrCreateTeam(color);
         if (glowTeam != null) {
             if (glowTeam.hasEntry(player.getName())) {
@@ -90,7 +89,7 @@ public class MenuClickListener implements Listener {
         }
     }
 
-    private boolean hasGlowPermission(Player player, ChatColor color){
+    public boolean hasGlowPermission(Player player, ChatColor color){
         return player.hasPermission("fancyglow."+ color.name().toLowerCase());
     }
 
@@ -134,7 +133,7 @@ public class MenuClickListener implements Listener {
         }
     }
 
-    private Team getOrCreateTeam(ChatColor color) {
+    public Team getOrCreateTeam(ChatColor color) {
         Team glowTeam = glowTeams.get(color);
         if (glowTeam == null) {
             glowTeam = createTeam(color);
@@ -143,7 +142,7 @@ public class MenuClickListener implements Listener {
         return glowTeam;
     }
 
-    private Team createTeam(ChatColor color) {
+    public Team createTeam(ChatColor color) {
         Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
         Team team = board.registerNewTeam(color.name());
         team.setColor(color);

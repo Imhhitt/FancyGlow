@@ -16,10 +16,11 @@ public class SubcommandTabSuggestion implements TabCompleter {
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
 
-        //Suggest the player "disable" con tab completion
+        //Suggest for disable and color
         if(args.length == 1 && sender.hasPermission("fancyglow.command") && !sender.hasPermission("fancyglow.admin")){
             List<String> completions = new ArrayList<>();
             completions.add("disable");
+            completions.add("color");
             return completions;
         }
 
@@ -27,8 +28,33 @@ public class SubcommandTabSuggestion implements TabCompleter {
             List<String> completions = new ArrayList<>();
             completions.add("disable");
             completions.add("reload");
+            completions.add("color");
             return completions;
         }
+
+        //Suggest for all color colors
+        if(args.length == 2 && args[0].equalsIgnoreCase("color")){
+            List<String> completions = new ArrayList<>();
+            completions.add("dark_red");
+            completions.add("red");
+            completions.add("gold");
+            completions.add("yellow");
+            completions.add("dark_green");
+            completions.add("green");
+            completions.add("aqua");
+            completions.add("dark_aqua");
+            completions.add("dark_blue");
+            completions.add("blue");
+            completions.add("pink");
+            completions.add("purple");
+            completions.add("black");
+            completions.add("dark_gray");
+            completions.add("gray");
+            completions.add("white");
+            return completions;
+        }
+
+
         return Collections.emptyList();
     }
 }

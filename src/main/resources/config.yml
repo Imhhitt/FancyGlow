@@ -24,13 +24,15 @@ Messages:
   Disable_Glow: "<red>You aren't glowing anymore!"
   Disable_Glow_Others: "<red>You have disabled glow of %player_name%"
   Not_Glowing: "<red>You are not glowing!"
+  Not_Valid_Color: "<red>Not a valid color! Use like: <gold>/glow color <color></gold>"
+  Wrong_Usage_Color_Command: "<red>Wrong command usage! Use like: <gold>/glow color <color></gold>."
 
   # Message that player gets when enter on a disabled world
   Disabled_World_Message: "<red>In this world glow is disabled!"
 
   # %fancyglow_status% translation, for true or false:
   Glow_Status_False: "<red>You are not glowing ❌"
-  Glow_Status_True: "<green>✔ Glowing! &7Click here to disable"
+  Glow_Status_True: "<green>✔ Glowing!</green> <gray>Click here to disable"
 
 # List of worlds where players glow will be disabled
 Disabled_Worlds:
