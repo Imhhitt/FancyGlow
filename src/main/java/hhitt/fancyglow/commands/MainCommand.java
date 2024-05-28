@@ -29,8 +29,9 @@ public class MainCommand implements CommandExecutor {
 
 
         //Users commands (/glow) that open the gui
-        if (sender.hasPermission("fancyglow.command.gui") || sender.hasPermission("fancyglow.admin")) {
-            if(args == null || args.length == 0){
+        if (args == null || args.length == 0) {
+
+            if(sender.hasPermission("fancyglow.command.gui") || sender.hasPermission("fancyglow.admin")){
 
                 //Check the world
                 if (noAllowedWorlds.contains(actualWorld)) {
@@ -43,17 +44,18 @@ public class MainCommand implements CommandExecutor {
                 ((Player) sender).openInventory(inventory.getInventory());
                 return true;
 
+            } else {
+                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
+                return true;
             }
-        } else {
-            MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-            return true;
+
         }
 
 
         //Logic for /glow disable
-        if(sender.hasPermission("fancyglow.command.disable") || sender.hasPermission("fancyglow.admin")){
+        if(args[0].equalsIgnoreCase("disable")){
 
-            if(args[0].equalsIgnoreCase("disable")){
+            if(sender.hasPermission("fancyglow.command.disable") || sender.hasPermission("fancyglow.admin")){
                 Scoreboard scoreboard = ((Player) sender).getScoreboard();
 
                 for (Team team : scoreboard.getTeams()) {
@@ -71,17 +73,18 @@ public class MainCommand implements CommandExecutor {
                 }
                 ((Player) sender).setGlowing(false);
                 return true;
+
+            } else {
+                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
+                return true;
             }
-        } else {
-            MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-            return true;
         }
 
 
 
         //Logic for /glow color <color>
-        if(sender.hasPermission("fancyglow.command.color") || sender.hasPermission("fancyglow.admin")){
-            if(args[0].equalsIgnoreCase("color")){
+        if( args[0].equalsIgnoreCase("color")){
+            if(sender.hasPermission("fancyglow.command.color") || sender.hasPermission("fancyglow.admin")){
 
                 if(args.length == 1){
                     MessageUtils.miniMessageSender(
@@ -94,17 +97,18 @@ public class MainCommand implements CommandExecutor {
                 colorCommandLogic.glowColorCommand(player, args[1]);
                 return true;
 
+            } else {
+                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
+                return true;
             }
 
-        } else {
-            MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-            return true;
         }
 
 
         //Admin commands
         if(!sender.hasPermission("fancyglow.admin")){
             MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
+            return true;
         } else{
 
             // Logic for /glow reload
