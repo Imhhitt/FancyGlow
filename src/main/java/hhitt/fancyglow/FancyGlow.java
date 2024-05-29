@@ -13,11 +13,9 @@ import hhitt.fancyglow.utils.IsGlowingVariable;
 import hhitt.fancyglow.utils.MessageUtils;
 import hhitt.fancyglow.utils.PlayerGlowingColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.Objects;
@@ -38,6 +36,12 @@ public final class FancyGlow extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        //Bstats hook
+        int pluginId = 22057;
+        Metrics metrics = new Metrics(this, pluginId);
+
+
         this.adventure = BukkitAudiences.create(this);
         this.colorCommandLogic = new ColorCommandLogic(this);
         MessageUtils.setAdventure(this.adventure);
@@ -62,15 +66,6 @@ public final class FancyGlow extends JavaPlugin {
         if(this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
-        }
-
-        Scoreboard board = Objects.requireNonNull(getServer().getScoreboardManager()).getMainScoreboard();
-        for (Team team : board.getTeams()) {
-            team.unregister();
-        }
-
-        for(Player player : getServer().getOnlinePlayers()){
-            player.setGlowing(false);
         }
 
     }

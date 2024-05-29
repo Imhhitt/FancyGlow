@@ -18,7 +18,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class MenuClickListener implements Listener {
 
@@ -143,9 +142,12 @@ public class MenuClickListener implements Listener {
     }
 
     public Team createTeam(ChatColor color) {
-        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
-        Team team = board.registerNewTeam(color.name());
-        team.setColor(color);
-        return team;
+        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        if (board.getTeam(color.name()) == null) {
+            Team team = board.registerNewTeam(color.name());
+            team.setColor(color);
+            return team;
+        }
+        return board.getTeam(color.name());
     }
 }
