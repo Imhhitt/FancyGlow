@@ -21,72 +21,23 @@ public class ColorCommandLogic {
 
 
     public void glowColorCommand(Player p, String arg){
-
-        ChatColor colorOfArg;
-        switch (arg){
-            case "dark_red":
-                colorOfArg = ChatColor.DARK_RED;
-                break;
-            case "red":
-                colorOfArg = ChatColor.RED;
-                break;
-            case "gold":
-                colorOfArg = ChatColor.GOLD;
-                break;
-            case "yellow":
-                colorOfArg = ChatColor.YELLOW;
-                break;
-            case "dark_green":
-                colorOfArg = ChatColor.DARK_GREEN;
-                break;
-            case "green":
-                colorOfArg = ChatColor.GREEN;
-                break;
-            case "aqua":
-                colorOfArg = ChatColor.AQUA;
-                break;
-            case "dark_aqua":
-                colorOfArg = ChatColor.DARK_AQUA;
-                break;
-            case "dark_blue":
-                colorOfArg = ChatColor.DARK_BLUE;
-                break;
-            case "blue":
-                colorOfArg = ChatColor.BLUE;
-                break;
-            case "pink":
-                colorOfArg = ChatColor.LIGHT_PURPLE;
-                break;
-            case "purple":
-                colorOfArg = ChatColor.DARK_PURPLE;
-                break;
-            case "black":
-                colorOfArg = ChatColor.BLACK;
-                break;
-            case "dark_gray":
-                colorOfArg = ChatColor.DARK_GRAY;
-                break;
-            case "gray":
-                colorOfArg = ChatColor.GRAY;
-                break;
-            case "white":
-                colorOfArg = ChatColor.WHITE;
-                break;
-            default:
-                MessageUtils.miniMessageSender(
-                        p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
-                return;
+        ChatColor color;
+        try {
+            color = ChatColor.valueOf(arg.toUpperCase());
+        } catch (IllegalStateException e) {
+            MessageUtils.miniMessageSender(p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
+            return;
         }
 
-        ChatColor color = colorOfArg;
-        if (!(color != null && hasGlowPermission(p, color) ||
-                color != null && p.hasPermission("fancyglow.all_colors") ||
-                color != null && p.hasPermission("fancyglow.admin"))) {
-            MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
-        } else {
+        if (
+            hasGlowPermission(p, color) ||
+            p.hasPermission("fancyglow.all_colors") ||
+            p.hasPermission("fancyglow.admin")
+        ) {
             toggleGlow(p, color);
+        } else {
+            MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
         }
-
     }
 
 
@@ -106,12 +57,12 @@ public class ColorCommandLogic {
     }
 
 
-    public boolean hasGlowPermission(Player player, ChatColor color){
+    private boolean hasGlowPermission(Player player, ChatColor color){
         return player.hasPermission("fancyglow."+ color.name().toLowerCase());
     }
 
 
-    public Team getOrCreateTeam(ChatColor color) {
+    private Team getOrCreateTeam(ChatColor color) {
         Team glowTeam = glowTeams.get(color);
         try { glowTeam.getName(); } catch (IllegalStateException | NullPointerException e) {
             glowTeam = createTeam(color);
@@ -120,9 +71,9 @@ public class ColorCommandLogic {
         return glowTeam;
     }
 
-    //Thanks to https://github.com/FragsVoid for suggest me the null check to avoid a commnon bug on server restart!
+    //Thanks to https://github.com/FragsVoid for suggest me the null check to avoid a common bug on server restart!
 
-    public Team createTeam(ChatColor color) {
+    private Team createTeam(ChatColor color) {
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         if (board.getTeam(color.name()) == null) {
             Team team = board.registerNewTeam(color.name());
@@ -131,6 +82,4 @@ public class ColorCommandLogic {
         }
         return board.getTeam(color.name());
     }
-
-
 }
