@@ -1,6 +1,7 @@
 package hhitt.fancyglow.inventory;
 
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.utils.HeadUtils;
 import hhitt.fancyglow.utils.IsGlowingVariable;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.Color;
@@ -23,6 +24,7 @@ public class CreatingInventory implements InventoryHolder {
 
     private final Inventory inventory;
     private final FancyGlow plugin;
+    private final String customTextureUrl = "67844a5b74f341039560f280db1fcdf836e3b6a48dc2a09351937626977e1c2";
 
     public CreatingInventory(FancyGlow plugin, Player sender){
         this.plugin = plugin;
@@ -30,7 +32,9 @@ public class CreatingInventory implements InventoryHolder {
                 MessageUtils.miniMessageParse(plugin.getMainConfigManager().getInventoryTittle()));
 
         ItemStack playerHead = getPlayerHead((Player) sender);
-        inventory.setItem(40, playerHead);
+        inventory.setItem(41, playerHead);
+        ItemStack rainbowHead = HeadUtils.getCustomSkull(customTextureUrl);
+        inventory.setItem(39, rainbowHead);
 
         // Botones
         ItemStack red = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -290,8 +294,7 @@ public class CreatingInventory implements InventoryHolder {
         inventory.setItem(36, fill);
         inventory.setItem(37, fill);
         inventory.setItem(38, fill);
-        inventory.setItem(39, fill);
-        inventory.setItem(41, fill);
+        inventory.setItem(40, fill);
         inventory.setItem(42, fill);
         inventory.setItem(43, fill);
         inventory.setItem(44, fill);
@@ -320,4 +323,6 @@ public class CreatingInventory implements InventoryHolder {
         }
         return head;
     }
+
+
 }

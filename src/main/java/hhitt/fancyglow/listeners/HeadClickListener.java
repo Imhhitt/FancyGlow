@@ -27,7 +27,11 @@ public class HeadClickListener implements Listener {
     public void onPlayerClickHead(InventoryClickEvent event){
         Inventory clickedInventory = event.getClickedInventory();
         if (clickedInventory != null && clickedInventory.getHolder() instanceof CreatingInventory) {
-            if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD) {
+
+
+            //Disable color head
+            if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD
+            && event.getSlot() == 41) {
                 Player player = (Player) event.getWhoClicked();
 
                 Scoreboard scoreboard = player.getScoreboard();
@@ -45,6 +49,12 @@ public class HeadClickListener implements Listener {
 
                 player.closeInventory();
             }
+
+            //Multicolor head
+
+
+
+
         }
     }
 }
