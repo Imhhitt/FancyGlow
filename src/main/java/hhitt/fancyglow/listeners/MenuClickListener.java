@@ -3,6 +3,7 @@ package hhitt.fancyglow.listeners;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.utils.MessageUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -150,4 +151,21 @@ public class MenuClickListener implements Listener {
         }
         return board.getTeam(color.name());
     }
+
+    public void checkAndRegisterTeams() {
+        Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        for (ChatColor color : ChatColor.values()) {
+            String teamName = "glow_" + color.name();
+            Team existingTeam = scoreboard.getTeam(teamName);
+            if (existingTeam == null) {
+                Team team = scoreboard.registerNewTeam(teamName);
+                team.setColor(color);
+                glowTeams.put(color, team);
+            } else {
+                glowTeams.put(color, existingTeam);
+            }
+        }
+    }
+
+
 }

@@ -15,6 +15,9 @@
 #While a player leave the server should the glow mode persist?
 # true = yes // false = no
 Persistant-Mode: true
+# How many ticks should the color change in rainbow mode?
+# 1 second = 20 ticks
+Rainbow_Update_Interval: 10
 
 Messages:
   # All Fancy Glow Messages translation.
@@ -41,7 +44,7 @@ Disabled_Worlds:
 
 Inventory:
   # For translate the gui
-  Tittle: "<color:#9e8fff>Select a glow color!"
+  Tittle: "<#9e8fff>Select a glow color!"
   Items:
     Dark_Red_Glow_Name: "<dark_red>Dark red</dark_red>"
     Red_Glow_Name: "<red>Red</red>"
@@ -60,9 +63,8 @@ Inventory:
     Black_Glow_Name: "<color:#454545>Black"
     White_Glow_Name: "<white>White"
     Color_Lore: "<color:#737373>Click me to choose that color!"
-    #Working on it yet
-    Ender_Eye_Name: "<rainbow>Rainbow Mode!!!</rainbow>"
-    Ender_Eye_Lore: "&fClick me to alternate all colors"
+    Rainbow_Head: "<rainbow>Rainbow Mode!</rainbow>"
+    Rainbow_Head_Lore: "<#9e8fff>Click me to alternate all colors"
     Fill_Material_Name: "<rainbow>Click on a color!</rainbow>"
     Player_Head:
       Name: "<color:#6effa3>Your glowing status:"

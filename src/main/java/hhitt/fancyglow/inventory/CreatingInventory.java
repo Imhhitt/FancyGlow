@@ -24,7 +24,8 @@ public class CreatingInventory implements InventoryHolder {
 
     private final Inventory inventory;
     private final FancyGlow plugin;
-    private final String customTextureUrl = "67844a5b74f341039560f280db1fcdf836e3b6a48dc2a09351937626977e1c2";
+    private final String customTextureUrl =
+            "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0=";
 
     public CreatingInventory(FancyGlow plugin, Player sender){
         this.plugin = plugin;
@@ -33,7 +34,18 @@ public class CreatingInventory implements InventoryHolder {
 
         ItemStack playerHead = getPlayerHead((Player) sender);
         inventory.setItem(41, playerHead);
-        ItemStack rainbowHead = HeadUtils.getCustomSkull(customTextureUrl);
+        ItemStack rainbowHead = HeadUtils.getCustomSkull(customTextureUrl, (Player) sender);
+        ItemMeta rainbowHeadMeta = rainbowHead.getItemMeta();
+
+        assert rainbowHeadMeta != null;
+        rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_DYE);
+        rainbowHeadMeta.setDisplayName(MessageUtils.miniMessageParse(
+                plugin.getConfig().getString("Inventory.Items.Rainbow_Head")));
+        rainbowHeadMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
+                plugin.getConfig().getString("Inventory.Items.Rainbow_Head_Lore"))));
+        rainbowHead.setItemMeta(rainbowHeadMeta);
+
         inventory.setItem(39, rainbowHead);
 
         // Botones
@@ -53,7 +65,6 @@ public class CreatingInventory implements InventoryHolder {
         ItemStack darkGray = new ItemStack(Material.LEATHER_CHESTPLATE);
         ItemStack gray = new ItemStack(Material.LEATHER_CHESTPLATE);
         ItemStack white = new ItemStack(Material.LEATHER_CHESTPLATE);
-        ItemStack rainbow = new ItemStack(Material.ENDER_EYE);
         ItemStack fill = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
         // Datos de botones.
@@ -74,7 +85,6 @@ public class CreatingInventory implements InventoryHolder {
         LeatherArmorMeta grayMeta = (LeatherArmorMeta) gray.getItemMeta();
         LeatherArmorMeta whiteMeta = (LeatherArmorMeta) white.getItemMeta();
         ItemMeta fillMeta = fill.getItemMeta();
-        ItemMeta rainbowMeta = rainbow.getItemMeta();
 
         // Ocultar atributos y poner lore
         assert darkRedMeta != null;
@@ -226,11 +236,6 @@ public class CreatingInventory implements InventoryHolder {
         fillMeta.setDisplayName(MessageUtils.miniMessageParse(
                 plugin.getMainConfigManager().getFillMaterialName()));
 
-        assert rainbowMeta != null;
-        rainbowMeta.setDisplayName(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getEnderName()));
-        rainbowMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getEnderLore())));
 
 
         // Guardamos los datos asignados
@@ -250,7 +255,6 @@ public class CreatingInventory implements InventoryHolder {
         darkGray.setItemMeta(darkGrayMeta);
         gray.setItemMeta(grayMeta);
         white.setItemMeta(whiteMeta);
-        rainbow.setItemMeta(rainbowMeta);
         fill.setItemMeta(fillMeta);
 
         // Colocar items en los botones

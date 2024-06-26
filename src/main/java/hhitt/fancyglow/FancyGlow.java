@@ -8,6 +8,7 @@ import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
+import hhitt.fancyglow.tasks.MulticolorTask;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
 import hhitt.fancyglow.utils.IsGlowingVariable;
 import hhitt.fancyglow.utils.MessageUtils;
@@ -15,15 +16,19 @@ import hhitt.fancyglow.utils.PlayerGlowingColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import java.util.Map;
 import java.util.Objects;
 
 public final class FancyGlow extends JavaPlugin {
 
     private MainConfigManager mainConfigManager;
     private ColorCommandLogic colorCommandLogic;
+    private Map<Player, MulticolorTask> multicolorTasks;
+    private MenuClickListener menuClickListener;
 
     private BukkitAudiences adventure;
 
@@ -43,6 +48,8 @@ public final class FancyGlow extends JavaPlugin {
 
 
         this.adventure = BukkitAudiences.create(this);
+        this.menuClickListener = new MenuClickListener(this);
+        menuClickListener.checkAndRegisterTeams();
         this.colorCommandLogic = new ColorCommandLogic(this);
         MessageUtils.setAdventure(this.adventure);
         mainConfigManager = new MainConfigManager(this);
@@ -68,6 +75,8 @@ public final class FancyGlow extends JavaPlugin {
             this.adventure = null;
         }
 
+        cancelMulticolorTasks();
+
     }
 
     public MainConfigManager getMainConfigManager() {
@@ -82,4 +91,17 @@ public final class FancyGlow extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new HeadClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
     }
+
+    public void cancelMulticolorTasks() {
+        if (multicolorTasks != null) {
+            for (MulticolorTask task : multicolorTasks.values()) {
+                task.cancel();
+            }
+            multicolorTasks.clear();
+        }
+
+
+    }
+
+
 }
