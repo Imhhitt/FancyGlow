@@ -1,29 +1,40 @@
 package hhitt.fancyglow.commands;
 
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.utils.GlowManager;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.HashMap;
-import java.util.Map;
-
-public class ColorCommandLogic {
-
-    private final Map<ChatColor, Team> glowTeams;
+public class ColorCommandLogic implements CommandExecutor {
     private final FancyGlow plugin;
-    public ColorCommandLogic(FancyGlow plugin) {
+    private final GlowManager glowManager;
+
+    public ColorCommandLogic(FancyGlow plugin, GlowManager glowManager) {
         this.plugin = plugin;
-        this.glowTeams = new HashMap<>();
+        this.glowManager = glowManager;
     }
 
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (sender instanceof Player) {
+            Player player = (Player) sender;
+            if (args.length == 1) {
+                glowColorCommand(player, args[0]);
+            } else {
+                MessageUtils.miniMessageSender(player, plugin.getConfig().getString("Messages.Not_Valid_Color"));
+            }
+        }
+        return true;
+    }
 
-    public void glowColorCommand(Player p, String arg){
-
+    public void glowColorCommand(Player p, String arg) {
         ChatColor colorOfArg;
-        switch (arg){
+        switch (arg) {
             case "dark_red":
                 colorOfArg = ChatColor.DARK_RED;
                 break;
@@ -72,6 +83,13 @@ public class ColorCommandLogic {
             case "white":
                 colorOfArg = ChatColor.WHITE;
                 break;
+            case "rainbow":
+                if (!p.hasPermission("fancyglow.rainbow") || !p.hasPermission("fancyglow.all_colors")) {
+                    MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
+                    return;
+                }
+                glowManager.toggleMulticolorGlow(p);
+                return;
             default:
                 MessageUtils.miniMessageSender(
                         p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
@@ -79,58 +97,27 @@ public class ColorCommandLogic {
         }
 
         ChatColor color = colorOfArg;
-        if (!(color != null && hasGlowPermission(p, color) ||
-                color != null && p.hasPermission("fancyglow.all_colors") ||
-                color != null && p.hasPermission("fancyglow.admin"))) {
+        if (!(glowManager.hasGlowPermission(p, color) || p.hasPermission("fancyglow.all_colors") || p.hasPermission("fancyglow.admin"))) {
             MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
         } else {
             toggleGlow(p, color);
         }
-
     }
 
-
     private void toggleGlow(Player player, ChatColor color) {
-        Team glowTeam = getOrCreateTeam(color);
+        Team glowTeam = glowManager.getOrCreateTeam(color);
         if (glowTeam != null) {
-            if (glowTeam.hasEntry(player.getName())) {
-                glowTeam.removeEntry(player.getName());
+            String cleanName = ChatColor.stripColor(player.getName());
+            if (glowTeam.hasEntry(cleanName)) {
+                glowTeam.removeEntry(cleanName);
                 player.setGlowing(false);
                 MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
             } else {
-                glowTeam.addEntry(player.getName());
+                glowManager.removePlayerFromAllTeams(player);
+                glowTeam.addEntry(cleanName);
                 player.setGlowing(true);
                 MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
             }
         }
     }
-
-
-    public boolean hasGlowPermission(Player player, ChatColor color){
-        return player.hasPermission("fancyglow."+ color.name().toLowerCase());
-    }
-
-
-    public Team getOrCreateTeam(ChatColor color) {
-        Team glowTeam = glowTeams.get(color);
-        if (glowTeam == null) {
-            glowTeam = createTeam(color);
-            glowTeams.put(color, glowTeam);
-        }
-        return glowTeam;
-    }
-
-    //Thanks to https://github.com/FragsVoid for suggest me the null check to avoid a commnon bug on server restart!
-
-    public Team createTeam(ChatColor color) {
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        if (board.getTeam(color.name()) == null) {
-            Team team = board.registerNewTeam(color.name());
-            team.setColor(color);
-            return team;
-        }
-        return board.getTeam(color.name());
-    }
-
-
 }

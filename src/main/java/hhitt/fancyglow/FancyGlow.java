@@ -9,10 +9,7 @@ import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
 import hhitt.fancyglow.tasks.MulticolorTask;
-import hhitt.fancyglow.utils.FancyGlowPlaceholder;
-import hhitt.fancyglow.utils.IsGlowingVariable;
-import hhitt.fancyglow.utils.MessageUtils;
-import hhitt.fancyglow.utils.PlayerGlowingColor;
+import hhitt.fancyglow.utils.*;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -29,6 +26,7 @@ public final class FancyGlow extends JavaPlugin {
     private ColorCommandLogic colorCommandLogic;
     private Map<Player, MulticolorTask> multicolorTasks;
     private MenuClickListener menuClickListener;
+    private GlowManager glowManager;
 
     private BukkitAudiences adventure;
 
@@ -48,9 +46,9 @@ public final class FancyGlow extends JavaPlugin {
 
 
         this.adventure = BukkitAudiences.create(this);
+        glowManager = new GlowManager(this);
         this.menuClickListener = new MenuClickListener(this);
-        menuClickListener.checkAndRegisterTeams();
-        this.colorCommandLogic = new ColorCommandLogic(this);
+        this.colorCommandLogic = new ColorCommandLogic(this, this.glowManager);
         MessageUtils.setAdventure(this.adventure);
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
@@ -88,7 +86,7 @@ public final class FancyGlow extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new IsGlowingVariable(this), this);
-        getServer().getPluginManager().registerEvents(new HeadClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new HeadClickListener(this, this.glowManager), this);
         getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
     }
 
@@ -100,7 +98,10 @@ public final class FancyGlow extends JavaPlugin {
             multicolorTasks.clear();
         }
 
+    }
 
+    public GlowManager getGlowManager() {
+        return glowManager;
     }
 
 

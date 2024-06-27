@@ -4,22 +4,19 @@ import hhitt.fancyglow.FancyGlow;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
-
-import java.util.Map;
 
 public class MulticolorTask extends BukkitRunnable {
 
     private final FancyGlow plugin;
     private final Player player;
-    private final Map<ChatColor, Team> glowTeams;
     private final ChatColor[] colorArray;
     private int currentIndex;
 
-    public MulticolorTask(FancyGlow plugin, Player player, Map<ChatColor, Team> glowTeams) {
+    public MulticolorTask(FancyGlow plugin, Player player) {
         this.plugin = plugin;
         this.player = player;
-        this.glowTeams = glowTeams;
         this.colorArray = getAllColors();
         this.currentIndex = 0;
     }
@@ -28,11 +25,16 @@ public class MulticolorTask extends BukkitRunnable {
     public void run() {
         ChatColor color = colorArray[currentIndex];
 
+        // Obtener o crear el equipo correspondiente al color actual
+        Team glowTeam = getOrCreateTeam(color);
+
         // Remover al jugador de todos los equipos excepto el actual
-        Team glowTeam = glowTeams.get(color);
-        for (Team team : glowTeams.values()) {
-            if (team != glowTeam && team.hasEntry(player.getName())) {
-                team.removeEntry(player.getName());
+        for (ChatColor c : colorArray) {
+            if (c != color) {
+                Team team = getOrCreateTeam(c);
+                if (team.hasEntry(player.getName())) {
+                    team.removeEntry(player.getName());
+                }
             }
         }
 
@@ -58,5 +60,21 @@ public class MulticolorTask extends BukkitRunnable {
                 ChatColor.DARK_GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA,
                 ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, ChatColor.WHITE
         };
+    }
+
+    private Team getOrCreateTeam(ChatColor color) {
+        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        Team glowTeam = board.getTeam(color.name());
+        if (glowTeam == null) {
+            glowTeam = createTeam(color);
+        }
+        return glowTeam;
+    }
+
+    private Team createTeam(ChatColor color) {
+        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        Team team = board.registerNewTeam(color.name());
+        team.setColor(color);
+        return team;
     }
 }

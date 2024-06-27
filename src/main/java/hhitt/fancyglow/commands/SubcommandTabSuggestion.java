@@ -53,6 +53,7 @@ public class SubcommandTabSuggestion implements TabCompleter {
             completions.add("dark_gray");
             completions.add("gray");
             completions.add("white");
+            completions.add("rainbow");
             return completions;
         }
 
