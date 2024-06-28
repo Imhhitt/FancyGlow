@@ -33,73 +33,27 @@ public class ColorCommandLogic implements CommandExecutor {
     }
 
     public void glowColorCommand(Player p, String arg) {
-        ChatColor colorOfArg;
-        switch (arg) {
-            case "dark_red":
-                colorOfArg = ChatColor.DARK_RED;
-                break;
-            case "red":
-                colorOfArg = ChatColor.RED;
-                break;
-            case "gold":
-                colorOfArg = ChatColor.GOLD;
-                break;
-            case "yellow":
-                colorOfArg = ChatColor.YELLOW;
-                break;
-            case "dark_green":
-                colorOfArg = ChatColor.DARK_GREEN;
-                break;
-            case "green":
-                colorOfArg = ChatColor.GREEN;
-                break;
-            case "aqua":
-                colorOfArg = ChatColor.AQUA;
-                break;
-            case "dark_aqua":
-                colorOfArg = ChatColor.DARK_AQUA;
-                break;
-            case "dark_blue":
-                colorOfArg = ChatColor.DARK_BLUE;
-                break;
-            case "blue":
-                colorOfArg = ChatColor.BLUE;
-                break;
-            case "pink":
-                colorOfArg = ChatColor.LIGHT_PURPLE;
-                break;
-            case "purple":
-                colorOfArg = ChatColor.DARK_PURPLE;
-                break;
-            case "black":
-                colorOfArg = ChatColor.BLACK;
-                break;
-            case "dark_gray":
-                colorOfArg = ChatColor.DARK_GRAY;
-                break;
-            case "gray":
-                colorOfArg = ChatColor.GRAY;
-                break;
-            case "white":
-                colorOfArg = ChatColor.WHITE;
-                break;
-            case "rainbow":
-                if (!(
-                    p.hasPermission("fancyglow.rainbow") ||
-                    p.hasPermission("fancyglow.all_colors")
-                )) {
-                    MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
-                    return;
-                }
-                glowManager.toggleMulticolorGlow(p);
+        ChatColor color;
+
+        if (arg.equals("rainbow")) {
+            if (!(
+                p.hasPermission("fancyglow.rainbow") ||
+                p.hasPermission("fancyglow.all_colors")
+            )) {
+                MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
                 return;
-            default:
-                MessageUtils.miniMessageSender(
-                        p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
+            }
+            glowManager.toggleMulticolorGlow(p);
+            return;
+        } else {
+            try {
+                color = ChatColor.valueOf(arg.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                MessageUtils.miniMessageSender(p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
                 return;
+            }
         }
 
-        ChatColor color = colorOfArg;
         if (!(glowManager.hasGlowPermission(p, color) || p.hasPermission("fancyglow.all_colors") || p.hasPermission("fancyglow.admin"))) {
             MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
         } else {
