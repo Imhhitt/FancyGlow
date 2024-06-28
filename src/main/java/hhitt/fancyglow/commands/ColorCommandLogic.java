@@ -84,7 +84,10 @@ public class ColorCommandLogic implements CommandExecutor {
                 colorOfArg = ChatColor.WHITE;
                 break;
             case "rainbow":
-                if (!p.hasPermission("fancyglow.rainbow") || !p.hasPermission("fancyglow.all_colors")) {
+                if (!(
+                    p.hasPermission("fancyglow.rainbow") ||
+                    p.hasPermission("fancyglow.all_colors")
+                )) {
                     MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
                     return;
                 }
