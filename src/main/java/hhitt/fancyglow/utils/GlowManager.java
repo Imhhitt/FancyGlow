@@ -57,7 +57,7 @@ public class GlowManager {
 
     public Team getOrCreateTeam(ChatColor color) {
         Team glowTeam = glowTeams.get(color);
-        if (glowTeam == null) {
+        try { glowTeam.getName(); } catch (IllegalStateException | NullPointerException e) {
             glowTeam = createTeam(color);
             glowTeams.put(color, glowTeam);
         }
