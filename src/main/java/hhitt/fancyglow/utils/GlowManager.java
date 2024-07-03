@@ -66,12 +66,12 @@ public class GlowManager {
 
     public Team createTeam(ChatColor color) {
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        if (board.getTeam(color.name()) == null) {
-            Team team = board.registerNewTeam(color.name());
+        Team team = board.getTeam(color.name());
+        if (team == null) {
+            team = board.registerNewTeam(color.name());
             team.setColor(color);
-            return team;
         }
-        return board.getTeam(color.name());
+        return team;
     }
 
     public boolean hasGlowPermission(Player player, ChatColor color) {
