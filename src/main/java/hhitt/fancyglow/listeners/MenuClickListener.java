@@ -47,7 +47,7 @@ public class MenuClickListener implements Listener {
 
     public MenuClickListener(FancyGlow plugin) {
         this.plugin = plugin;
-        this.glowManager = new GlowManager(plugin);
+        this.glowManager = plugin.getGlowManager();
     }
 
     @EventHandler
