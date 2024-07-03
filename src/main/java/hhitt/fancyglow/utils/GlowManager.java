@@ -45,6 +45,22 @@ public class GlowManager {
         return multicolorTasks.containsKey(player);
     }
 
+    public void toggleGlow(Player player, ChatColor color) {
+        Team glowTeam = getOrCreateTeam(color);
+        String cleanName = ChatColor.stripColor(player.getName());
+
+        removeGlow(player);
+
+        if (glowTeam.hasEntry(cleanName)) {
+            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
+            return;
+        }
+
+        glowTeam.addEntry(cleanName);
+        player.setGlowing(true);
+        MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
+    }
+
     public void removeGlow(Player player) {
         player.setGlowing(false);
         removePlayerFromAllTeams(player);
