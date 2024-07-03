@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlowManager {
+
     private final FancyGlow plugin;
     private final Map<ChatColor, Team> glowTeams;
     private final Map<Player, MulticolorTask> multicolorTasks;
@@ -23,22 +24,17 @@ public class GlowManager {
 
     public void toggleMulticolorGlow(Player player) {
         if (multicolorTasks.containsKey(player)) {
-            MulticolorTask task = multicolorTasks.get(player);
-            task.cancel();
-            multicolorTasks.remove(player);
-            removePlayerFromAllTeams(player);
-            player.setGlowing(false);
+            removeGlow(player);
             MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
-            player.closeInventory();
-        } else {
-            int ticks = plugin.getConfig().getInt("Rainbow_Update_Interval");
-            MulticolorTask task = new MulticolorTask(plugin, player);
-            task.runTaskTimer(plugin, 0L, ticks);
-            multicolorTasks.put(player, task);
-            player.setGlowing(true);
-            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
-            player.closeInventory();
+            return;
         }
+
+        int ticks = plugin.getConfig().getInt("Rainbow_Update_Interval");
+        MulticolorTask task = new MulticolorTask(plugin, player);
+        task.runTaskTimer(plugin, 0L, ticks);
+        multicolorTasks.put(player, task);
+        player.setGlowing(true);
+        MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
     }
 
     public boolean isMulticolorTaskActive(Player player) {
