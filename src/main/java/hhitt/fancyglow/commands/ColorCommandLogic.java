@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class ColorCommandLogic implements CommandExecutor {
+
     private final FancyGlow plugin;
     private final GlowManager glowManager;
 
@@ -61,5 +62,4 @@ public class ColorCommandLogic implements CommandExecutor {
 
         glowManager.toggleGlow(p, color);
     }
-
 }

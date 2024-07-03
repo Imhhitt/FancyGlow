@@ -18,7 +18,9 @@ public class MainCommand implements CommandExecutor {
 
     private final FancyGlow plugin;
 
-    public MainCommand(FancyGlow plugin) {this.plugin = plugin;}
+    public MainCommand(FancyGlow plugin) {
+        this.plugin = plugin;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
@@ -27,11 +29,10 @@ public class MainCommand implements CommandExecutor {
         String actualWorld = ((Player) sender).getWorld().getName();
         List<String> noAllowedWorlds = plugin.getConfig().getStringList("Disabled_Worlds");
 
-
         //Users commands (/glow) that open the gui
         if (args == null || args.length == 0) {
 
-            if(sender.hasPermission("fancyglow.command.gui") || sender.hasPermission("fancyglow.admin")){
+            if (sender.hasPermission("fancyglow.command.gui") || sender.hasPermission("fancyglow.admin")) {
 
                 //Check the world
                 if (noAllowedWorlds.contains(actualWorld)) {
@@ -53,9 +54,9 @@ public class MainCommand implements CommandExecutor {
 
 
         //Logic for /glow disable
-        if(args[0].equalsIgnoreCase("disable")){
+        if (args[0].equalsIgnoreCase("disable")) {
 
-            if(sender.hasPermission("fancyglow.command.disable") || sender.hasPermission("fancyglow.admin")){
+            if (sender.hasPermission("fancyglow.command.disable") || sender.hasPermission("fancyglow.admin")) {
                 Scoreboard scoreboard = ((Player) sender).getScoreboard();
 
                 for (Team team : scoreboard.getTeams()) {
@@ -65,10 +66,10 @@ public class MainCommand implements CommandExecutor {
                 }
 
                 //If the player is not glowing, "exception" error
-                if(!player.isGlowing()){
+                if (!player.isGlowing()) {
                     MessageUtils.miniMessageSender(player, plugin.getConfig().getString("Messages.Not_Glowing"));
-                }else{
-                    //If is glowing, then disabled message
+                } else {
+                    //If it's glowing, then disabled message
                     MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
                 }
                 ((Player) sender).setGlowing(false);
@@ -81,12 +82,11 @@ public class MainCommand implements CommandExecutor {
         }
 
 
-
         //Logic for /glow color <color>
-        if( args[0].equalsIgnoreCase("color")){
-            if(sender.hasPermission("fancyglow.command.color") || sender.hasPermission("fancyglow.admin")){
+        if (args[0].equalsIgnoreCase("color")) {
+            if (sender.hasPermission("fancyglow.command.color") || sender.hasPermission("fancyglow.admin")) {
 
-                if(args.length == 1){
+                if (args.length == 1) {
                     MessageUtils.miniMessageSender(
                             player, plugin.getConfig().getString("Messages.Wrong_Usage_Color_Command"));
                     return true;
@@ -106,20 +106,20 @@ public class MainCommand implements CommandExecutor {
 
 
         //Admin commands
-        if(!sender.hasPermission("fancyglow.admin")){
+        if (!sender.hasPermission("fancyglow.admin")) {
             MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
             return true;
-        } else{
+        } else {
 
             // Logic for /glow reload
-            if(args.length == 1 && args[0].equalsIgnoreCase("reload")){
+            if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
                 plugin.getMainConfigManager().reloadConfig();
                 MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getReloadConfigMessage());
                 return true;
             }
 
             // Logic for /glow disable <player>
-            if (args.length >= 2 && args[0].equalsIgnoreCase("disable")){
+            if (args.length >= 2 && args[0].equalsIgnoreCase("disable")) {
 
                 Player playerToDisable = Bukkit.getPlayer(args[1]);
                 Scoreboard scoreboard = playerToDisable.getScoreboard();
@@ -135,7 +135,6 @@ public class MainCommand implements CommandExecutor {
                 return true;
 
             }
-
         }
 
         return true;
