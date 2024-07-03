@@ -14,12 +14,36 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.scoreboard.Team;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MenuClickListener implements Listener {
 
     private final FancyGlow plugin;
     private final GlowManager glowManager;
+
+    // Implementación para la lógica para mapear los colores de la armadura de cuero a los colores.
+    private static final Map<Color, ChatColor> colorMap = new HashMap<>();
+
+    static {
+        colorMap.put(Color.BLACK, ChatColor.BLACK);
+        colorMap.put(Color.BLUE, ChatColor.BLUE);
+        colorMap.put(Color.LIME, ChatColor.GREEN);
+        colorMap.put(Color.AQUA, ChatColor.AQUA);
+        colorMap.put(Color.RED, ChatColor.RED);
+        colorMap.put(Color.FUCHSIA, ChatColor.LIGHT_PURPLE);
+        colorMap.put(Color.YELLOW, ChatColor.YELLOW);
+        colorMap.put(Color.WHITE, ChatColor.WHITE);
+        colorMap.put(Color.SILVER, ChatColor.GRAY);
+        colorMap.put(Color.GRAY, ChatColor.DARK_GRAY);
+        colorMap.put(Color.NAVY, ChatColor.DARK_BLUE);
+        colorMap.put(Color.GREEN, ChatColor.DARK_GREEN);
+        colorMap.put(Color.TEAL, ChatColor.DARK_AQUA);
+        colorMap.put(Color.MAROON, ChatColor.DARK_RED);
+        colorMap.put(Color.PURPLE, ChatColor.DARK_PURPLE);
+        colorMap.put(Color.ORANGE, ChatColor.GOLD);
+    }
 
     public MenuClickListener(FancyGlow plugin) {
         this.plugin = plugin;
@@ -82,41 +106,6 @@ public class MenuClickListener implements Listener {
     }
 
     private ChatColor getColorFromArmorColor(org.bukkit.Color armorColor) {
-        // Implementación para la lógica para mapear los colores de la armadura de cuero a los colores
-        if (armorColor.equals(Color.BLACK)) {
-            return ChatColor.BLACK;
-        } else if (armorColor.equals(Color.BLUE)) {
-            return ChatColor.BLUE;
-        } else if (armorColor.equals(Color.LIME)) {
-            return ChatColor.GREEN;
-        } else if (armorColor.equals(Color.AQUA)) {
-            return ChatColor.AQUA;
-        } else if (armorColor.equals(Color.RED)) {
-            return ChatColor.RED;
-        } else if (armorColor.equals(Color.FUCHSIA)) {
-            return ChatColor.LIGHT_PURPLE;
-        } else if (armorColor.equals(Color.YELLOW)) {
-            return ChatColor.YELLOW;
-        } else if (armorColor.equals(Color.WHITE)) {
-            return ChatColor.WHITE;
-        } else if (armorColor.equals(Color.SILVER)) {
-            return ChatColor.GRAY;
-        } else if (armorColor.equals(Color.GRAY)) {
-            return ChatColor.DARK_GRAY;
-        } else if (armorColor.equals(Color.NAVY)) {
-            return ChatColor.DARK_BLUE;
-        } else if (armorColor.equals(Color.GREEN)) {
-            return ChatColor.DARK_GREEN;
-        } else if (armorColor.equals(Color.TEAL)) {
-            return ChatColor.DARK_AQUA;
-        } else if (armorColor.equals(Color.MAROON)) {
-            return ChatColor.DARK_RED;
-        } else if (armorColor.equals(Color.PURPLE)) {
-            return ChatColor.DARK_PURPLE;
-        } else if (armorColor.equals(Color.ORANGE)) {
-            return ChatColor.GOLD;
-        } else {
-            return null;
-        }
+        return colorMap.getOrDefault(armorColor, ChatColor.WHITE);
     }
 }
