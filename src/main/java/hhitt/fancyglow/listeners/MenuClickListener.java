@@ -81,28 +81,11 @@ public class MenuClickListener implements Listener {
                 color != null && p.hasPermission("fancyglow.admin"))) {
             MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
             p.closeInventory();
-        } else {
-            toggleGlow(p, color);
+            return;
         }
-    }
 
-    private void toggleGlow(Player player, ChatColor color) {
-        Team glowTeam = glowManager.getOrCreateTeam(color);
-        if (glowTeam != null) {
-            String cleanName = ChatColor.stripColor(player.getName());
-            if (glowTeam.hasEntry(cleanName)) {
-                glowTeam.removeEntry(cleanName);
-                player.setGlowing(false);
-                MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
-                player.closeInventory();
-            } else {
-                glowManager.removePlayerFromAllTeams(player);
-                glowTeam.addEntry(cleanName);
-                player.setGlowing(true);
-                MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
-                player.closeInventory();
-            }
-        }
+        glowManager.toggleGlow(p, color);
+        p.closeInventory();
     }
 
     private ChatColor getColorFromArmorColor(org.bukkit.Color armorColor) {
