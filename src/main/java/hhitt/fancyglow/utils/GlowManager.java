@@ -45,6 +45,16 @@ public class GlowManager {
         return multicolorTasks.containsKey(player);
     }
 
+    public void removeGlow(Player player) {
+        player.setGlowing(false);
+        removePlayerFromAllTeams(player);
+
+        if (isMulticolorTaskActive(player)) {
+            multicolorTasks.get(player).cancel();
+            multicolorTasks.remove(player);
+        }
+    }
+
     public void removePlayerFromAllTeams(Player player) {
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         String cleanName = ChatColor.stripColor(player.getName());
