@@ -14,7 +14,7 @@
 
 #While a player leave the server should the glow mode persist?
 # true = yes // false = no
-Persistant-Mode: true
+Persistent-Mode: true
 # How many ticks should the color change in rainbow mode?
 # 1 second = 20 ticks
 Rainbow_Update_Interval: 10
