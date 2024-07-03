@@ -9,7 +9,11 @@ import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
 import hhitt.fancyglow.tasks.MulticolorTask;
-import hhitt.fancyglow.utils.*;
+import hhitt.fancyglow.utils.FancyGlowPlaceholder;
+import hhitt.fancyglow.utils.GlowManager;
+import hhitt.fancyglow.utils.IsGlowingVariable;
+import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.PlayerGlowingColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -31,7 +35,7 @@ public final class FancyGlow extends JavaPlugin {
     private BukkitAudiences adventure;
 
     public @NonNull BukkitAudiences adventure() {
-        if(this.adventure == null) {
+        if (this.adventure == null) {
             throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
         }
         return this.adventure;
@@ -42,8 +46,7 @@ public final class FancyGlow extends JavaPlugin {
 
         //Bstats hook
         int pluginId = 22057;
-        Metrics metrics = new Metrics(this, pluginId);
-
+        new Metrics(this, pluginId);
 
         this.adventure = BukkitAudiences.create(this);
         glowManager = new GlowManager(this);
@@ -52,6 +55,7 @@ public final class FancyGlow extends JavaPlugin {
         MessageUtils.setAdventure(this.adventure);
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
+        //TODO: Also being instantiated at FancyGlowPlaceholder, not being used yet?
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
         getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
@@ -68,7 +72,7 @@ public final class FancyGlow extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        if(this.adventure != null) {
+        if (this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
         }
@@ -80,7 +84,10 @@ public final class FancyGlow extends JavaPlugin {
     public MainConfigManager getMainConfigManager() {
         return mainConfigManager;
     }
-    public ColorCommandLogic getColorCommandLogic() {return colorCommandLogic;}
+
+    public ColorCommandLogic getColorCommandLogic() {
+        return colorCommandLogic;
+    }
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
@@ -103,6 +110,4 @@ public final class FancyGlow extends JavaPlugin {
     public GlowManager getGlowManager() {
         return glowManager;
     }
-
-
 }

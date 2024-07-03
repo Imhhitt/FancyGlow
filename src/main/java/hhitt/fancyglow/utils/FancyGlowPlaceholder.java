@@ -12,11 +12,11 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     private final FancyGlow plugin;
     private PlayerGlowingColor playerGlowingColor;
-    public FancyGlowPlaceholder(FancyGlow plugin){
+
+    public FancyGlowPlaceholder(FancyGlow plugin) {
         this.plugin = plugin;
         this.playerGlowingColor = new PlayerGlowingColor(plugin);
     }
-
 
     @Override
     public @NotNull String getIdentifier() {
@@ -34,20 +34,21 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
     }
 
     @Override
-    public boolean canRegister(){
+    public boolean canRegister() {
         return true;
     }
+
     @Override
-    public boolean persist(){
-      return true;
+    public boolean persist() {
+        return true;
     }
 
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String params) {
-        if(player == null){
+        if (player == null) {
             return "";
         }
-        if(params.equals("color")){
+        if (params.equals("color")) {
             return playerGlowingColor.getPlayerGlowColor(player);
         }
         return "";

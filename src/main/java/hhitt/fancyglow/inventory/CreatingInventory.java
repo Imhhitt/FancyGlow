@@ -27,7 +27,7 @@ public class CreatingInventory implements InventoryHolder {
     private final String customTextureUrl =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0=";
 
-    public CreatingInventory(FancyGlow plugin, Player sender){
+    public CreatingInventory(FancyGlow plugin, Player sender) {
         this.plugin = plugin;
         this.inventory = plugin.getServer().createInventory(this, 45,
                 MessageUtils.miniMessageParse(plugin.getMainConfigManager().getInventoryTittle()));
@@ -237,7 +237,6 @@ public class CreatingInventory implements InventoryHolder {
                 plugin.getMainConfigManager().getFillMaterialName()));
 
 
-
         // Guardamos los datos asignados
         darkRed.setItemMeta(darkRedMeta);
         red.setItemMeta(redMeta);
@@ -302,11 +301,10 @@ public class CreatingInventory implements InventoryHolder {
         inventory.setItem(42, fill);
         inventory.setItem(43, fill);
         inventory.setItem(44, fill);
-
     }
 
     @Override
-    public Inventory getInventory(){
+    public Inventory getInventory() {
         return this.inventory;
     }
 

@@ -10,7 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.inventory.ItemStack;
 
 
 public class HeadClickListener implements Listener {
@@ -25,47 +25,33 @@ public class HeadClickListener implements Listener {
     @EventHandler
     public void onPlayerClickHead(InventoryClickEvent event) {
         Inventory clickedInventory = event.getClickedInventory();
-        if (clickedInventory != null && clickedInventory.getHolder() instanceof CreatingInventory) {
-            Player player = (Player) event.getWhoClicked();
+        if (clickedInventory == null || !(clickedInventory.getHolder() instanceof CreatingInventory)) return;
 
-            // Disable color head
-            if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD
-                    && event.getSlot() == 41) {
+        Player player = (Player) event.getWhoClicked();
+        ItemStack currentItem = event.getCurrentItem();
+        if (currentItem == null) return;
 
-                if (glowManager.isMulticolorTaskActive(player)) {
-                    glowManager.toggleMulticolorGlow(player);
-                    player.setGlowing(false);
-                    glowManager.removePlayerFromAllTeams(player);
-                    MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
-                    player.closeInventory();
-                } else {
-                    Scoreboard scoreboard = player.getScoreboard();
-                    scoreboard.getTeams().stream()
-                            .filter(team -> team.hasEntry(player.getName()))
-                            .forEach(team -> team.removeEntry(player.getName()));
+        Material itemType = currentItem.getType();
+        int slot = event.getSlot();
 
-                    String messageKey = player.isGlowing() ? plugin.getMainConfigManager().getDisableGlow()
-                            : plugin.getConfig().getString("Messages.Not_Glowing");
+        // Disable color head
+        if (itemType == Material.PLAYER_HEAD && slot == 41) {
+            glowManager.removeGlow(player);
+            player.closeInventory();
+        }
 
-                    MessageUtils.miniMessageSender(player, messageKey);
-                    player.setGlowing(false);
-                    player.closeInventory();
-                }
+        // Multicolor head
+        if (itemType == Material.PLAYER_HEAD && slot == 39) {
+
+            if (!player.hasPermission("fancyglow.rainbow") || !player.hasPermission("fancyglow.all_colors")) {
+                MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getNoPermissionMessage());
+                player.closeInventory();
+                return;
             }
 
-            // Multicolor head
-            if (event.getCurrentItem() != null && event.getCurrentItem().getType() == Material.PLAYER_HEAD
-                    && event.getSlot() == 39) {
-
-                if(!player.hasPermission("fancyglow.rainbow") || !player.hasPermission("fancyglow.all_colors")){
-                    MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getNoPermissionMessage());
-                    player.closeInventory();
-                    return;
-                }
-
-                // Toggle multicolor mode
-                glowManager.toggleMulticolorGlow(player);
-            }
+            // Toggle multicolor mode
+            glowManager.toggleMulticolorGlow(player);
+            player.closeInventory();
         }
     }
 }

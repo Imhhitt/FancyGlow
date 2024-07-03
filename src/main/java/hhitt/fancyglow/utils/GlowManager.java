@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GlowManager {
+
     private final FancyGlow plugin;
     private final Map<ChatColor, Team> glowTeams;
     private final Map<Player, MulticolorTask> multicolorTasks;
@@ -23,26 +24,47 @@ public class GlowManager {
 
     public void toggleMulticolorGlow(Player player) {
         if (multicolorTasks.containsKey(player)) {
-            MulticolorTask task = multicolorTasks.get(player);
-            task.cancel();
-            multicolorTasks.remove(player);
-            removePlayerFromAllTeams(player);
-            player.setGlowing(false);
+            removeGlow(player);
             MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
-            player.closeInventory();
-        } else {
-            int ticks = plugin.getConfig().getInt("Rainbow_Update_Interval");
-            MulticolorTask task = new MulticolorTask(plugin, player);
-            task.runTaskTimer(plugin, 0L, ticks);
-            multicolorTasks.put(player, task);
-            player.setGlowing(true);
-            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
-            player.closeInventory();
+            return;
         }
+
+        int ticks = plugin.getConfig().getInt("Rainbow_Update_Interval");
+        MulticolorTask task = new MulticolorTask(plugin, player);
+        task.runTaskTimer(plugin, 0L, ticks);
+        multicolorTasks.put(player, task);
+        player.setGlowing(true);
+        MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
     }
 
     public boolean isMulticolorTaskActive(Player player) {
         return multicolorTasks.containsKey(player);
+    }
+
+    public void toggleGlow(Player player, ChatColor color) {
+        Team glowTeam = getOrCreateTeam(color);
+        String cleanName = ChatColor.stripColor(player.getName());
+
+        removeGlow(player);
+
+        if (glowTeam.hasEntry(cleanName)) {
+            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
+            return;
+        }
+
+        glowTeam.addEntry(cleanName);
+        player.setGlowing(true);
+        MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
+    }
+
+    public void removeGlow(Player player) {
+        player.setGlowing(false);
+        removePlayerFromAllTeams(player);
+
+        if (isMulticolorTaskActive(player)) {
+            multicolorTasks.get(player).cancel();
+            multicolorTasks.remove(player);
+        }
     }
 
     public void removePlayerFromAllTeams(Player player) {
@@ -56,22 +78,17 @@ public class GlowManager {
     }
 
     public Team getOrCreateTeam(ChatColor color) {
-        Team glowTeam = glowTeams.get(color);
-        try { glowTeam.getName(); } catch (IllegalStateException | NullPointerException e) {
-            glowTeam = createTeam(color);
-            glowTeams.put(color, glowTeam);
-        }
-        return glowTeam;
+        return glowTeams.computeIfAbsent(color, k -> createTeam(color));
     }
 
     public Team createTeam(ChatColor color) {
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        if (board.getTeam(color.name()) == null) {
-            Team team = board.registerNewTeam(color.name());
+        Team team = board.getTeam(color.name());
+        if (team == null) {
+            team = board.registerNewTeam(color.name());
             team.setColor(color);
-            return team;
         }
-        return board.getTeam(color.name());
+        return team;
     }
 
     public boolean hasGlowPermission(Player player, ChatColor color) {
