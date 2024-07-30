@@ -26,13 +26,13 @@ import java.util.Objects;
 
 public final class FancyGlow extends JavaPlugin {
 
+    private BukkitAudiences adventure;
     private MainConfigManager mainConfigManager;
     private ColorCommandLogic colorCommandLogic;
     private Map<Player, MulticolorTask> multicolorTasks;
     private MenuClickListener menuClickListener;
     private GlowManager glowManager;
-
-    private BukkitAudiences adventure;
+    private PlayerGlowManager playerGlowManager;
 
     public @NonNull BukkitAudiences adventure() {
         if (this.adventure == null) {
@@ -53,11 +53,15 @@ public final class FancyGlow extends JavaPlugin {
         this.menuClickListener = new MenuClickListener(this);
         this.colorCommandLogic = new ColorCommandLogic(this, this.glowManager);
         MessageUtils.setAdventure(this.adventure);
+
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
         //TODO: Also being instantiated at FancyGlowPlaceholder, not being used yet?
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
         getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
+
+        playerGlowManager = new PlayerGlowManager(this);
+
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
         Objects.requireNonNull(getCommand("glow")).setTabCompleter(new SubcommandTabSuggestion(this));
 
@@ -111,5 +115,9 @@ public final class FancyGlow extends JavaPlugin {
 
     public GlowManager getGlowManager() {
         return glowManager;
+    }
+
+    public PlayerGlowManager getPlayerGlowManager() {
+        return playerGlowManager;
     }
 }
