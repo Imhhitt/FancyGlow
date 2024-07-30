@@ -6,7 +6,7 @@
 
     <groupId>hhitt.org.example</groupId>
     <artifactId>FancyGlow</artifactId>
-    <version>2.0.1</version>
+    <version>2.0.4</version>
     <packaging>jar</packaging>
 
     <name>FancyGlow</name>
@@ -26,7 +26,23 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>hhitt.fancyglow</shadedPattern>
+                            <shadedPattern>hhitt.fancyglow.deps.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.adventure</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.mojang.authlib</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.authlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.annotations.intellij</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.annotations.jetbrains</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -42,6 +58,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <outputDirectory>./jars</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -69,6 +93,7 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -86,11 +111,13 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
             <version>4.17.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
-            <version>1.5.25</version>
+            <version>1.5.26</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>

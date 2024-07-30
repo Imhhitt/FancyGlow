@@ -1,6 +1,8 @@
 package hhitt.fancyglow.utils;
 
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.managers.GlowManager;
+import hhitt.fancyglow.managers.PlayerGlowManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -9,13 +11,14 @@ import org.jetbrains.annotations.Nullable;
 public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     // PlaceholderAPI hook to create a placeholder (color one)
-
     private final FancyGlow plugin;
-    private PlayerGlowingColor playerGlowingColor;
+    private final GlowManager glowManager;
+    private final PlayerGlowManager playerGlowManager;
 
     public FancyGlowPlaceholder(FancyGlow plugin) {
         this.plugin = plugin;
-        this.playerGlowingColor = new PlayerGlowingColor(plugin);
+        this.glowManager = plugin.getGlowManager();
+        this.playerGlowManager = plugin.getPlayerGlowManager();
     }
 
     @Override
@@ -30,7 +33,7 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.0";
+        return "1.1";
     }
 
     @Override
@@ -49,7 +52,10 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
             return "";
         }
         if (params.equals("color")) {
-            return playerGlowingColor.getPlayerGlowColor(player);
+            if (glowManager.isMulticolorTaskActive(player)) {
+                return "RAINBOW";
+            }
+            return playerGlowManager.getPlayerGlowColor(player);
         }
         return "";
     }

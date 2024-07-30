@@ -1,7 +1,7 @@
 package hhitt.fancyglow.tasks;
 
 import hhitt.fancyglow.FancyGlow;
-import hhitt.fancyglow.utils.GlowManager;
+import hhitt.fancyglow.managers.GlowManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

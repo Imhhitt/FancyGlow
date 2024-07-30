@@ -1,8 +1,8 @@
 package hhitt.fancyglow.inventory;
 
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.HeadUtils;
-import hhitt.fancyglow.utils.IsGlowingVariable;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -19,22 +19,26 @@ import java.util.Collections;
 
 public class CreatingInventory implements InventoryHolder {
 
-
     // Paper inventory holder to manage the gui creation and others
 
     private final Inventory inventory;
     private final FancyGlow plugin;
+    private final PlayerGlowManager playerGlowManager;
     private final String customTextureUrl =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0=";
 
     public CreatingInventory(FancyGlow plugin, Player sender) {
         this.plugin = plugin;
+        this.playerGlowManager = plugin.getPlayerGlowManager();
         this.inventory = plugin.getServer().createInventory(this, 45,
                 MessageUtils.miniMessageParse(plugin.getMainConfigManager().getInventoryTittle()));
 
-        ItemStack playerHead = getPlayerHead((Player) sender);
+        // Player head
+        ItemStack playerHead = getPlayerHead(sender);
         inventory.setItem(41, playerHead);
-        ItemStack rainbowHead = HeadUtils.getCustomSkull(customTextureUrl, (Player) sender);
+
+        // Rainbow head
+        ItemStack rainbowHead = HeadUtils.getCustomSkull(customTextureUrl);
         ItemMeta rainbowHeadMeta = rainbowHead.getItemMeta();
 
         assert rainbowHeadMeta != null;
@@ -315,16 +319,12 @@ public class CreatingInventory implements InventoryHolder {
         meta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getHeadName()));
         meta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getHeadLore())));
 
-        // Comprobación de que el ItemMeta no sea nulo
-        if (meta != null) {
-            meta.setOwningPlayer(player);
-            head.setItemMeta(meta);
+        meta.setOwningPlayer(player);
+        head.setItemMeta(meta);
 
-            // Actualiza el lore del item con el estado de brillo del jugador
-            IsGlowingVariable.updateItemLore(head, player);
-        }
+        // Actualiza el lore del item con el estado de brillo del jugador
+        playerGlowManager.updateItemLore(head, player);
+
         return head;
     }
-
-
 }

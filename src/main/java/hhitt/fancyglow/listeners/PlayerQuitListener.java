@@ -1,7 +1,8 @@
 package hhitt.fancyglow.listeners;
 
 import hhitt.fancyglow.FancyGlow;
-import hhitt.fancyglow.utils.GlowManager;
+import hhitt.fancyglow.managers.GlowManager;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -16,11 +17,13 @@ public class PlayerQuitListener implements Listener {
         this.glowManager = plugin.getGlowManager();
     }
 
-    // Actions of persistant mode
+    // Actions of persistent mode
     @EventHandler
-    public void onPlayerQuit(PlayerQuitEvent e) {
-        if (!plugin.getConfig().getBoolean("Persistent-Mode")) {
-            glowManager.removePlayerFromAllTeams(e.getPlayer());
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        // Remove from teams if Persistent-Mode is disabled or player is in rainbow mode.
+        if (!plugin.getConfig().getBoolean("Persistent-Mode") || glowManager.isMulticolorTaskActive(player)) {
+            glowManager.removeGlow(player);
         }
     }
 }

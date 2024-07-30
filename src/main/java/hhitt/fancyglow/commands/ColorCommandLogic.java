@@ -1,7 +1,7 @@
 package hhitt.fancyglow.commands;
 
 import hhitt.fancyglow.FancyGlow;
-import hhitt.fancyglow.utils.GlowManager;
+import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,9 +15,9 @@ public class ColorCommandLogic implements CommandExecutor {
     private final FancyGlow plugin;
     private final GlowManager glowManager;
 
-    public ColorCommandLogic(FancyGlow plugin, GlowManager glowManager) {
+    public ColorCommandLogic(FancyGlow plugin) {
         this.plugin = plugin;
-        this.glowManager = glowManager;
+        this.glowManager = plugin.getGlowManager();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ColorCommandLogic implements CommandExecutor {
     public void glowColorCommand(Player p, String arg) {
         ChatColor color;
 
-        if (arg.equals("rainbow")) {
+        if (arg.equalsIgnoreCase("rainbow")) {
             if (!(
                     p.hasPermission("fancyglow.rainbow") ||
                             p.hasPermission("fancyglow.all_colors")
