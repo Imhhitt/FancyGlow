@@ -26,7 +26,23 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>hhitt.fancyglow</shadedPattern>
+                            <shadedPattern>hhitt.fancyglow.deps.bstats</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>net.kyori</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.adventure</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.mojang.authlib</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.authlib</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.intellij</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.annotations.intellij</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.jetbrains</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.annotations.jetbrains</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -77,6 +93,7 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -94,11 +111,13 @@
             <groupId>net.kyori</groupId>
             <artifactId>adventure-api</artifactId>
             <version>4.17.0</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.mojang</groupId>
             <artifactId>authlib</artifactId>
             <version>1.5.26</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>

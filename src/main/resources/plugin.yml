@@ -1,12 +1,12 @@
 name: FancyGlow
 author: hhitt
-version: '2.0.1'
+version: '2.0.4'
 main: hhitt.fancyglow.FancyGlow
 api-version: '1.20'
-softdepend: [PlaceholderAPI]
+softdepend: [ PlaceholderAPI ]
 commands:
   glow:
-    description: enable or disable your glow mode
+    description: Main FancyGlow command can toggle or select your glow mode.
     usage: /<command>
     aliases:
-    - fancyglow
+      - fancyglow
