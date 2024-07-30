@@ -59,6 +59,8 @@ public final class FancyGlow extends JavaPlugin {
         PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
         getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
+        Objects.requireNonNull(getCommand("glow")).setTabCompleter(new SubcommandTabSuggestion(this));
+
         registerEvents();
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new FancyGlowPlaceholder(this).register();
