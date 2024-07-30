@@ -1,6 +1,5 @@
 package hhitt.fancyglow;
 
-import hhitt.fancyglow.commands.ColorCommandLogic;
 import hhitt.fancyglow.commands.MainCommand;
 import hhitt.fancyglow.commands.SubcommandTabSuggestion;
 import hhitt.fancyglow.config.MainConfigManager;
@@ -8,29 +7,23 @@ import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
-import hhitt.fancyglow.tasks.MulticolorTask;
+import hhitt.fancyglow.managers.GlowManager;
+import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
-import hhitt.fancyglow.utils.GlowManager;
-import hhitt.fancyglow.utils.IsGlowingVariable;
 import hhitt.fancyglow.utils.MessageUtils;
-import hhitt.fancyglow.utils.PlayerGlowingColor;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Map;
 import java.util.Objects;
 
 public final class FancyGlow extends JavaPlugin {
 
     private BukkitAudiences adventure;
     private MainConfigManager mainConfigManager;
-    private ColorCommandLogic colorCommandLogic;
-    private Map<Player, MulticolorTask> multicolorTasks;
-    private MenuClickListener menuClickListener;
+
     private GlowManager glowManager;
     private PlayerGlowManager playerGlowManager;
 
@@ -43,29 +36,29 @@ public final class FancyGlow extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        //bStats hook / metrics
+        new Metrics(this, 22057);
 
-        //Bstats hook
-        int pluginId = 22057;
-        new Metrics(this, pluginId);
-
+        // Try to create adventure audience
         this.adventure = BukkitAudiences.create(this);
-        glowManager = new GlowManager(this);
-        this.menuClickListener = new MenuClickListener(this);
-        this.colorCommandLogic = new ColorCommandLogic(this, this.glowManager);
         MessageUtils.setAdventure(this.adventure);
 
+        // Init config manager.
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
-        //TODO: Also being instantiated at FancyGlowPlaceholder, not being used yet?
-        PlayerGlowingColor playerGlowingColor = new PlayerGlowingColor(this);
-        getCommand("glow").setTabCompleter(new SubcommandTabSuggestion());
 
+        // Init managers.
+        glowManager = new GlowManager(this);
         playerGlowManager = new PlayerGlowManager(this);
 
+        // Register command and suggestions.
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
         Objects.requireNonNull(getCommand("glow")).setTabCompleter(new SubcommandTabSuggestion(this));
 
+        // Register events.
         registerEvents();
+
+        // Attempt to get PlaceholderAPI
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new FancyGlowPlaceholder(this).register();
         } else {
@@ -74,43 +67,25 @@ public final class FancyGlow extends JavaPlugin {
         }
     }
 
-
     @Override
     public void onDisable() {
-
         if (this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
         }
 
-        cancelMulticolorTasks();
-
-    }
-
-    public MainConfigManager getMainConfigManager() {
-        return mainConfigManager;
-    }
-
-    public ColorCommandLogic getColorCommandLogic() {
-        return colorCommandLogic;
+        glowManager.cancelMulticolorTasks();
     }
 
     public void registerEvents() {
         getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
-        getServer().getPluginManager().registerEvents(new IsGlowingVariable(this), this);
-        getServer().getPluginManager().registerEvents(new HeadClickListener(this, this.glowManager), this);
+        getServer().getPluginManager().registerEvents(new HeadClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
     }
 
-    public void cancelMulticolorTasks() {
-        if (multicolorTasks != null) {
-            for (MulticolorTask task : multicolorTasks.values()) {
-                task.cancel();
-            }
-            multicolorTasks.clear();
-        }
-
+    public MainConfigManager getMainConfigManager() {
+        return mainConfigManager;
     }
 
     public GlowManager getGlowManager() {
