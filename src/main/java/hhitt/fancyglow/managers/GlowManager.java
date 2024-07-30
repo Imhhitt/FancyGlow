@@ -75,6 +75,18 @@ public class GlowManager {
                 team.removeEntry(cleanName);
             }
         }
+
+        // Attempt to remove player from any color team.
+        Arrays.stream(ChatColor.values())
+                // Allowed team names. (Color names from ChatColor...)
+                .map(color -> board.getTeam(color.name()))
+                // Make sure team exists.
+                .filter(Objects::nonNull)
+                // Filter if player is in the team
+                .filter(team -> team.hasEntry(cleanName))
+                // Remove from the team.
+                .forEach(team -> team.removeEntry(cleanName));
+
     }
 
     public Team getOrCreateTeam(ChatColor color) {
