@@ -2,6 +2,7 @@ package hhitt.fancyglow.commands;
 
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.managers.GlowManager;
+import hhitt.fancyglow.utils.ColorUtils;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -49,7 +50,7 @@ public class ColorCommandLogic implements CommandExecutor {
         }
 
         try {
-            color = ChatColor.valueOf(arg.toUpperCase());
+            color = ColorUtils.findColor(arg.toUpperCase());
         } catch (IllegalArgumentException e) {
             MessageUtils.miniMessageSender(p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
             return;
