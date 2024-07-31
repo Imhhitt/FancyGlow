@@ -33,7 +33,7 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.1";
+        return "1.2.0";
     }
 
     @Override
@@ -52,10 +52,13 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
             return "";
         }
         if (params.equals("color")) {
+            return playerGlowManager.getPlayerGlowColor(player);
+        }
+        if (params.equals("color_name")) {
             if (glowManager.isMulticolorTaskActive(player)) {
                 return "RAINBOW";
             }
-            return playerGlowManager.getPlayerGlowColor(player);
+            return playerGlowManager.getPlayerGlowColorName(player);
         }
         return "";
     }
