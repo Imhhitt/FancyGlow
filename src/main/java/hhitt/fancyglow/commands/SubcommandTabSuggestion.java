@@ -3,6 +3,7 @@ package hhitt.fancyglow.commands;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.utils.ColorUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -48,22 +49,37 @@ public class SubcommandTabSuggestion implements TabCompleter {
         }
 
         //Suggest all colors and rainbow
-        if (args.length == 2 && args[0].equalsIgnoreCase("color") && (canColor || hasAdminPermission)) {
+        if (args.length == 2) {
             // Returns empty list to console.
             if (!(sender instanceof Player)) return Collections.emptyList();
 
-            completions = ColorUtils.getChatColorValues()
-                    .stream()
-                    .filter(name -> glowManager.hasGlowPermission(((Player) sender), name))
-                    .map(color -> color.name().toLowerCase())
-                    .collect(Collectors.toList());
+            if (args[0].equalsIgnoreCase("color") && (canColor || hasAdminPermission)) {
 
-            boolean canRainbow = sender.hasPermission("fancyglow.rainbow");
-            // Add rainbow completion if can
-            if (canRainbow) completions.add("rainbow");
+                completions = ColorUtils.getChatColorValues()
+                        .stream()
+                        .filter(name -> glowManager.hasGlowPermission(((Player) sender), name))
+                        .map(color -> color.name().toLowerCase())
+                        .collect(Collectors.toList());
 
-            // Returns starting string argument completion.
-            return filter(completions, args[1]);
+                boolean canRainbow = sender.hasPermission("fancyglow.rainbow");
+                // Add rainbow completion if can
+                if (canRainbow) completions.add("rainbow");
+
+                // Returns starting string argument completion.
+                return filter(completions, args[1]);
+            }
+
+            if (args[0].equalsIgnoreCase("disable") && (canDisable && hasAdminPermission)) {
+
+                completions = Bukkit.getOnlinePlayers()
+                        .stream()
+                        .map(Player::getName)
+                        .collect(Collectors.toList());
+
+                completions.add("all");
+
+                return completions;
+            }
         }
 
         return Collections.emptyList();
