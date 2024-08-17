@@ -46,4 +46,12 @@ public class ColorUtils {
         return colorMap.values();
     }
 
+    public static ChatColor findColor(String value) {
+        return colorMap.values()
+                .stream()
+                .filter(color -> color.name().equalsIgnoreCase(value))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

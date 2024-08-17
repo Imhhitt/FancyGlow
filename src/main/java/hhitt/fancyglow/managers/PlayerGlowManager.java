@@ -29,7 +29,7 @@ public class PlayerGlowManager {
         return player.isGlowing() ? trueStatus : falseStatus;
     }
 
-    public String getPlayerGlowColor(Player player) {
+    public String getPlayerGlowColorName(Player player) {
         if (player.isGlowing()) {
             Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
             Team team = board.getPlayerTeam(player);
@@ -39,6 +39,18 @@ public class PlayerGlowManager {
             }
         }
         return "NONE";
+    }
+
+    public String getPlayerGlowColor(Player player) {
+        if (player.isGlowing()) {
+            Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
+            Team team = board.getPlayerTeam(player);
+            if (team != null) {
+                ChatColor glowColor = team.getColor();
+                return glowColor.toString();
+            }
+        }
+        return "";
     }
 
     public void updateItemLore(ItemStack item, Player player) {
