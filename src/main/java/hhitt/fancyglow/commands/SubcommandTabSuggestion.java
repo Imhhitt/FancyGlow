@@ -58,7 +58,7 @@ public class SubcommandTabSuggestion implements TabCompleter {
                 completions = ColorUtils.getChatColorValues()
                         .stream()
                         .filter(name -> glowManager.hasGlowPermission(((Player) sender), name))
-                        .map(color -> color.name().toLowerCase())
+                        .map(String::toLowerCase)
                         .collect(Collectors.toList());
 
                 boolean canRainbow = sender.hasPermission("fancyglow.rainbow");
