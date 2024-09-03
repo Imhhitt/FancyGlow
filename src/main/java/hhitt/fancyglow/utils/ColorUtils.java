@@ -10,6 +10,7 @@ import java.util.Map;
 public class ColorUtils {
 
     // Implementación para la lógica para mapear los colores de la armadura de cuero a los colores.
+    private static final Map<String, ChatColor> colorValues = new HashMap<>();
     private static final Map<Color, ChatColor> colorMap = new HashMap<>();
     private static final Map<ChatColor, Color> reverseColorMap = new HashMap<>();
 
@@ -31,6 +32,12 @@ public class ColorUtils {
         colorMap.put(Color.PURPLE, ChatColor.DARK_PURPLE);
         colorMap.put(Color.ORANGE, ChatColor.GOLD);
 
+        //Add available colors.
+        colorMap.values().forEach(color -> colorValues.put(color.name(), color));
+        //Manually add common used color names.
+        colorValues.put("PINK", ChatColor.LIGHT_PURPLE);
+        colorValues.put("PURPLE", ChatColor.DARK_PURPLE);
+
         colorMap.forEach((key, value) -> reverseColorMap.put(value, key));
     }
 
@@ -42,14 +49,14 @@ public class ColorUtils {
         return reverseColorMap.getOrDefault(chatColor, Color.WHITE);
     }
 
-    public static Collection<ChatColor> getChatColorValues() {
-        return colorMap.values();
+    public static Collection<String> getChatColorValues() {
+        return colorValues.keySet();
     }
 
     public static ChatColor findColor(String value) {
-        return colorMap.values()
-                .stream()
-                .filter(color -> color.name().equalsIgnoreCase(value))
+        return colorValues.entrySet().stream()
+                .filter(entry -> entry.getKey().equalsIgnoreCase(value))
+                .map(Map.Entry::getValue)
                 .findFirst()
                 .orElse(null);
     }
