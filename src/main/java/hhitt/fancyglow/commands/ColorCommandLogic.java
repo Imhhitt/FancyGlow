@@ -35,7 +35,7 @@ public class ColorCommandLogic implements CommandExecutor {
     }
 
     public void glowColorCommand(Player p, String arg) {
-        ChatColor color;
+        ChatColor color = ColorUtils.findColor(arg.toUpperCase());
 
         if (arg.equalsIgnoreCase("rainbow")) {
             if (!(
@@ -49,9 +49,7 @@ public class ColorCommandLogic implements CommandExecutor {
             return;
         }
 
-        try {
-            color = ColorUtils.findColor(arg.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        if (color == null) {
             MessageUtils.miniMessageSender(p, plugin.getConfig().getString("Messages.Not_Valid_Color"));
             return;
         }
