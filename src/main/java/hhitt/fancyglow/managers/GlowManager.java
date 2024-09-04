@@ -111,7 +111,11 @@ public class GlowManager {
     }
 
     public boolean hasGlowPermission(Player player, ChatColor color) {
-        return player.hasPermission("fancyglow." + color.name().toLowerCase());
+        return hasGlowPermission(player, color.name());
+    }
+
+    public boolean hasGlowPermission(Player player, String colorName) {
+        return player.hasPermission("fancyglow." + colorName.toLowerCase());
     }
 
     public void cancelMulticolorTasks() {

@@ -33,7 +33,7 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.2.0";
+        return "1.3.0";
     }
 
     @Override
@@ -51,8 +51,18 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
         if (player == null) {
             return "";
         }
+
+        String enabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanTrue();
+        String disabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanFalse();
+
         if (params.equals("color")) {
             return playerGlowManager.getPlayerGlowColor(player);
+        }
+        if (params.equals("status_formatted")) {
+            playerGlowManager.getPlayerGlowingStatus(player);
+        }
+        if (params.equals("status")) {
+            return player.isGlowing() ? enabled : disabled;
         }
         if (params.equals("color_name")) {
             if (glowManager.isMulticolorTaskActive(player)) {
