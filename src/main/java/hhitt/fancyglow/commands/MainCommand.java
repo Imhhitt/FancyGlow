@@ -100,8 +100,8 @@ public class MainCommand implements CommandExecutor {
         // Logic for /glow reload
         if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
             plugin.getMainConfigManager().reloadConfig();
-            if(sender instanceof Player senderPlayer){
-                MessageUtils.miniMessageSender(senderPlayer, plugin.getMainConfigManager().getReloadConfigMessage());
+            if(sender instanceof Player){
+                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getReloadConfigMessage());
             } else {
                 sender.sendMessage(plugin.getMainConfigManager().getReloadConfigMessage());
             }
@@ -118,8 +118,8 @@ public class MainCommand implements CommandExecutor {
                     MessageUtils.miniMessageSender(online, this.plugin.getMainConfigManager().getDisableGlow());
                 });
 
-                if(sender instanceof Player senderPlayer){
-                    MessageUtils.miniMessageSender(senderPlayer, this.plugin.getConfig().getString("Messages.Disable_Glow_Everyone"));
+                if(sender instanceof Player){
+                    MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Disable_Glow_Everyone"));
                 } else {
                     sender.sendMessage(this.plugin.getConfig().getString("Messages.Disable_Glow_Everyone"));
                 }
@@ -142,8 +142,8 @@ public class MainCommand implements CommandExecutor {
             glowManager.removeGlow(target);
             MessageUtils.miniMessageSender(target, this.plugin.getMainConfigManager().getDisableGlow());
             //noinspection DataFlowIssue
-            if(sender instanceof Player senderPlayer){
-                MessageUtils.miniMessageSender(senderPlayer, this.plugin.getConfig().getString("Messages.Disable_Glow_Others").replace("%player_name%", target.getName()));
+            if(sender instanceof Player){
+                MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Disable_Glow_Others").replace("%player_name%", target.getName()));
             } else {
                 sender.sendMessage(this.plugin.getConfig().getString("Messages.Disable_Glow_Others").replace("%player_name%", target.getName()));
             }
