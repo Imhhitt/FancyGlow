@@ -28,12 +28,16 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
 
-        Player player = (Player) sender;
         String actualWorld = ((Player) sender).getWorld().getName();
         List<String> noAllowedWorlds = plugin.getConfig().getStringList("Disabled_Worlds");
 
         //Users commands (/glow) that open the gui
         if (args == null || args.length == 0) {
+            if(!(sender instanceof Player)){
+                sender.sendMessage("That command can be performed only by players!");
+                return true;
+            }
+            Player player = (Player) sender;
             if (!sender.hasPermission("fancyglow.command.gui") && !sender.hasPermission("fancyglow.admin")) {
                 MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
                 return true;
@@ -54,6 +58,11 @@ public class MainCommand implements CommandExecutor {
 
         //Logic for /glow disable
         if (args[0].equalsIgnoreCase("disable") && args.length == 1) {
+            if(!(sender instanceof Player)){
+                sender.sendMessage("That command can be performed only by players!");
+                return true;
+            }
+            Player player = (Player) sender;
             if (!sender.hasPermission("fancyglow.command.disable") && !sender.hasPermission("fancyglow.admin")) {
                 MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
                 return true;
@@ -75,6 +84,11 @@ public class MainCommand implements CommandExecutor {
 
         //Logic for /glow color <color>
         if (args[0].equalsIgnoreCase("color")) {
+            if(!(sender instanceof Player)){
+                sender.sendMessage("That command can be performed only by players!");
+                return true;
+            }
+            Player player = (Player) sender;
             if (!sender.hasPermission("fancyglow.command.color") && !sender.hasPermission("fancyglow.admin")) {
                 MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
                 return true;
