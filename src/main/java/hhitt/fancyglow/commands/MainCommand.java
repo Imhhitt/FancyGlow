@@ -28,7 +28,7 @@ public class MainCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
 
-        String actualWorld = ((Player) sender).getWorld().getName();
+
         List<String> noAllowedWorlds = plugin.getConfig().getStringList("Disabled_Worlds");
 
         //Users commands (/glow) that open the gui
@@ -42,6 +42,7 @@ public class MainCommand implements CommandExecutor {
                 MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
                 return true;
             }
+            String actualWorld = ((Player) sender).getWorld().getName();
 
             //Check the world
             if (noAllowedWorlds.contains(actualWorld)) {
