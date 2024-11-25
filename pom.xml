@@ -66,7 +66,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>D:\TestingServer\1_20_4\plugins</outputDirectory>
+                    <outputDirectory>./jars</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
