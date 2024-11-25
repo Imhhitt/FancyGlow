@@ -25,6 +25,7 @@ Messages:
   Reload_Message: "<blue>Plugin configuration file reloaded successfully!"
   Enable_Glow: "<green>Now you are glowing!"
   Disable_Glow: "<red>You aren't glowing anymore!"
+  Disable_Usage: "<red>Correct usage is: /glow disable <player>"
   Disable_Glow_Others: "<red>You have disabled glow of %player_name%"
   Disable_Glow_Everyone: "<red>You have disabled glow to everyone online."
   Not_Glowing: "<red>You are not glowing!"
@@ -32,6 +33,7 @@ Messages:
   Wrong_Usage_Color_Command: "<red>Wrong command usage! Use like: <gold>/glow color <color></gold>."
   Unknown_Target: "<red>Player %player_name% is not online!"
   Target_Not_Glowing: "<red>Target is not glowing!"
+  Invalid_Sub_Command: "<red>Unknown sub-command \"%sub_command%\"."
 
 
   # Message that player gets when enter on a disabled world
