@@ -6,7 +6,7 @@
 
     <groupId>hhitt.org.example</groupId>
     <artifactId>FancyGlow</artifactId>
-    <version>2.2.1</version>
+    <version>2.3.0</version>
     <packaging>jar</packaging>
 
     <name>FancyGlow</name>
@@ -66,7 +66,7 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.1</version>
                 <configuration>
-                    <outputDirectory>./jars</outputDirectory>
+                    <outputDirectory>D:\TestingServer\1_20_4\plugins</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
