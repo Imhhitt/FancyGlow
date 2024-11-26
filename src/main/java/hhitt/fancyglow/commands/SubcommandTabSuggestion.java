@@ -32,6 +32,9 @@ public class SubcommandTabSuggestion implements TabCompleter {
 
         boolean hasAdminPermission = sender.hasPermission("fancyglow.admin");
         boolean canDisable = sender.hasPermission("fancyglow.command.disable");
+        boolean canDisableOthers = sender.hasPermission("fancyglow.command.disable.others");
+        boolean canDisableEveryone = sender.hasPermission("fancyglow.command.disable.everyone");
+        boolean canReload = sender.hasPermission("fancyglow.command.reload");
         boolean canColor = sender.hasPermission("fancyglow.command.color");
 
         //Suggest for disable and color
@@ -41,6 +44,7 @@ public class SubcommandTabSuggestion implements TabCompleter {
                 completions.addAll(Arrays.asList("disable", "reload", "color"));
             } else {
                 if (canDisable) completions.add("disable");
+                if (canReload) completions.add("reload");
                 if (canColor) completions.add("color");
             }
 
@@ -69,14 +73,16 @@ public class SubcommandTabSuggestion implements TabCompleter {
                 return filter(completions, args[1]);
             }
 
-            if (args[0].equalsIgnoreCase("disable") && (canDisable && hasAdminPermission)) {
+            if (args[0].equalsIgnoreCase("disable") && (canDisableOthers || hasAdminPermission)) {
 
                 completions = Bukkit.getOnlinePlayers()
                         .stream()
                         .map(Player::getName)
                         .collect(Collectors.toList());
 
-                completions.add("all");
+                if (canDisableEveryone) {
+                    completions.add("all");
+                }
 
                 return completions;
             }

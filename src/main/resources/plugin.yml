@@ -1,6 +1,6 @@
 name: FancyGlow
 author: hhitt
-version: 2.2.1
+version: '${project.version}'
 main: hhitt.fancyglow.FancyGlow
 api-version: '1.20'
 softdepend: [ PlaceholderAPI ]
@@ -10,3 +10,16 @@ commands:
     usage: /<command>
     aliases:
       - fancyglow
+
+permissions:
+  fancyglow.admin:
+    description: Gives permission to every fancy glow command and feature.
+    children:
+      fancyglow.rainbow: true
+      fancyglow.all_colors: true
+      fancyglow.command.gui: true
+      fancyglow.command.color: true
+      fancyglow.command.reload: true
+      fancyglow.command.disable: true
+      fancyglow.command.disable.everyone: true
+      fancyglow.command.disable.others: true

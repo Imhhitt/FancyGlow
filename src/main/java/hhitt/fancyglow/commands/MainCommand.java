@@ -27,143 +27,175 @@ public class MainCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
-
-
         List<String> noAllowedWorlds = plugin.getConfig().getStringList("Disabled_Worlds");
 
-        //Users commands (/glow) that open the gui
-        if (args == null || args.length == 0) {
-            if(!(sender instanceof Player)){
-                sender.sendMessage("That command can be performed only by players!");
-                return true;
-            }
+        //Prevent command usage in target worlds.
+        if (isPlayer(sender)) {
             Player player = (Player) sender;
-            if (!sender.hasPermission("fancyglow.command.gui") && !sender.hasPermission("fancyglow.admin")) {
-                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-                return true;
-            }
-            String actualWorld = ((Player) sender).getWorld().getName();
 
             //Check the world
-            if (noAllowedWorlds.contains(actualWorld)) {
+            if (noAllowedWorlds.contains(player.getWorld().getName())) {
                 MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisabledWorldMessage());
                 return true;
             }
+        }
+
+        if (args.length == 0) {
+            // Prevent open gui when in console.
+            if (!isPlayer(sender)) {
+                sender.sendMessage("That command can only be performed by players!");
+                return true;
+            }
+
+            Player player = (Player) sender;
+
+            //Check gui permissions.
+            if (!hasPermission(player, "fancyglow.command.gui")) return true;
 
             //Open the gui
-            CreatingInventory inventory = new CreatingInventory(plugin, (Player) sender);
-            ((Player) sender).openInventory(inventory.getInventory());
+            player.openInventory(new CreatingInventory(plugin, player).getInventory());
             return true;
         }
 
-
-        //Logic for /glow disable
-        if (args[0].equalsIgnoreCase("disable") && args.length == 1) {
-            if(!(sender instanceof Player)){
-                sender.sendMessage("That command can be performed only by players!");
-                return true;
-            }
-            Player player = (Player) sender;
-            if (!sender.hasPermission("fancyglow.command.disable") && !sender.hasPermission("fancyglow.admin")) {
-                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-                return true;
-            }
-
-
-            //If the player is not glowing, "exception" error
-            if (!player.isGlowing()) {
-                MessageUtils.miniMessageSender(player, plugin.getConfig().getString("Messages.Not_Glowing"));
-                return true;
-            }
-
-            //If it's glowing, then disabled message
-            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
-            glowManager.removeGlow(player);
-            return true;
-        }
-
-
-        //Logic for /glow color <color>
-        if (args[0].equalsIgnoreCase("color")) {
-            if(!(sender instanceof Player)){
-                sender.sendMessage("That command can be performed only by players!");
-                return true;
-            }
-            Player player = (Player) sender;
-            if (!sender.hasPermission("fancyglow.command.color") && !sender.hasPermission("fancyglow.admin")) {
-                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-                return true;
-            }
-
-            if (args.length == 1) {
-                MessageUtils.miniMessageSender(
-                        player, plugin.getConfig().getString("Messages.Wrong_Usage_Color_Command"));
-                return true;
-            }
-
-            colorCommandLogic.glowColorCommand(player, args[1]);
-            return true;
-        }
-
-
-        //Admin commands
-        if (!sender.hasPermission("fancyglow.admin")) {
-            MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
-            return true;
-        }
-
-        // Logic for /glow reload
-        if (args.length == 1 && args[0].equalsIgnoreCase("reload")) {
-            plugin.getMainConfigManager().reloadConfig();
-            if(sender instanceof Player){
-                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getReloadConfigMessage());
-            } else {
-                sender.sendMessage(plugin.getMainConfigManager().getReloadConfigMessage());
-            }
-            return true;
-        }
-
-        // Logic for /glow disable <player>
-        if (args[0].equalsIgnoreCase("disable") && args.length >= 2) {
-
-            // Disable glow to everyone online.
-            if (args[1].equalsIgnoreCase("all")) {
-                Bukkit.getOnlinePlayers().forEach(online -> {
-                    glowManager.removeGlow(online);
-                    MessageUtils.miniMessageSender(online, this.plugin.getMainConfigManager().getDisableGlow());
-                });
-
-                if(sender instanceof Player){
-                    MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Disable_Glow_Everyone"));
-                } else {
-                    sender.sendMessage(this.plugin.getConfig().getString("Messages.Disable_Glow_Everyone"));
-                }
-                return true;
-            }
-
-            Player target = Bukkit.getPlayer(args[1]);
-
-            if (target == null) {
-                //noinspection DataFlowIssue
-                MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Unknown_Target").replace("%player_name%", args[1]));
-                return true;
-            }
-
-            if (!target.isGlowing()) {
-                MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Target_Not_Glowing"));
-                return true;
-            }
-
-            glowManager.removeGlow(target);
-            MessageUtils.miniMessageSender(target, this.plugin.getMainConfigManager().getDisableGlow());
-            //noinspection DataFlowIssue
-            if(sender instanceof Player){
-                MessageUtils.miniMessageSender((Player) sender, this.plugin.getConfig().getString("Messages.Disable_Glow_Others").replace("%player_name%", target.getName()));
-            } else {
-                sender.sendMessage(this.plugin.getConfig().getString("Messages.Disable_Glow_Others").replace("%player_name%", target.getName()));
-            }
-            return true;
+        String subCommand = args[0].toLowerCase();
+        switch (subCommand) {
+            case "disable":
+                // Logic for /glow disable
+                handleDisableCommand(sender, args);
+                break;
+            case "color":
+                // Logic for /glow color <color>
+                handleColorCommand(sender, args);
+                break;
+            case "reload":
+                // Logic for /glow reload
+                handleReloadCommand(sender);
+                break;
+            default:
+                // Handle unknown sub-commands.
+                sendMessage(sender, plugin.getConfig().getString("Messages.Invalid_Sub_Command"));
+                break;
         }
         return true;
     }
+
+    private void handleDisableCommand(CommandSender sender, String[] args) {
+        if (args.length == 1) {
+            handleSelfDisable(sender);
+        } else if (args.length >= 2) {
+            handleTargetDisable(sender, args[1]);
+        }
+    }
+
+    private void handleSelfDisable(CommandSender sender) {
+        // Check if the sender is a player
+        if (!isPlayer(sender)) {
+            sendMessage(sender, plugin.getConfig().getString("Messages.Disable_Usage"));
+            return;
+        }
+
+        Player player = (Player) sender;
+
+        // Check if the player has permission to disable their own glow
+        if (!hasPermission(player, "fancyglow.command.disable")) return;
+
+        // Check if the player is glowing
+        if (!player.isGlowing()) {
+            sendMessage(player, plugin.getConfig().getString("Messages.Not_Glowing"));
+            return;
+        }
+
+        // Disable the player's glow
+        glowManager.removeGlow(player);
+        sendMessage(player, plugin.getConfig().getString("Messages.Disable_Glow"));
+    }
+
+    private void handleTargetDisable(CommandSender sender, String targetArg) {
+        if (targetArg.equalsIgnoreCase("all")) {
+            handleDisableAll(sender);
+            return;
+        }
+
+        Player target = Bukkit.getPlayer(targetArg);
+
+        if (target == null) {
+            sendMessage(sender, plugin.getConfig().getString("Messages.Unknown_Target").replace("%player_name%", targetArg));
+            return;
+        }
+
+        if (!target.isGlowing()) {
+            sendMessage(sender, plugin.getConfig().getString("Messages.Target_Not_Glowing"));
+            return;
+        }
+
+        glowManager.removeGlow(target);
+        MessageUtils.miniMessageSender(target, plugin.getMainConfigManager().getDisableGlow());
+        sendMessage(sender, plugin.getConfig().getString("Messages.Disable_Glow_Others").replace("%player_name%", target.getName()));
+    }
+
+    private void handleDisableAll(CommandSender sender) {
+        // Check permissions
+        if (!hasPermission(sender, "fancyglow.command.disable.everyone") && !hasPermission(sender, "fancyglow.admin"))
+            return;
+
+        // Disable glow for all online players
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            glowManager.removeGlow(player);
+            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
+        });
+
+        sendMessage(sender, plugin.getConfig().getString("Messages.Disable_Glow_Everyone"));
+    }
+
+    private void handleColorCommand(CommandSender sender, String[] args) {
+        if (!isPlayer(sender)) {
+            sender.sendMessage("That command can only be performed by players!");
+            return;
+        }
+
+        Player player = (Player) sender;
+
+        if (!hasPermission(player, "fancyglow.command.color")) return;
+
+        if (args.length == 1) {
+            sendMessage(player, plugin.getConfig().getString("Messages.Wrong_Usage_Color_Command"));
+            return;
+        }
+
+        colorCommandLogic.glowColorCommand(player, args[1]);
+    }
+
+    private void handleReloadCommand(CommandSender sender) {
+        if (!hasPermission(sender, "fancyglow.command.reload")) return;
+
+        plugin.getMainConfigManager().reloadConfig();
+        sendMessage(sender, plugin.getMainConfigManager().getReloadConfigMessage());
+    }
+
+    // Utility Methogs
+
+    private boolean isPlayer(CommandSender sender) {
+        return sender instanceof Player;
+    }
+
+    private boolean hasPermission(CommandSender sender, String permission) {
+        if (!sender.hasPermission(permission)) {
+            if (sender instanceof Player) {
+                MessageUtils.miniMessageSender((Player) sender, plugin.getMainConfigManager().getNoPermissionMessage());
+            } else {
+                sender.sendMessage(plugin.getMainConfigManager().getNoPermissionMessage());
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private void sendMessage(CommandSender sender, String message) {
+        if (sender instanceof Player) {
+            MessageUtils.miniMessageSender((Player) sender, message);
+        } else {
+            sender.sendMessage(MessageUtils.miniMessageParse(message));
+        }
+    }
+
 }
