@@ -10,68 +10,65 @@
 # Useful links:
 # Documentation: https://hhitt-1.gitbook.io/fancy-glow-documentation
 # Discord for support, suggestions & more: https://discord.com/invite/6SgzfJFVwq
-# MiniMessage tool that make it faster ;) https://webui.advntr.dev/
+# MiniMessage tool to preview changes: https://webui.advntr.dev/
 
-#While a player leave the server should the glow mode persist?
+# Should selected glow mode persist when a player leaves the server?
 # true = yes // false = no
-Persistent-Mode: true
+Persistent_Mode: true
 # How many ticks should the color change in rainbow mode?
 # 1 second = 20 ticks
 Rainbow_Update_Interval: 10
 
 Messages:
-  # All Fancy Glow Messages translation.
-  No_Permission: "<red>You don't have permission to perform this!"
+  # All translations for plugin messages
+  No_Permission: "<red>You do not have permission to perform this!"
   Reload_Message: "<blue>Plugin configuration file reloaded successfully!"
-  Enable_Glow: "<green>Now you are glowing!"
-  Disable_Glow: "<red>You aren't glowing anymore!"
-  Disable_Usage: "<red>Correct usage is: /glow disable <player>"
-  Disable_Glow_Others: "<red>You have disabled glow of %player_name%"
-  Disable_Glow_Everyone: "<red>You have disabled glow to everyone online."
-  Not_Glowing: "<red>You are not glowing!"
-  Not_Valid_Color: "<red>Not a valid color! Use like: <gold>/glow color <color></gold>"
-  Wrong_Usage_Color_Command: "<red>Wrong command usage! Use like: <gold>/glow color <color></gold>."
+  Enable_Glow: "<green>Glow successfully enabled!"
+  Disable_Glow: "<red>Glow successfully disabled!"
+  Disable_Usage: "<red>Incorrect command usage! Use /glow disable <player>."
+  Disable_Glow_Others: "<red>Disabled glow of %player_name%!"
+  Disable_Glow_Everyone: "<red>Disabled glow of everyone online!"
+  Not_Glowing: "<red>You are not currently glowing!"
+  Not_Valid_Color: "<red>Not a valid glow color!"
+  Color_Command_Usage: "<red>Incorrect command usage! Use /glow color <color>."
   Unknown_Target: "<red>Player %player_name% is not online!"
   Target_Not_Glowing: "<red>Target is not glowing!"
   Invalid_Sub_Command: "<red>Unknown sub-command \"%sub_command%\"."
-
-
-  # Message that player gets when enter on a disabled world
-  Disabled_World_Message: "<red>In this world glow is disabled!"
-
+  # Message that player gets when entering a world where glow is disabled
+  Disabled_World_Message: "<red>Glow is disabled in this world!"
   # %fancyglow_status% translation, for true or false:
-  Glow_Status_False: "<red>You are not glowing ❌"
-  Glow_Status_True: "<green>✔ Glowing!</green> <gray>Click here to disable"
+  Glow_Status_False: "<red>Not glowing! ❌"
+  Glow_Status_True: "<green>Glowing! ✔</green> <gray>Click to disable!"
 
-# List of worlds where players glow will be disabled
+# List of worlds where glow cannot be enabled
 Disabled_Worlds:
   - "Example"
   - "DisabledGlowWorld"
 
 Inventory:
   # For translate the gui
-  Tittle: "<#9e8fff>Select a glow color!"
+  Title: "<dark_red>Select a glow color!"
   Items:
-    Dark_Red_Glow_Name: "<dark_red>Dark red</dark_red>"
+    Dark_Red_Glow_Name: "<dark_red>Dark Red</dark_red>"
     Red_Glow_Name: "<red>Red</red>"
-    Gold_Glow_Name: "<gold>Gold"
-    Yellow_Glow_Name: "<yellow>Yellow"
-    Dark_Green_Glow_Name: "<dark_green>Dark green"
-    Green_Glow_Name: "<green>Green"
-    Aqua_Glow_Name: "<aqua>Aqua"
-    Dark_Aqua_Glow_Name: "<dark_aqua>Dark aqua"
-    Dark_Blue_Glow_Name: "<dark_blue>Dark Blue"
-    Blue_Glow_Name: "<blue>Blue"
-    Pink_Glow_Name: "<light_purple>Pink"
-    Purple_Glow_Name: "<dark_purple>Purple"
-    Dark_Gray_Glow_Name: "<color:#919191>Dark gray"
-    Gray_Glow_Name: "<color:#bdbdbd>Gray"
-    Black_Glow_Name: "<color:#454545>Black"
-    White_Glow_Name: "<white>White"
-    Color_Lore: "<color:#737373>Click me to choose that color!"
+    Gold_Glow_Name: "<gold>Gold</gold>"
+    Yellow_Glow_Name: "<yellow>Yellow</yellow>"
+    Dark_Green_Glow_Name: "<dark_green>Dark Green</dark_green>"
+    Green_Glow_Name: "<green>Green</green>"
+    Aqua_Glow_Name: "<aqua>Aqua</aqua>"
+    Dark_Aqua_Glow_Name: "<dark_aqua>Dark Aqua</dark_aqua>"
+    Dark_Blue_Glow_Name: "<dark_blue>Dark Blue</dark_blue>"
+    Blue_Glow_Name: "<blue>Blue</blue>"
+    Pink_Glow_Name: "<light_purple>Pink</light_purple>"
+    Purple_Glow_Name: "<dark_purple>Purple</dark_purple>"
+    Dark_Gray_Glow_Name: "<color:#919191>Dark Gray</color>"
+    Gray_Glow_Name: "<color:#bdbdbd>Gray</color>"
+    Black_Glow_Name: "<color:#454545>Black</color>"
+    White_Glow_Name: "<white>White</white>"
+    Color_Lore: "<color:#737373>Click to select!</color>"
     Rainbow_Head: "<rainbow>Rainbow Mode!</rainbow>"
-    Rainbow_Head_Lore: "<#9e8fff>Click me to alternate all colors"
+    Rainbow_Head_Lore: "<#9e8fff>Click to enable rainbow mode!</#9e8fff>"
     Fill_Material_Name: "<rainbow>Click on a color!</rainbow>"
     Player_Head:
-      Name: "<color:#6effa3>Your glowing status:"
-      Lore: "<white>%fancyglow_status%"
+      Name: "<color:#6effa3>Your glowing status:</color>"
+      Lore: "<white>%fancyglow_status%</white>"
