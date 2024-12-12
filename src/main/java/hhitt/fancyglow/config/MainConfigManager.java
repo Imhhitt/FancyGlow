@@ -13,7 +13,7 @@ public class MainConfigManager {
     private String reloadConfigMessage;
     private String enableGlow;
     private String disableGlow;
-    private String inventoryTittle;
+    private String inventoryTitle;
     private String aquaName;
     private String darkAquaName;
     private String darkRedName;
@@ -55,7 +55,7 @@ public class MainConfigManager {
         reloadConfigMessage = configuration.getString("Messages.Reload_Message");
         enableGlow = configuration.getString("Messages.Enable_Glow");
         disableGlow = configuration.getString("Messages.Disable_Glow");
-        inventoryTittle = configuration.getString("Inventory.Tittle");
+        inventoryTitle = configuration.getString("Inventory.Title");
         rainbowName = configuration.getString("Inventory.Items.Ender_Eye_Name");
         rainbowLore = configuration.getString("Inventory.Items.Ender_Eye_Lore");
         aquaName = configuration.getString("Inventory.Items.Aqua_Glow_Name");
@@ -101,8 +101,8 @@ public class MainConfigManager {
     public String getDisableGlow(){
         return disableGlow;
     }
-    public String getInventoryTittle(){
-        return inventoryTittle;
+    public String getInventoryTitle(){
+        return inventoryTitle;
     }
     public String getAquaName(){
         return aquaName;

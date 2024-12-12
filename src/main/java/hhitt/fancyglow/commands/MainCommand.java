@@ -158,7 +158,7 @@ public class MainCommand implements CommandExecutor {
         if (!hasPermission(player, "fancyglow.command.color")) return;
 
         if (args.length == 1) {
-            sendMessage(player, plugin.getConfig().getString("Messages.Wrong_Usage_Color_Command"));
+            sendMessage(player, plugin.getConfig().getString("Messages.Color_Command_Usage"));
             return;
         }
 

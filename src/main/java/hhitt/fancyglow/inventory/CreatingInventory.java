@@ -31,7 +31,7 @@ public class CreatingInventory implements InventoryHolder {
         this.plugin = plugin;
         this.playerGlowManager = plugin.getPlayerGlowManager();
         this.inventory = plugin.getServer().createInventory(this, 45,
-                MessageUtils.miniMessageParse(plugin.getMainConfigManager().getInventoryTittle()));
+                MessageUtils.miniMessageParse(plugin.getMainConfigManager().getInventoryTitle()));
 
         // Player head
         ItemStack playerHead = getPlayerHead(sender);

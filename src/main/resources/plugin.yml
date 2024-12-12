@@ -6,14 +6,14 @@ api-version: '1.20'
 softdepend: [ PlaceholderAPI ]
 commands:
   glow:
-    description: Main FancyGlow command can toggle or select your glow mode.
+    description: Main FancyGlow command used to toggle or select your glow mode.
     usage: /<command>
     aliases:
       - fancyglow
 
 permissions:
   fancyglow.admin:
-    description: Gives permission to every fancy glow command and feature.
+    description: Gives permission to every FancyGlow command and feature.
     children:
       fancyglow.rainbow: true
       fancyglow.all_colors: true
