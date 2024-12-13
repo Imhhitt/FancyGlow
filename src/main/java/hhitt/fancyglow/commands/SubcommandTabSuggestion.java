@@ -37,9 +37,9 @@ public class SubcommandTabSuggestion implements TabCompleter {
         boolean canReload = sender.hasPermission("fancyglow.command.reload");
         boolean canColor = sender.hasPermission("fancyglow.command.color");
 
-        //Suggest for disable and color
+        // Suggest for disable and color
         if (args.length == 1) {
-            // Add permission required arguments.
+            // Add permission required arguments
             if (hasAdminPermission) {
                 completions.addAll(Arrays.asList("disable", "reload", "color"));
             } else {
@@ -48,13 +48,13 @@ public class SubcommandTabSuggestion implements TabCompleter {
                 if (canColor) completions.add("color");
             }
 
-            // Returns starting string argument completion.
+            // Returns starting string argument completion
             return filter(completions, args[0]);
         }
 
-        //Suggest all colors and rainbow
+        // Suggest all colors and rainbow
         if (args.length == 2) {
-            // Returns empty list to console.
+            // Returns empty list to console
             if (!(sender instanceof Player)) return Collections.emptyList();
 
             if (args[0].equalsIgnoreCase("color") && (canColor || hasAdminPermission)) {
@@ -69,7 +69,7 @@ public class SubcommandTabSuggestion implements TabCompleter {
                 // Add rainbow completion if can
                 if (canRainbow) completions.add("rainbow");
 
-                // Returns starting string argument completion.
+                // Returns starting string argument completion
                 return filter(completions, args[1]);
             }
 

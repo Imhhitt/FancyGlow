@@ -52,7 +52,7 @@ public class CreatingInventory implements InventoryHolder {
 
         inventory.setItem(39, rainbowHead);
 
-        // Botones
+        // Buttons
         ItemStack red = new ItemStack(Material.LEATHER_CHESTPLATE);
         ItemStack darkRed = new ItemStack(Material.LEATHER_CHESTPLATE);
         ItemStack gold = new ItemStack(Material.LEATHER_CHESTPLATE);
@@ -71,7 +71,7 @@ public class CreatingInventory implements InventoryHolder {
         ItemStack white = new ItemStack(Material.LEATHER_CHESTPLATE);
         ItemStack fill = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
-        // Datos de botones.
+        // Button data
         LeatherArmorMeta darkRedMeta = (LeatherArmorMeta) darkRed.getItemMeta();
         LeatherArmorMeta redMeta = (LeatherArmorMeta) red.getItemMeta();
         LeatherArmorMeta goldMeta = (LeatherArmorMeta) gold.getItemMeta();
@@ -90,7 +90,7 @@ public class CreatingInventory implements InventoryHolder {
         LeatherArmorMeta whiteMeta = (LeatherArmorMeta) white.getItemMeta();
         ItemMeta fillMeta = fill.getItemMeta();
 
-        // Ocultar atributos y poner lore
+        // Hide attributes and set lore
         assert darkRedMeta != null;
         darkRedMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         darkRedMeta.addItemFlags(ItemFlag.HIDE_DYE);
@@ -187,7 +187,7 @@ public class CreatingInventory implements InventoryHolder {
         whiteMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
                 plugin.getMainConfigManager().getColorLore())));
 
-        // Nombres de los destellos
+        // Names of the glows
         darkRedMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDarkRedName()));
         darkRedMeta.setColor(Color.MAROON);
 
@@ -241,7 +241,7 @@ public class CreatingInventory implements InventoryHolder {
                 plugin.getMainConfigManager().getFillMaterialName()));
 
 
-        // Guardamos los datos asignados
+        // Save the assigned data
         darkRed.setItemMeta(darkRedMeta);
         red.setItemMeta(redMeta);
         gold.setItemMeta(goldMeta);
@@ -260,8 +260,8 @@ public class CreatingInventory implements InventoryHolder {
         white.setItemMeta(whiteMeta);
         fill.setItemMeta(fillMeta);
 
-        // Colocar items en los botones
-        // No, no soy imbecil, es sólo que cambiaré esto en poco por un inventario más "guay"
+        // Place items on the buttons
+        // TODO Better inventory layout
         inventory.setItem(0, fill);
         inventory.setItem(1, fill);
         inventory.setItem(2, fill);
@@ -322,7 +322,7 @@ public class CreatingInventory implements InventoryHolder {
         meta.setOwningPlayer(player);
         head.setItemMeta(meta);
 
-        // Actualiza el lore del item con el estado de brillo del jugador
+        // Update the item's lore with the player's glow status
         playerGlowManager.updateItemLore(head, player);
 
         return head;

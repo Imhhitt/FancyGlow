@@ -36,26 +36,26 @@ public final class FancyGlow extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        //bStats hook / metrics
+        // bStats hook / metrics
         new Metrics(this, 22057);
 
         // Try to create adventure audience
         this.adventure = BukkitAudiences.create(this);
         MessageUtils.setAdventure(this.adventure);
 
-        // Init config manager.
+        // Init config manager
         mainConfigManager = new MainConfigManager(this);
         mainConfigManager.loadConfig();
 
-        // Init managers.
+        // Init managers
         glowManager = new GlowManager(this);
         playerGlowManager = new PlayerGlowManager(this);
 
-        // Register command and suggestions.
+        // Register command and suggestions
         Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
         Objects.requireNonNull(getCommand("glow")).setTabCompleter(new SubcommandTabSuggestion(this));
 
-        // Register events.
+        // Register events
         registerEvents();
 
         // Attempt to get PlaceholderAPI

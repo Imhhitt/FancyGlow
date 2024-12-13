@@ -27,10 +27,10 @@ public class MulticolorTask extends BukkitRunnable {
     public void run() {
         ChatColor currentColor = colorArray[currentIndex];
 
-        // Obtener o crear el equipo correspondiente al color actual
+        // Get or create the team corresponding to the current color
         Team glowTeam = glowManager.getOrCreateTeam(currentColor);
 
-        // Remover al jugador de todos los equipos excepto el actual
+        // Remove the player from all teams except the current one
         for (ChatColor color : colorArray) {
             if (color != currentColor) {
                 Team team = glowManager.getOrCreateTeam(color);
@@ -40,15 +40,15 @@ public class MulticolorTask extends BukkitRunnable {
             }
         }
 
-        // Agregar al jugador al nuevo equipo
+        // Add the player to the new team
         if (!glowTeam.hasEntry(player.getName())) {
             glowTeam.addEntry(player.getName());
         }
 
-        // Actualizar el scoreboard si es necesario
+        // Update the scoreboard if necessary
         player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
 
-        // Incrementar el índice para el siguiente color
+        // Increment the index for the next color
         currentIndex++;
         if (currentIndex >= colorArray.length) {
             currentIndex = 0;

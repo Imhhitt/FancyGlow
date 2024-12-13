@@ -29,11 +29,11 @@ public class MainCommand implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, String[] args) {
         List<String> noAllowedWorlds = plugin.getConfig().getStringList("Disabled_Worlds");
 
-        //Prevent command usage in target worlds.
+        // Prevent command usage in target worlds
         if (isPlayer(sender)) {
             Player player = (Player) sender;
 
-            //Check the world
+            // Check the world
             if (noAllowedWorlds.contains(player.getWorld().getName())) {
                 MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisabledWorldMessage());
                 return true;
@@ -41,7 +41,7 @@ public class MainCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            // Prevent open gui when in console.
+            // Prevent open gui when in console
             if (!isPlayer(sender)) {
                 sender.sendMessage("That command can only be performed by players!");
                 return true;
@@ -49,10 +49,10 @@ public class MainCommand implements CommandExecutor {
 
             Player player = (Player) sender;
 
-            //Check gui permissions.
+            // Check gui permissions
             if (!hasPermission(player, "fancyglow.command.gui")) return true;
 
-            //Open the gui
+            // Open the gui
             player.openInventory(new CreatingInventory(plugin, player).getInventory());
             return true;
         }
@@ -72,8 +72,9 @@ public class MainCommand implements CommandExecutor {
                 handleReloadCommand(sender);
                 break;
             default:
-                // Handle unknown sub-commands.
-                sendMessage(sender, plugin.getConfig().getString("Messages.Invalid_Sub_Command"));
+                // Handle unknown sub-commands
+                String invalidSubCommandMessage = plugin.getConfig().getString("Messages.Invalid_Sub_Command").replace("%sub_command%", subCommand);
+                sendMessage(sender, invalidSubCommandMessage);
                 break;
         }
         return true;
