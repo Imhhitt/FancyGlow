@@ -39,14 +39,14 @@ public class MainConfigManager {
     private String disabledWorldMessage;
 
 
-    // Cargar la configuración
+    // Load the configuration
     public MainConfigManager(FancyGlow FancyGlow) {
         configFile = new MainConfig("config.yml", null, FancyGlow);
         configFile.registerConfig();
         loadConfig();
     }
 
-    // Cargar los mensajes de la config en variables
+    // Load the messages from the config into variables
     public void loadConfig(){
         FileConfiguration configuration = configFile.getConfig();
         boolean nicknameColor = configuration.getBoolean("Options.Color_Nickname"); //TODO Use this?
@@ -87,7 +87,7 @@ public class MainConfigManager {
         loadConfig();
     }
 
-    // Métodos para tener el valor de la config
+    // Methods to get the value from the config
     public String getDisabledWorldMessage(){ return disabledWorldMessage    ; }
     public String getNoPermissionMessage(){
         return noPermissionMessage;

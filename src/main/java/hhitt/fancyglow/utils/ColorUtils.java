@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ColorUtils {
 
-    // Implementación para la lógica para mapear los colores de la armadura de cuero a los colores.
+    // Implementation for the logic to map leather armor colors to colors
     private static final Map<String, ChatColor> colorValues = new HashMap<>();
     private static final Map<Color, ChatColor> colorMap = new HashMap<>();
     private static final Map<ChatColor, Color> reverseColorMap = new HashMap<>();
@@ -32,9 +32,9 @@ public class ColorUtils {
         colorMap.put(Color.PURPLE, ChatColor.DARK_PURPLE);
         colorMap.put(Color.ORANGE, ChatColor.GOLD);
 
-        //Add available colors.
+        //Add available colors
         colorMap.values().forEach(color -> colorValues.put(color.name(), color));
-        //Manually add common used color names.
+        //Manually add common used color names
         colorValues.put("PINK", ChatColor.LIGHT_PURPLE);
         colorValues.put("PURPLE", ChatColor.DARK_PURPLE);
 

@@ -53,7 +53,7 @@ public class GlowManager {
         removeGlow(player);
 
         if (glowTeam.hasEntry(cleanName)) {
-            // Send message if no longer glowing.
+            // Send message if no longer glowing
             MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
             return;
         }
@@ -65,9 +65,9 @@ public class GlowManager {
     }
 
     public void removeGlow(Player player) {
-        // Remove glow from player.
+        // Remove glow from player
         player.setGlowing(false);
-        // Remove from any existing color team.
+        // Remove from any existing color team
         removePlayerFromAllTeams(player);
     }
 
@@ -75,23 +75,23 @@ public class GlowManager {
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         String cleanName = ChatColor.stripColor(player.getName());
 
-        // Handle remove if rainbow selected.
+        // Handle remove if rainbow selected
         if (isMulticolorTaskActive(player)) {
             // Cancel task
             multicolorTasks.get(player.getUniqueId()).cancel();
-            // Remove from map.
+            // Remove from map
             multicolorTasks.remove(player.getUniqueId());
         }
 
-        // Attempt to remove player from any color team.
+        // Attempt to remove player from any color team
         Arrays.stream(ChatColor.values())
                 // Allowed team names. (Color names from ChatColor...)
                 .map(color -> board.getTeam(color.name()))
-                // Make sure team exists.
+                // Make sure team exists
                 .filter(Objects::nonNull)
                 // Filter if player is in the team
                 .filter(team -> team.hasEntry(cleanName))
-                // Remove from the team.
+                // Remove from the team
                 .forEach(team -> team.removeEntry(cleanName));
 
     }

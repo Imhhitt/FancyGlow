@@ -21,7 +21,7 @@ public class PlayerQuitListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        // Remove from teams if persistent mode is disabled or player is in rainbow mode.
+        // Remove from teams if persistent mode is disabled or player is in rainbow mode
         if (!plugin.getConfig().getBoolean("Persistent_Mode") || glowManager.isMulticolorTaskActive(player)) {
             glowManager.removeGlow(player);
         }
