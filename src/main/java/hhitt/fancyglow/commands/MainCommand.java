@@ -73,7 +73,8 @@ public class MainCommand implements CommandExecutor {
                 break;
             default:
                 // Handle unknown sub-commands.
-                sendMessage(sender, plugin.getConfig().getString("Messages.Invalid_Sub_Command"));
+                String invalidSubCommandMessage = plugin.getConfig().getString("Messages.Invalid_Sub_Command").replace("%sub_command%", subCommand);
+                sendMessage(sender, invalidSubCommandMessage);
                 break;
         }
         return true;
