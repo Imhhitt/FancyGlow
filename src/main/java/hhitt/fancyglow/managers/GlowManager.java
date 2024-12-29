@@ -52,12 +52,6 @@ public class GlowManager {
         // Remove any existing glow
         removeGlow(player);
 
-        if (glowTeam.hasEntry(cleanName)) {
-            // Send message if no longer glowing
-            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
-            return;
-        }
-
         // Add the player to the team and enable glowing
         glowTeam.addEntry(cleanName);
         player.setGlowing(true);
