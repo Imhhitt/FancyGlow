@@ -3,6 +3,7 @@ package hhitt.fancyglow.listeners;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.managers.GlowManager;
+import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.ColorUtils;
 import hhitt.fancyglow.utils.MessageUtils;
 import org.bukkit.ChatColor;
@@ -19,10 +20,12 @@ public class MenuClickListener implements Listener {
 
     private final FancyGlow plugin;
     private final GlowManager glowManager;
+    private final PlayerGlowManager playerGlowManager;
 
     public MenuClickListener(FancyGlow plugin) {
         this.plugin = plugin;
         this.glowManager = plugin.getGlowManager();
+        this.playerGlowManager = plugin.getPlayerGlowManager();
     }
 
     @EventHandler
@@ -55,6 +58,11 @@ public class MenuClickListener implements Listener {
                 color != null && p.hasPermission("fancyglow.all_colors") ||
                 color != null && p.hasPermission("fancyglow.admin"))) {
             MessageUtils.miniMessageSender(p, plugin.getMainConfigManager().getNoPermissionMessage());
+            p.closeInventory();
+            return;
+        }
+
+        if (playerGlowManager.getPlayerGlowColorName(p).equalsIgnoreCase(color.name())) {
             p.closeInventory();
             return;
         }

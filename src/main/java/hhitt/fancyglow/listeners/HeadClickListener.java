@@ -38,6 +38,7 @@ public class HeadClickListener implements Listener {
         if (itemType == Material.PLAYER_HEAD && slot == 41) {
             glowManager.removeGlow(player);
             player.closeInventory();
+            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
         }
 
         // Multicolor head
