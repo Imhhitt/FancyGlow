@@ -1,6 +1,7 @@
 package hhitt.fancyglow.managers;
 
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.commands.MainCommand;
 import hhitt.fancyglow.commands.lamp.ColorSuggestionFactory;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
@@ -21,6 +22,7 @@ public final class CommandManager {
     }
 
     public void registerCommands() {
+        lamp.register(new MainCommand(plugin));
     }
 
     public void unregisterAll() {
