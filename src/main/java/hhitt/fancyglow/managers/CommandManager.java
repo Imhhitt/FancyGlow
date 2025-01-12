@@ -1,6 +1,7 @@
 package hhitt.fancyglow.managers;
 
 import hhitt.fancyglow.FancyGlow;
+import hhitt.fancyglow.commands.lamp.ColorSuggestionFactory;
 import revxrsal.commands.Lamp;
 import revxrsal.commands.bukkit.BukkitLamp;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
@@ -12,7 +13,11 @@ public final class CommandManager {
 
     public CommandManager(FancyGlow plugin) {
         this.plugin = plugin;
-        this.lamp = BukkitLamp.builder(plugin).build();
+        this.lamp = BukkitLamp.builder(plugin)
+                .suggestionProviders(suggestions -> {
+                    suggestions.addProviderFactory(new ColorSuggestionFactory(plugin));
+                })
+                .build();
     }
 
     public void registerCommands() {
