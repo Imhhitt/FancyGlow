@@ -1,4 +1,5 @@
 name: FancyGlow
+description: "Plugin that allow the player to change its glowing color."
 author: hhitt
 version: '${project.version}'
 main: hhitt.fancyglow.FancyGlow
