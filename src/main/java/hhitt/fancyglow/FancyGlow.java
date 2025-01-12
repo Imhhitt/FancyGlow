@@ -1,12 +1,11 @@
 package hhitt.fancyglow;
 
-import hhitt.fancyglow.commands.MainCommand;
-import hhitt.fancyglow.commands.SubcommandTabSuggestion;
 import hhitt.fancyglow.config.MainConfigManager;
 import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
+import hhitt.fancyglow.managers.CommandManager;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
@@ -17,8 +16,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.Objects;
-
 public final class FancyGlow extends JavaPlugin {
 
     private BukkitAudiences adventure;
@@ -26,6 +23,8 @@ public final class FancyGlow extends JavaPlugin {
 
     private GlowManager glowManager;
     private PlayerGlowManager playerGlowManager;
+
+    private CommandManager commandManager;
 
     public @NonNull BukkitAudiences adventure() {
         if (this.adventure == null) {
@@ -52,8 +51,8 @@ public final class FancyGlow extends JavaPlugin {
         playerGlowManager = new PlayerGlowManager(this);
 
         // Register command and suggestions
-        Objects.requireNonNull(getCommand("glow")).setExecutor(new MainCommand(this));
-        Objects.requireNonNull(getCommand("glow")).setTabCompleter(new SubcommandTabSuggestion(this));
+        commandManager = new CommandManager(this);
+        commandManager.registerCommands();
 
         // Register events
         registerEvents();
@@ -72,6 +71,10 @@ public final class FancyGlow extends JavaPlugin {
         if (this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
+        }
+
+        if (commandManager != null) {
+            commandManager.unregisterAll();
         }
 
         glowManager.cancelMulticolorTasks();
