@@ -46,6 +46,10 @@
                             <pattern>org.jetbrains</pattern>
                             <shadedPattern>hhitt.fancyglow.deps.annotations.jetbrains</shadedPattern>
                         </relocation>
+                        <relocation>
+                            <pattern>revxrsal.commands</pattern>
+                            <shadedPattern>hhitt.fancyglow.deps.lamp</shadedPattern>
+                        </relocation>
                     </relocations>
                 </configuration>
                 <executions>
@@ -134,6 +138,18 @@
             <artifactId>authlib</artifactId>
             <version>1.5.26</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.revxrsal</groupId>
+            <artifactId>lamp.common</artifactId>
+            <version>4.0.0-rc.2</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.github.revxrsal</groupId>
+            <artifactId>lamp.bukkit</artifactId>
+            <version>4.0.0-rc.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.retrooper</groupId>
