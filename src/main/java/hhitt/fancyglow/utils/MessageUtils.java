@@ -1,8 +1,8 @@
 package hhitt.fancyglow.utils;
 
+import hhitt.fancyglow.FancyGlow;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.entity.Player;
@@ -11,28 +11,22 @@ import org.jetbrains.annotations.NotNull;
 public class MessageUtils {
 
     private static BukkitAudiences adventure;
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
 
-    public static void setAdventure(BukkitAudiences adventureInstance) {
-        adventure = adventureInstance;
+    public MessageUtils(FancyGlow plugin) {
+        adventure = plugin.adventure();
     }
 
-    public static Component parse(String message){
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        return miniMessage.deserialize(message);
+    public static Component parse(String message) {
+        return MINI_MESSAGE.deserialize(message);
     }
 
     public static @NotNull String miniMessageParse(String message) {
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        TextComponent text = (TextComponent) miniMessage.deserialize(message);
-        return LegacyComponentSerializer.legacySection().serialize(text);
+        return LEGACY_COMPONENT_SERIALIZER.serialize(MINI_MESSAGE.deserialize(message));
     }
 
     public static void miniMessageSender(Player player, String message) {
-        if (adventure == null) {
-            throw new IllegalStateException("BukkitAudiences is not initialized.");
-        }
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        TextComponent text = (TextComponent) miniMessage.deserialize(message);
-        adventure.player(player).sendMessage(text);
+        adventure.player(player).sendMessage(MINI_MESSAGE.deserialize(message));
     }
 }

@@ -9,6 +9,7 @@ import hhitt.fancyglow.managers.CommandManager;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
+import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.MessageUtils;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
@@ -41,7 +42,7 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         // Try to create adventure audience
         this.adventure = BukkitAudiences.create(this);
-        MessageUtils.setAdventure(this.adventure);
+        new MessageUtils(this);
 
         // Init config manager
         mainConfigManager = new MainConfigManager(this);
