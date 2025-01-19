@@ -15,9 +15,8 @@ public final class CommandManager {
     public CommandManager(FancyGlow plugin) {
         this.plugin = plugin;
         this.lamp = BukkitLamp.builder(plugin)
-                .suggestionProviders(suggestions -> {
-                    suggestions.addProviderFactory(new ColorSuggestionFactory(plugin));
-                })
+                .suggestionProviders(suggestions ->
+                        suggestions.addProviderFactory(new ColorSuggestionFactory(plugin)))
                 .build();
     }
 
