@@ -69,7 +69,7 @@ public class GlowManager {
     }
 
     public void removePlayerFromAllTeams(Player player) {
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
         String cleanName = ChatColor.stripColor(player.getName());
 
         // Handle remove if rainbow selected
@@ -98,7 +98,7 @@ public class GlowManager {
     }
 
     public Team createTeam(ChatColor color) {
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
         Team team = board.getTeam(color.name());
         if (team == null) {
             team = board.registerNewTeam(color.name());
@@ -120,5 +120,9 @@ public class GlowManager {
             task.cancel();
         }
         multicolorTasks.clear();
+    }
+
+    public Map<ChatColor, Team> getGlowTeams() {
+        return glowTeams;
     }
 }

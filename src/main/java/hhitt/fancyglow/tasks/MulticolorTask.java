@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Objects;
+
 public class MulticolorTask extends BukkitRunnable {
 
     private final FancyGlow plugin;
@@ -46,7 +48,7 @@ public class MulticolorTask extends BukkitRunnable {
         }
 
         // Update the scoreboard if necessary
-        player.setScoreboard(plugin.getServer().getScoreboardManager().getMainScoreboard());
+        player.setScoreboard(Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard());
 
         // Increment the index for the next color
         currentIndex++;

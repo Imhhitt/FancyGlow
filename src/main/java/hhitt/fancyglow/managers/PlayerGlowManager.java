@@ -3,24 +3,22 @@ package hhitt.fancyglow.managers;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.Messages;
-import org.bukkit.ChatColor;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PlayerGlowManager {
 
-    private final FancyGlow plugin;
+    private final GlowManager glowManager;
     private final MessageHandler messageHandler;
 
     public PlayerGlowManager(FancyGlow plugin) {
-        this.plugin = plugin;
+        this.glowManager = plugin.getGlowManager();
         this.messageHandler = plugin.getMessageHandler();
     }
 
@@ -30,27 +28,22 @@ public class PlayerGlowManager {
     }
 
     public String getPlayerGlowColorName(Player player) {
-        if (player.isGlowing()) {
-            Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
-            Team team = board.getPlayerTeam(player);
-            if (team != null) {
-                ChatColor glowColor = team.getColor();
-                return glowColor.name();
-            }
-        }
-        return "NONE";
+        Team team = findPlayerTeam(player);
+        return (player.isGlowing() && team != null) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
     }
 
     public String getPlayerGlowColor(Player player) {
-        if (player.isGlowing()) {
-            Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
-            Team team = board.getPlayerTeam(player);
-            if (team != null) {
-                ChatColor glowColor = team.getColor();
-                return glowColor.toString();
+        Team team = findPlayerTeam(player);
+        return (player.isGlowing() && team != null) ? team.getColor().toString() : "";
+    }
+
+    private Team findPlayerTeam(Player player) {
+        for (Team team : glowManager.getGlowTeams().values()) {
+            if (team.hasEntry(player.getName())) {
+                return team;
             }
         }
-        return "";
+        return null;
     }
 
     public void updateItemLore(ItemStack item, Player player) {
@@ -59,7 +52,7 @@ public class PlayerGlowManager {
             List<String> lore = new ArrayList<>();
 
             for (String line : meta.getLore()) {
-                lore.add(line.replace("%fancyglow_status%", getPlayerGlowingStatus(player)));
+                lore.add(PlaceholderAPI.setPlaceholders(player, line));
             }
 
             meta.setLore(lore);
