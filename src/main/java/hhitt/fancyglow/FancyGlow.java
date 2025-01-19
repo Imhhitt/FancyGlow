@@ -1,6 +1,12 @@
 package hhitt.fancyglow;
 
-import hhitt.fancyglow.config.MainConfigManager;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.Pattern;
+import dev.dejvokep.boostedyaml.dvs.segment.Segment;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
@@ -17,11 +23,16 @@ import org.bukkit.Bukkit;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import revxrsal.zapper.ZapperJavaPlugin;
 
-public final class FancyGlow extends JavaPlugin {
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
+
 public final class FancyGlow extends ZapperJavaPlugin {
 
     private BukkitAudiences adventure;
-    private MainConfigManager mainConfigManager;
+
+    private YamlDocument configuration;
+    private MessageHandler messageHandler;
 
     private GlowManager glowManager;
     private PlayerGlowManager playerGlowManager;
@@ -45,16 +56,27 @@ public final class FancyGlow extends ZapperJavaPlugin {
         new MessageUtils(this);
 
         // Init config manager
-        mainConfigManager = new MainConfigManager(this);
-        mainConfigManager.loadConfig();
+        try {
+            this.configuration = YamlDocument.create(
+                    new File(this.getDataFolder(), "config.yml"),
+                    Objects.requireNonNull(getResource("config.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(true).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new Pattern(Segment.range(1, Integer.MAX_VALUE)), "config-version").build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        this.messageHandler = new MessageHandler(this, configuration);
 
         // Init managers
-        glowManager = new GlowManager(this);
-        playerGlowManager = new PlayerGlowManager(this);
+        this.glowManager = new GlowManager(this);
+        this.playerGlowManager = new PlayerGlowManager(this);
 
         // Register command and suggestions
-        commandManager = new CommandManager(this);
-        commandManager.registerCommands();
+        this.commandManager = new CommandManager(this);
+        this.commandManager.registerCommands();
 
         // Register events
         registerEvents();
@@ -75,11 +97,13 @@ public final class FancyGlow extends ZapperJavaPlugin {
             this.adventure = null;
         }
 
-        if (commandManager != null) {
-            commandManager.unregisterAll();
+        if (this.commandManager != null) {
+            this.commandManager.unregisterAll();
         }
 
-        glowManager.cancelMulticolorTasks();
+        if (this.glowManager != null) {
+            this.glowManager.cancelMulticolorTasks();
+        }
     }
 
     public void registerEvents() {
@@ -89,8 +113,12 @@ public final class FancyGlow extends ZapperJavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
     }
 
-    public MainConfigManager getMainConfigManager() {
-        return mainConfigManager;
+    public YamlDocument getConfiguration() {
+        return configuration;
+    }
+
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
     }
 
     public GlowManager getGlowManager() {
