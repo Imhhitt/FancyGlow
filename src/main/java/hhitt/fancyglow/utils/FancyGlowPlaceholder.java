@@ -11,12 +11,10 @@ import org.jetbrains.annotations.Nullable;
 public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     // PlaceholderAPI hook to create a placeholder (color one)
-    private final FancyGlow plugin;
     private final GlowManager glowManager;
     private final PlayerGlowManager playerGlowManager;
 
     public FancyGlowPlaceholder(FancyGlow plugin) {
-        this.plugin = plugin;
         this.glowManager = plugin.getGlowManager();
         this.playerGlowManager = plugin.getPlayerGlowManager();
     }
@@ -33,7 +31,7 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.3.0";
+        return "1.3.1";
     }
 
     @Override
@@ -55,20 +53,22 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
         String enabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanTrue();
         String disabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanFalse();
 
-        if (params.equals("color")) {
-            return playerGlowManager.getPlayerGlowColor(player);
-        }
-        if (params.equals("status_formatted")) {
-            playerGlowManager.getPlayerGlowingStatus(player);
-        }
-        if (params.equals("status")) {
-            return player.isGlowing() ? enabled : disabled;
-        }
-        if (params.equals("color_name")) {
-            if (glowManager.isMulticolorTaskActive(player)) {
-                return "RAINBOW";
+        switch (params) {
+            case "color" -> {
+                return playerGlowManager.getPlayerGlowColor(player);
             }
-            return playerGlowManager.getPlayerGlowColorName(player);
+            case "status" -> {
+                return player.isGlowing() ? enabled : disabled;
+            }
+            case "status_formatted" -> {
+                return playerGlowManager.getPlayerGlowingStatus(player);
+            }
+            case "color_name" -> {
+                if (glowManager.isMulticolorTaskActive(player)) {
+                    return "RAINBOW";
+                }
+                return playerGlowManager.getPlayerGlowColorName(player);
+            }
         }
         return "";
     }
