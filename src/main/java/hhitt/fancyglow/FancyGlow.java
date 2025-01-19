@@ -20,6 +20,7 @@ import hhitt.fancyglow.utils.MessageUtils;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginManager;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import revxrsal.zapper.ZapperJavaPlugin;
 
@@ -48,6 +49,15 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
     @Override
     public void onEnable() {
+        // Check if PlaceholderAPI is available.
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
+
+            // Disable if not found.
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+
         // bStats hook / metrics
         new Metrics(this, 22057);
 
@@ -81,13 +91,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
         // Register events
         registerEvents();
 
-        // Attempt to get PlaceholderAPI
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            new FancyGlowPlaceholder(this).register();
-        } else {
-            getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
-            Bukkit.getPluginManager().disablePlugin(this);
-        }
+        // Actually register placeholderapi extension.
+        new FancyGlowPlaceholder(this).register();
     }
 
     @Override
@@ -107,10 +112,12 @@ public final class FancyGlow extends ZapperJavaPlugin {
     }
 
     public void registerEvents() {
-        getServer().getPluginManager().registerEvents(new MenuClickListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
-        getServer().getPluginManager().registerEvents(new HeadClickListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerChangeWorldListener(this), this);
+        PluginManager pluginManager = getServer().getPluginManager();
+
+        pluginManager.registerEvents(new MenuClickListener(this), this);
+        pluginManager.registerEvents(new HeadClickListener(this), this);
+        pluginManager.registerEvents(new PlayerQuitListener(this), this);
+        pluginManager.registerEvents(new PlayerChangeWorldListener(this), this);
     }
 
     public YamlDocument getConfiguration() {
