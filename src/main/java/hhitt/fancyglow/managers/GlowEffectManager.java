@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-
+// TODO: Proper implementation.
 public class GlowEffectManager {
-    
+
     private static final String TEAM_NAME_PREFIX = "glow_";
 
     public static void setPlayerGlow(Player player, NamedTextColor color) {

@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-// TODO: Proper implementation.
 public class PlayerGlowManager {
 
     private final FancyGlow plugin;
