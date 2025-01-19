@@ -12,6 +12,9 @@
 # Discord for support, suggestions & more: https://discord.com/invite/6SgzfJFVwq
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
+# DO NOT CHANGE THIS.
+config-version: 1
+
 # Should selected glow mode persist when a player leaves the server?
 # true = yes // false = no
 Persistent_Mode: true
