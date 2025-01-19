@@ -53,7 +53,7 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         // Try to create adventure audience
         this.adventure = BukkitAudiences.create(this);
-        new MessageUtils(this);
+        MessageUtils.setAdventure(adventure);
 
         // Init config manager
         try {

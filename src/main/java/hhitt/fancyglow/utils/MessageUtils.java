@@ -1,6 +1,5 @@
 package hhitt.fancyglow.utils;
 
-import hhitt.fancyglow.FancyGlow;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -14,10 +13,6 @@ public class MessageUtils {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
 
-    public MessageUtils(FancyGlow plugin) {
-        adventure = plugin.adventure();
-    }
-
     public static Component parse(String message) {
         return MINI_MESSAGE.deserialize(message);
     }
@@ -27,6 +22,10 @@ public class MessageUtils {
     }
 
     public static void miniMessageSender(Player player, String message) {
-        adventure.player(player).sendMessage(MINI_MESSAGE.deserialize(message));
+        adventure.player(player).sendMessage(parse(message));
+    }
+
+    public static void setAdventure(BukkitAudiences adventure) {
+        MessageUtils.adventure = adventure;
     }
 }

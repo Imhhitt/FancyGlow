@@ -144,7 +144,9 @@ public class MessageHandler {
      */
     private void sendManualMessage(CommandSender sender, String message) {
         if (sender instanceof Player) {
-            MessageUtils.miniMessageSender((Player) sender, intercept(sender, message));
+            message = handlePAPIPlaceholders(sender, message);
+
+            MessageUtils.miniMessageSender((Player) sender, message);
             return;
         }
 
