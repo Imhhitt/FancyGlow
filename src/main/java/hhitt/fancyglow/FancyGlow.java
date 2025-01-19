@@ -13,10 +13,11 @@ import hhitt.fancyglow.utils.MessageUtils;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import revxrsal.zapper.ZapperJavaPlugin;
 
 public final class FancyGlow extends JavaPlugin {
+public final class FancyGlow extends ZapperJavaPlugin {
 
     private BukkitAudiences adventure;
     private MainConfigManager mainConfigManager;

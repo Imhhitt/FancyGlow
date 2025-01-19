@@ -1,28 +1,30 @@
 import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import revxrsal.zapper.gradle.zapper
 
 plugins {
     id("java")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
+    id("io.github.revxrsal.zapper") version "1.0.3"
 }
 
 repositories {
     mavenLocal()
     mavenCentral()
 
-    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
-    maven("https://oss.sonatype.org/content/groups/public")
-    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
     maven("https://libraries.minecraft.net/")
-    maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-releases/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi")
 }
 
 dependencies {
-    compileOnly(libs.org.spigotmc.spigot.api)
     compileOnly(libs.com.mojang.authlib)
-    compileOnly(libs.com.github.retrooper.packetevents.spigot)
     compileOnly(libs.me.clip.placeholderapi)
+    compileOnly(libs.org.spigotmc.spigot.api)
+    compileOnly(libs.com.github.retrooper.packetevents.spigot)
 
     implementation(libs.net.kyori.adventure.platform.bukkit)
     implementation(libs.org.bstats.bstats.bukkit)
@@ -30,11 +32,29 @@ dependencies {
     implementation(libs.io.github.revxrsal.lamp.common)
     implementation(libs.io.github.revxrsal.lamp.bukkit)
     implementation(libs.net.kyori.adventure.text.minimessage)
+    zap(libs.net.kyori.adventure.api)
+    zap(libs.org.bstats.bstats.bukkit)
+    zap(libs.io.github.revxrsal.lamp.common)
+    zap(libs.io.github.revxrsal.lamp.bukkit)
+    zap(libs.net.kyori.adventure.platform.bukkit)
+    zap(libs.net.kyori.adventure.text.minimessage)
 }
 
 group = "hhitt.fancyglow"
 description = "FancyGlow"
 version = "2.4.0"
+
+zapper {
+    libsFolder = "libraries"
+    relocationPrefix = "${group}.deps"
+
+    repositories { includeProjectRepositories() }
+
+    relocate("net.kyori", "kyori")
+    relocate("org.bstats", "bstats")
+    relocate("revxrsal.commands", "lamp")
+    relocate("dev.dejvokep.boostedyaml", "boostedyaml")
+}
 
 tasks {
 
@@ -53,9 +73,6 @@ tasks {
         archiveFileName.set("FancyGlow-${project.version}.jar")
 
         destinationDirectory.set(file("$rootDir/jars/"))
-
-        //TODO Needs dependencies relocation.
-        //relocate("com.alessiodp.libby", "${project.group}.deps.libby")
     }
 
     bukkit {
