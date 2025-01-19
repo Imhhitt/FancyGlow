@@ -2,7 +2,8 @@ package hhitt.fancyglow.managers;
 
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.tasks.MulticolorTask;
-import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -17,11 +18,13 @@ import java.util.UUID;
 public class GlowManager {
 
     private final FancyGlow plugin;
+    private final MessageHandler messageHandler;
     private final Map<ChatColor, Team> glowTeams;
     private final Map<UUID, MulticolorTask> multicolorTasks;
 
     public GlowManager(FancyGlow plugin) {
         this.plugin = plugin;
+        this.messageHandler = plugin.getMessageHandler();
         this.glowTeams = new HashMap<>();
         this.multicolorTasks = new HashMap<>();
     }
@@ -29,7 +32,7 @@ public class GlowManager {
     public void toggleMulticolorGlow(Player player) {
         if (isMulticolorTaskActive(player)) {
             removeGlow(player);
-            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
+            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             return;
         }
 
@@ -38,7 +41,7 @@ public class GlowManager {
         task.runTaskTimer(plugin, 0L, ticks);
         multicolorTasks.put(player.getUniqueId(), task);
         player.setGlowing(true);
-        MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
+        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public boolean isMulticolorTaskActive(Player player) {
@@ -55,7 +58,7 @@ public class GlowManager {
         // Add the player to the team and enable glowing
         glowTeam.addEntry(cleanName);
         player.setGlowing(true);
-        MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getEnableGlow());
+        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public void removeGlow(Player player) {

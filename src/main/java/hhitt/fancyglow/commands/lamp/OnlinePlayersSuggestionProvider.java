@@ -10,7 +10,7 @@ import revxrsal.commands.node.ExecutionContext;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class OnlinePlayersSuggestionProvider implements SuggestionProvider<@NotNull BukkitCommandActor> {
+public final class OnlinePlayersSuggestionProvider implements SuggestionProvider<BukkitCommandActor> {
 
     @Override
     public @NotNull List<String> getSuggestions(@NotNull ExecutionContext<BukkitCommandActor> context) {

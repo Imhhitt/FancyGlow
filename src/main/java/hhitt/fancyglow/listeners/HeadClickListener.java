@@ -3,7 +3,8 @@ package hhitt.fancyglow.listeners;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.managers.GlowManager;
-import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,12 +15,15 @@ import org.bukkit.inventory.ItemStack;
 
 
 public class HeadClickListener implements Listener {
+
     private final FancyGlow plugin;
     private final GlowManager glowManager;
+    private final MessageHandler messageHandler;
 
     public HeadClickListener(FancyGlow plugin) {
         this.plugin = plugin;
         this.glowManager = plugin.getGlowManager();
+        this.messageHandler = plugin.getMessageHandler();
     }
 
     @EventHandler
@@ -38,13 +42,14 @@ public class HeadClickListener implements Listener {
         if (itemType == Material.PLAYER_HEAD && slot == 41) {
             glowManager.removeGlow(player);
             player.closeInventory();
-            MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getDisableGlow());
+
+            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
         }
 
         // Multicolor head
         if (itemType == Material.PLAYER_HEAD && slot == 39) {
             if (!player.hasPermission("fancyglow.rainbow") || !player.hasPermission("fancyglow.all_colors")) {
-                MessageUtils.miniMessageSender(player, plugin.getMainConfigManager().getNoPermissionMessage());
+                messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                 player.closeInventory();
                 return;
             }

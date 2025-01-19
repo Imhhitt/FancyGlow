@@ -4,13 +4,14 @@ import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerTeams;
 import hhitt.fancyglow.utils.MessageUtils;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 
 public class GlowEffectManager {
+    
     private static final String TEAM_NAME_PREFIX = "glow_";
 
     public static void setPlayerGlow(Player player, NamedTextColor color) {

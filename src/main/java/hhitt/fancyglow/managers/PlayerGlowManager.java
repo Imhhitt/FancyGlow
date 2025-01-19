@@ -1,7 +1,8 @@
 package hhitt.fancyglow.managers;
 
 import hhitt.fancyglow.FancyGlow;
-import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -13,20 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+// TODO: Proper implementation.
 public class PlayerGlowManager {
 
     private final FancyGlow plugin;
+    private final MessageHandler messageHandler;
 
     public PlayerGlowManager(FancyGlow plugin) {
         this.plugin = plugin;
+        this.messageHandler = plugin.getMessageHandler();
     }
 
     // Used to manage the placeholder of status at gui
     public String getPlayerGlowingStatus(Player player) {
-        String trueStatus = MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGlowStatusTrue());
-        String falseStatus = MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGlowStatusFalse());
-
-        return player.isGlowing() ? trueStatus : falseStatus;
+        return messageHandler.getMessage(player.isGlowing() ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
     }
 
     public String getPlayerGlowColorName(Player player) {

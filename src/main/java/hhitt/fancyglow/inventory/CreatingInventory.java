@@ -3,7 +3,8 @@ package hhitt.fancyglow.inventory;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.HeadUtils;
-import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.Messages;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,23 +16,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Collections;
-
 public class CreatingInventory implements InventoryHolder {
 
     // Paper inventory holder to manage the gui creation and others
 
     private final Inventory inventory;
     private final FancyGlow plugin;
+    private final MessageHandler messageHandler;
     private final PlayerGlowManager playerGlowManager;
     private final String customTextureUrl =
             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0=";
 
     public CreatingInventory(FancyGlow plugin, Player sender) {
         this.plugin = plugin;
+        this.messageHandler = plugin.getMessageHandler();
         this.playerGlowManager = plugin.getPlayerGlowManager();
-        this.inventory = plugin.getServer().createInventory(this, 45,
-                MessageUtils.miniMessageParse(plugin.getMainConfigManager().getInventoryTitle()));
+        this.inventory = plugin.getServer().createInventory(this, 45, messageHandler.getMessage(Messages.INVENTORY_TITLE));
 
         // Player head
         ItemStack playerHead = getPlayerHead(sender);
@@ -44,10 +44,8 @@ public class CreatingInventory implements InventoryHolder {
         assert rainbowHeadMeta != null;
         rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        rainbowHeadMeta.setDisplayName(MessageUtils.miniMessageParse(
-                plugin.getConfig().getString("Inventory.Items.Rainbow_Head")));
-        rainbowHeadMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getConfig().getString("Inventory.Items.Rainbow_Head_Lore"))));
+        rainbowHeadMeta.setDisplayName(messageHandler.getMessage(Messages.RAINBOW_HEAD_NAME));
+        rainbowHeadMeta.setLore(messageHandler.getMessages(Messages.RAINBOW_HEAD_LORE));
         rainbowHead.setItemMeta(rainbowHeadMeta);
 
         inventory.setItem(39, rainbowHead);
@@ -94,152 +92,134 @@ public class CreatingInventory implements InventoryHolder {
         assert darkRedMeta != null;
         darkRedMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         darkRedMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        darkRedMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        darkRedMeta.setLore(messageHandler.getMessages(sender, Messages.COLOR_LORE));
 
         assert redMeta != null;
         redMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         redMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        redMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        redMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert goldMeta != null;
         goldMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         goldMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        goldMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        goldMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert yellowMeta != null;
         yellowMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         yellowMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        yellowMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        yellowMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert darkGreenMeta != null;
         darkGreenMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         darkGreenMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        darkGreenMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        darkGreenMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert greenMeta != null;
         greenMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         greenMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        greenMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        greenMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert aquaMeta != null;
         aquaMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         aquaMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        aquaMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        aquaMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert darkAquaMeta != null;
         darkAquaMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         darkAquaMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        darkAquaMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        darkAquaMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert darkBlueMeta != null;
         darkBlueMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         darkBlueMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        darkBlueMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        darkBlueMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert blueMeta != null;
         blueMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         blueMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        blueMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        blueMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert pinkMeta != null;
         pinkMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         pinkMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        pinkMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        pinkMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert purpleMeta != null;
         purpleMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         purpleMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        purpleMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        purpleMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert blackMeta != null;
         blackMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         blackMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        blackMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        blackMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert darkGrayMeta != null;
         darkGrayMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         darkGrayMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        darkGrayMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        darkGrayMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert grayMeta != null;
         grayMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         grayMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        grayMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        grayMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         assert whiteMeta != null;
         whiteMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         whiteMeta.addItemFlags(ItemFlag.HIDE_DYE);
-        whiteMeta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getColorLore())));
+        whiteMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
 
         // Names of the glows
-        darkRedMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDarkRedName()));
+        darkRedMeta.setDisplayName(messageHandler.getMessage(Messages.DARK_RED_NAME));
         darkRedMeta.setColor(Color.MAROON);
 
-        redMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getRedName()));
+        redMeta.setDisplayName(messageHandler.getMessage(Messages.RED_NAME));
         redMeta.setColor(Color.RED);
 
-        goldMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGoldName()));
+        goldMeta.setDisplayName(messageHandler.getMessage(Messages.GOLD_NAME));
         goldMeta.setColor(Color.ORANGE);
 
-        yellowMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getYellowName()));
+        yellowMeta.setDisplayName(messageHandler.getMessage(Messages.YELLOW_NAME));
         yellowMeta.setColor(Color.YELLOW);
 
-        darkGreenMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDarkGreenName()));
+        darkGreenMeta.setDisplayName(messageHandler.getMessage(Messages.DARK_GREEN_NAME));
         darkGreenMeta.setColor(Color.GREEN);
 
-        greenMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGreenName()));
+        greenMeta.setDisplayName(messageHandler.getMessage(Messages.GREEN_NAME));
         greenMeta.setColor(Color.LIME);
 
-        aquaMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getAquaName()));
+        aquaMeta.setDisplayName(messageHandler.getMessage(Messages.AQUA_NAME));
         aquaMeta.setColor(Color.AQUA);
 
-        darkAquaMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDarkAquaName()));
+        darkAquaMeta.setDisplayName(messageHandler.getMessage(Messages.DARK_AQUA_NAME));
         darkAquaMeta.setColor(Color.TEAL);
 
-        darkBlueMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDarkBlueName()));
+        darkBlueMeta.setDisplayName(messageHandler.getMessage(Messages.DARK_BLUE_NAME));
         darkBlueMeta.setColor(Color.NAVY);
 
-        blueMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getBlueName()));
+        blueMeta.setDisplayName(messageHandler.getMessage(Messages.BLUE_NAME));
         blueMeta.setColor(Color.BLUE);
 
-        pinkMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getPinkName()));
+        pinkMeta.setDisplayName(messageHandler.getMessage(Messages.PINK_NAME));
         pinkMeta.setColor(Color.FUCHSIA);
 
-        purpleMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getPurpleName()));
+        purpleMeta.setDisplayName(messageHandler.getMessage(Messages.PURPLE_NAME));
         purpleMeta.setColor(Color.PURPLE);
 
-        blackMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getBlackName()));
+        blackMeta.setDisplayName(messageHandler.getMessage(Messages.BLACK_NAME));
         blackMeta.setColor(Color.BLACK);
 
-        darkGrayMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getDarkGrayName()));
+        darkGrayMeta.setDisplayName(messageHandler.getMessage(Messages.DARK_GRAY_NAME));
         darkGrayMeta.setColor(Color.GRAY);
 
-        grayMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGrayName()));
+        grayMeta.setDisplayName(messageHandler.getMessage(Messages.GRAY_NAME));
         grayMeta.setColor(Color.SILVER);
 
-        whiteMeta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getWhiteName()));
+        whiteMeta.setDisplayName(messageHandler.getMessage(Messages.WHITE_NAME));
         whiteMeta.setColor(Color.WHITE);
 
         assert fillMeta != null;
-        fillMeta.setDisplayName(MessageUtils.miniMessageParse(
-                plugin.getMainConfigManager().getFillMaterialName()));
-
+        fillMeta.setDisplayName(messageHandler.getMessage(Messages.FILL_MATERIAL_NAME));
 
         // Save the assigned data
         darkRed.setItemMeta(darkRedMeta);
@@ -316,8 +296,8 @@ public class CreatingInventory implements InventoryHolder {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) head.getItemMeta();
         assert meta != null;
-        meta.setDisplayName(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getHeadName()));
-        meta.setLore(Collections.singletonList(MessageUtils.miniMessageParse(plugin.getMainConfigManager().getHeadLore())));
+        meta.setDisplayName(messageHandler.getMessage(Messages.HEAD_NAME));
+        meta.setLore(messageHandler.getMessages(Messages.HEAD_LORE));
 
         meta.setOwningPlayer(player);
         head.setItemMeta(meta);
