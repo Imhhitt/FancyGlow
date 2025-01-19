@@ -20,6 +20,7 @@ public enum Messages {
 
     GLOW_STATUS_TRUE("Messages.Glow_Status_True"),
     GLOW_STATUS_FALSE("Messages.Glow_Status_False"),
+    GLOW_STATUS_NONE("Messages.Glow_Status_None"),
 
     // Inventory,
     DARK_RED_NAME("Inventory.Items.Dark_Red_Glow_Name"), RED_NAME("Inventory.Items.Red_Glow_Name"),

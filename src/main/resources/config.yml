@@ -16,8 +16,8 @@
 config-version: 1
 
 # Should selected glow mode persist when a player leaves the server?
-# true = yes // false = no
 Persistent_Mode: true
+
 # How many ticks should the color change in rainbow mode?
 # 1 second = 20 ticks
 Rainbow_Update_Interval: 10
@@ -39,9 +39,10 @@ Messages:
   Invalid_Sub_Command: "<red>Unknown sub-command \"%sub_command%\"."
   # Message that player gets when entering a world where glow is disabled
   Disabled_World_Message: "<red>Glow is disabled in this world!"
-  # %fancyglow_status% translation, for true or false:
+  # Translations for status placeholder. (%fancyglow_status_formatted%)
   Glow_Status_False: "<red>Not glowing! ❌"
   Glow_Status_True: "<green>Glowing! ✔</green> <gray>Click to disable!"
+  Glow_Status_None: "NONE"
 
 # List of worlds where glow cannot be enabled
 Disabled_Worlds:
@@ -74,4 +75,4 @@ Inventory:
     Fill_Material_Name: "<rainbow>Click on a color!</rainbow>"
     Player_Head:
       Name: "<color:#6effa3>Your glowing status:</color>"
-      Lore: "<white>%fancyglow_status%</white>"
+      Lore: "<white>%fancyglow_status_formatted%</white>"
