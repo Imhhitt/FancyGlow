@@ -45,7 +45,7 @@ public class MainCommand {
         }
 
         // Prevent command usage in target worlds
-        List<String> noAllowedWorlds = plugin.getConfig().getStringList("Disabled_Worlds");
+        List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
         if (actor.isPlayer()) {
             Player player = (Player) sender;
 
@@ -71,7 +71,7 @@ public class MainCommand {
     @Description("FancyGlow reload sub-command.")
     public void reloadCommand(BukkitCommandActor actor) {
         CommandSender sender = actor.sender();
-        if (sender.hasPermission("fancyglow.command.reload")) {
+        if (!sender.hasPermission("fancyglow.command.reload")) {
             messageHandler.sendMessage(sender, Messages.NO_PERMISSION);
             return;
         }
