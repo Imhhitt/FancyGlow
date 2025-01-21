@@ -1,5 +1,7 @@
 package hhitt.fancyglow.utils;
 
+import java.util.Arrays;
+
 public enum Messages {
 
     COLOR_COMMAND_USAGE("Messages.Color_Command_Usage"),
@@ -28,16 +30,17 @@ public enum Messages {
     DARK_GREEN_NAME("Inventory.Items.Dark_Green_Glow_Name"), GREEN_NAME("Inventory.Items.Green_Glow_Name"),
     DARK_AQUA_NAME("Inventory.Items.Dark_Aqua_Glow_Name"), AQUA_NAME("Inventory.Items.Aqua_Glow_Name"),
     DARK_BLUE_NAME("Inventory.Items.Dark_Blue_Glow_Name"), BLUE_NAME("Inventory.Items.Blue_Glow_Name"),
-    PINK_NAME("Inventory.Items.Pink_Glow_Name"), PURPLE_NAME("Inventory.Items.Purple_Glow_Name"),
+    LIGHT_PURPLE_NAME("Inventory.Items.Pink_Glow_Name"), DARK_PURPLE_NAME("Inventory.Items.Purple_Glow_Name"),
     BLACK_NAME("Inventory.Items.Black_Glow_Name"), DARK_GRAY_NAME("Inventory.Items.Dark_Gray_Glow_Name"),
     GRAY_NAME("Inventory.Items.Gray_Glow_Name"), WHITE_NAME("Inventory.Items.White_Glow_Name"),
-    FILL_MATERIAL_NAME("Inventory.Items.Fill_Material_Name"),
+    FILLER_NAME("Inventory.Filler.Name"),
 
-    HEAD_NAME("Inventory.Items.Player_Head.Name"), HEAD_LORE("Inventory.Items.Player_Head.Lore"),
-    RAINBOW_HEAD_NAME("Inventory.Items.Rainbow_Head"), RAINBOW_HEAD_LORE("Inventory.Items.Rainbow_Head_Lore"),
+    HEAD_NAME("Inventory.Status.Name"), HEAD_LORE("Inventory.Status.Lore"),
+    RAINBOW_HEAD_NAME("Inventory.Rainbow.Name"), RAINBOW_HEAD_LORE("Inventory.Rainbow.Lore"),
+    FLASHING_HEAD_NAME("Inventory.Flashing.Name"), FLASHING_HEAD_LORE("Inventory.Flashing.Lore"),
     INVENTORY_TITLE("Inventory.Title"),
     // General messages.
-    NO_PERMISSION("Messages.No_Permission"), RELOADED("Messages.Reload_Message");
+    NO_PERMISSION("Messages.No_Permission"), RELOADED("Messages.Reload_Message"), MESSAGE_NOT_FOUND("Messages.Message_Not_Found");
 
     private final String path;
 
@@ -47,5 +50,12 @@ public enum Messages {
 
     public String getPath() {
         return path;
+    }
+
+    public static Messages match(String string) {
+        return Arrays.stream(values())
+                .filter(type -> type.name().equalsIgnoreCase(string))
+                .findFirst()
+                .orElse(MESSAGE_NOT_FOUND);
     }
 }
