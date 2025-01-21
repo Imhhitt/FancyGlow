@@ -55,6 +55,11 @@ public class MainCommand {
             }
         }
 
+        // Returns if disabled so player use its own menus.
+        if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) {
+            return;
+        }
+
         // Check gui permissions
         Player player = (Player) sender;
         if (!player.hasPermission("fancyglow.command.gui")) {

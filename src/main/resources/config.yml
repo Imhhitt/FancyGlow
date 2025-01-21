@@ -22,6 +22,9 @@ Persistent_Mode: true
 # 1 second = 20 ticks
 Rainbow_Update_Interval: 10
 
+# Change to false if you want to use a menu plugin to handle your glow.
+Open_Glow_Menu: true
+
 Messages:
   # All translations for plugin messages
   No_Permission: "<red>You do not have permission to perform this!"
