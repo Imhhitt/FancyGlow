@@ -142,7 +142,7 @@ public class MessageHandler {
      * @see hhitt.fancyglow.utils.MessageHandler#sendMessage(CommandSender, String)
      * @see hhitt.fancyglow.utils.MessageHandler#sendMessage(CommandSender, Messages)
      */
-    private void sendManualMessage(CommandSender sender, String message) {
+    public void sendManualMessage(CommandSender sender, String message) {
         if (sender instanceof Player) {
             message = handlePAPIPlaceholders(sender, message);
 
