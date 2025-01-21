@@ -18,7 +18,7 @@ public class MessageUtils {
     }
 
     public static @NotNull String miniMessageParse(String message) {
-        return LEGACY_COMPONENT_SERIALIZER.serialize(MINI_MESSAGE.deserialize(message));
+        return LEGACY_COMPONENT_SERIALIZER.serialize(parse(message));
     }
 
     public static void miniMessageSender(Player player, String message) {
