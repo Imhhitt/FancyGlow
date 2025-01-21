@@ -58,12 +58,15 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
                 return playerGlowManager.getPlayerGlowColor(player);
             }
             case "status" -> {
-                return player.isGlowing() ? enabled : disabled;
+                return (player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? enabled : disabled;
             }
             case "status_formatted" -> {
                 return playerGlowManager.getPlayerGlowingStatus(player);
             }
             case "color_name" -> {
+                if (glowManager.isFlashingTaskActive(player)) {
+                    return "FLASHING";
+                }
                 if (glowManager.isMulticolorTaskActive(player)) {
                     return "RAINBOW";
                 }

@@ -89,7 +89,7 @@ tasks {
                 default = BukkitPluginDescription.Permission.Default.OP
                 description = "Gives permission to every FancyGlow command and feature."
                 children = listOf(
-                    "fancyglow.rainbow", "fancyglow.all_colors", "fancyglow.command.gui",
+                    "fancyglow.rainbow", "fancyglow.flashing", "fancyglow.all_colors", "fancyglow.command.gui",
                     "fancyglow.command.color", "fancyglow.command.reload", "fancyglow.command.disable",
                     "fancyglow.command.disable.everyone", "fancyglow.command.disable.others"
                 )

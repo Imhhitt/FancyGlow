@@ -18,12 +18,20 @@ config-version: 1
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
 
-# How many ticks should the color change in rainbow mode?
-# 1 second = 20 ticks
+# Rainbow mode update interval
+# 1 second = 20 ticks, Keep in mind when using low values it might affect performance.
 Rainbow_Update_Interval: 10
+
+# Flashing mode update interval
+# 1 second = 20 ticks, Keep in mind when using low values it might affect performance.
+Flashing_Update_Interval: 6
 
 # Change to false if you want to use a menu plugin to handle your glow.
 Open_Glow_Menu: true
+
+# Use flash mode when player is also using rainbow mode.
+# If you experience problems when using this option please notify plugin developers.
+Flash_Rainbow: false
 
 Messages:
   # All translations for plugin messages

@@ -22,22 +22,41 @@ public class PlayerGlowManager {
         this.messageHandler = plugin.getMessageHandler();
     }
 
-    // Used to manage the placeholder of status at gui
+    /**
+     * @param player Player to search to.
+     *
+     * @return Returns player formatted glowing status.
+     */
     public String getPlayerGlowingStatus(Player player) {
-        return messageHandler.getMessage(player.isGlowing() ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
+        return messageHandler.getMessage((player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
     }
 
+    /**
+     * @param player Player to search to.
+     *
+     * @return Player glow color name, if not glowing returns none status.
+     */
     public String getPlayerGlowColorName(Player player) {
         Team team = findPlayerTeam(player);
         return (player.isGlowing() && team != null) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
     }
 
+    /**
+     * @param player Player to search to.
+     *
+     * @return Player glow color format if not glowing returns an empty string.
+     */
     public String getPlayerGlowColor(Player player) {
         Team team = findPlayerTeam(player);
-        return (player.isGlowing() && team != null) ? team.getColor().toString() : "";
+        return (team != null) ? team.getColor().toString() : "";
     }
 
-    private Team findPlayerTeam(Player player) {
+    /**
+     * @param player Player to search to.
+     *
+     * @return Team where player has a registry on, if none returns null
+     */
+    public Team findPlayerTeam(Player player) {
         for (Team team : glowManager.getGlowTeams().values()) {
             if (team.hasEntry(player.getName())) {
                 return team;
@@ -46,6 +65,12 @@ public class PlayerGlowManager {
         return null;
     }
 
+    /**
+     * Updates head lore placeholders.
+     *
+     * @param item   Item to update to.
+     * @param player Player whose inventory if from.
+     */
     public void updateItemLore(ItemStack item, Player player) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null && meta.getLore() != null) {

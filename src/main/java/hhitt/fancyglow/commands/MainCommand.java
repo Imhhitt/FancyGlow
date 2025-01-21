@@ -5,6 +5,7 @@ import hhitt.fancyglow.commands.lamp.ColorSuggestion;
 import hhitt.fancyglow.commands.lamp.OnlinePlayersSuggestionProvider;
 import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.managers.GlowManager;
+import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.ColorUtils;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.Messages;
@@ -27,11 +28,13 @@ public class MainCommand {
     private final FancyGlow plugin;
     private final GlowManager glowManager;
     private final MessageHandler messageHandler;
+    private final PlayerGlowManager playerGlowManager;
 
     public MainCommand(FancyGlow plugin) {
         this.plugin = plugin;
         this.glowManager = plugin.getGlowManager();
         this.messageHandler = plugin.getMessageHandler();
+        this.playerGlowManager = plugin.getPlayerGlowManager();
     }
 
     @Command({"glow", "fancyglow"})
@@ -124,6 +127,28 @@ public class MainCommand {
             glowManager.toggleMulticolorGlow(player);
             return;
         }
+        if (arg.equalsIgnoreCase("flashing") || arg.equalsIgnoreCase("flash")) {
+            if (!(
+                    player.hasPermission("fancyglow.flashing")
+            )) {
+                messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                return;
+            }
+
+            //TODO: Create message.
+            if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(player)) {
+                messageHandler.sendManualMessage(player, "Please disable rainbow before using flashing mode.");
+                return;
+            }
+
+            if (playerGlowManager.findPlayerTeam(player) == null) {
+                messageHandler.sendManualMessage(player, "You need to select a color first!");
+                return;
+            }
+
+            glowManager.toggleFlashingGlow(player);
+            return;
+        }
 
         if (color == null) {
             messageHandler.sendMessage(player, Messages.INVALID_COLOR);
@@ -157,7 +182,7 @@ public class MainCommand {
         }
 
         // Check if the player is glowing
-        if (!player.isGlowing()) {
+        if (!player.isGlowing() && !glowManager.isFlashingTaskActive(player)) {
             messageHandler.sendMessage(player, Messages.NOT_GLOWING);
             return;
         }

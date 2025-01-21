@@ -107,7 +107,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
         }
 
         if (this.glowManager != null) {
-            this.glowManager.cancelMulticolorTasks();
+            this.glowManager.stopFlashingTask();
+            this.glowManager.stopMulticolorTask();
         }
     }
 

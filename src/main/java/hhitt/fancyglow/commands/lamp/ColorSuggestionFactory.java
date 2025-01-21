@@ -12,6 +12,7 @@ import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class ColorSuggestionFactory implements SuggestionProvider.Factory<BukkitCommandActor> {
@@ -41,10 +42,14 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
             BukkitCommandActor actor = context.actor();
 
             if (actor.isPlayer()) {
-                Player player = actor.asPlayer();
+                Player player = Objects.requireNonNull(actor.asPlayer());
 
                 if (glowManager.hasGlowPermission(player, "rainbow")) {
                     availableColors.add("rainbow");
+                }
+                if (glowManager.hasGlowPermission(player, "flashing")) {
+                    availableColors.add("flash");
+                    availableColors.add("flashing");
                 }
 
                 return availableColors

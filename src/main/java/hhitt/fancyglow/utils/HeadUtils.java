@@ -10,10 +10,16 @@ import org.bukkit.profile.PlayerTextures;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 public class HeadUtils {
 
+    /**
+     * @param base64 Base64 string to use as texture.
+     *
+     * @return A head item stack with the specified texture.
+     */
     public static ItemStack getCustomSkull(String base64) {
         ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
         if (base64 == null || base64.isEmpty()) {
@@ -33,12 +39,18 @@ public class HeadUtils {
         profile.setTextures(textures); // Set the textures back to the profile
 
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setOwnerProfile(profile); // Set the owning player of the head to the player profile
+        Objects.requireNonNull(meta).setOwnerProfile(profile); // Set the owning player of the head to the player profile
         skull.setItemMeta(meta);
 
         return skull;
     }
 
+    /**
+     * @param base64 Base64 string.
+     *
+     * @return URL object to use as skin.
+     * @throws MalformedURLException
+     */
     public static URL getUrlFromBase64(String base64) throws MalformedURLException {
         String decoded = new String(Base64.getDecoder().decode(base64));
         // We simply remove the "beginning" and "ending" part of the JSON, so we're left with only the URL. You could use a proper
