@@ -60,6 +60,8 @@ public class MenuClickListener implements Listener {
         }
 
         if (playerGlowManager.getPlayerGlowColorName(player).equalsIgnoreCase(color.name())) {
+            // TODO: create message.
+            messageHandler.sendManualMessage(player, "You already have selected that color.");
             player.closeInventory();
             return;
         }

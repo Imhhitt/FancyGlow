@@ -12,12 +12,11 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class GlowManager {
 
@@ -26,7 +25,6 @@ public class GlowManager {
 
     private final Set<UUID> flashingPlayerSet;
     private final Set<UUID> multicolorPlayerSet;
-    private final Map<ChatColor, Team> glowTeams;
 
     private BukkitTask flashingTask;
     private BukkitTask multicolorTask;
@@ -35,7 +33,6 @@ public class GlowManager {
         this.plugin = plugin;
         this.messageHandler = plugin.getMessageHandler();
 
-        this.glowTeams = new HashMap<>();
         this.flashingPlayerSet = new HashSet<>();
         this.multicolorPlayerSet = new HashSet<>();
     }
@@ -116,7 +113,15 @@ public class GlowManager {
     }
 
     public Team getOrCreateTeam(ChatColor color) {
-        return glowTeams.computeIfAbsent(color, k -> createTeam(color));
+        if (getGlowTeams().contains(color.name())) {
+            for (Team team : getGlowTeams()) {
+                if (team.getName().equalsIgnoreCase(color.name())) {
+                    return team;
+                }
+            }
+        }
+
+        return createTeam(color);
     }
 
     public Team createTeam(ChatColor color) {
@@ -181,8 +186,16 @@ public class GlowManager {
         return multicolorPlayerSet;
     }
 
-    public Map<ChatColor, Team> getGlowTeams() {
-        return glowTeams;
+    public Set<Team> getGlowTeams() {
+        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
+        return board.getTeams()
+                .stream()
+                .filter(team -> getAvailableColorsSet().contains(team.getName()))
+                .collect(Collectors.toSet());
+    }
+
+    public Set<String> getAvailableColorsSet() {
+        return Arrays.stream(getAvailableColors()).map(Enum::name).collect(Collectors.toSet());
     }
 
     public ChatColor[] getAvailableColors() {
