@@ -37,7 +37,7 @@ dependencies {
 
 group = "hhitt.fancyglow"
 description = "FancyGlow"
-version = "2.7.3-BETA"
+version = "2.8.0-BETA"
 
 zapper {
     libsFolder = "libraries"
@@ -91,7 +91,7 @@ tasks {
                 children = listOf(
                     "fancyglow.rainbow", "fancyglow.flashing", "fancyglow.all_colors", "fancyglow.command.gui",
                     "fancyglow.command.color", "fancyglow.command.reload", "fancyglow.command.disable",
-                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others"
+                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others", "fancyglow.update"
                 )
             }
         }
