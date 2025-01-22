@@ -1,65 +1,83 @@
 package hhitt.fancyglow.managers;
 
 import hhitt.fancyglow.FancyGlow;
-import hhitt.fancyglow.utils.MessageUtils;
-import org.bukkit.ChatColor;
+import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.Messages;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class PlayerGlowManager {
 
-    private final FancyGlow plugin;
+    private final GlowManager glowManager;
+    private final MessageHandler messageHandler;
 
     public PlayerGlowManager(FancyGlow plugin) {
-        this.plugin = plugin;
+        this.glowManager = plugin.getGlowManager();
+        this.messageHandler = plugin.getMessageHandler();
     }
 
-    // Used to manage the placeholder of status at gui
+    /**
+     * @param player Player to search to.
+     *
+     * @return Returns player formatted glowing status.
+     */
     public String getPlayerGlowingStatus(Player player) {
-        String trueStatus = MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGlowStatusTrue());
-        String falseStatus = MessageUtils.miniMessageParse(plugin.getMainConfigManager().getGlowStatusFalse());
-
-        return player.isGlowing() ? trueStatus : falseStatus;
+        return messageHandler.getMessage((player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
     }
 
+    /**
+     * @param player Player to search to.
+     *
+     * @return Player glow color name, if not glowing returns none status.
+     */
     public String getPlayerGlowColorName(Player player) {
-        if (player.isGlowing()) {
-            Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
-            Team team = board.getPlayerTeam(player);
-            if (team != null) {
-                ChatColor glowColor = team.getColor();
-                return glowColor.name();
-            }
-        }
-        return "NONE";
+        Team team = findPlayerTeam(player);
+        return (player.isGlowing() && team != null) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
     }
 
+    /**
+     * @param player Player to search to.
+     *
+     * @return Player glow color format if not glowing returns an empty string.
+     */
     public String getPlayerGlowColor(Player player) {
-        if (player.isGlowing()) {
-            Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
-            Team team = board.getPlayerTeam(player);
-            if (team != null) {
-                ChatColor glowColor = team.getColor();
-                return glowColor.toString();
-            }
-        }
-        return "";
+        Team team = findPlayerTeam(player);
+        return (team != null) ? team.getColor().toString() : "";
     }
 
+    /**
+     * @param player Player to search to.
+     *
+     * @return Team where player has a registry on, if none returns null
+     */
+    public Team findPlayerTeam(Player player) {
+        for (Team team : glowManager.getGlowTeams()) {
+            if (team.hasEntry(player.getName())) {
+                return team;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Updates head lore placeholders.
+     *
+     * @param item   Item to update to.
+     * @param player Player whose inventory if from.
+     */
     public void updateItemLore(ItemStack item, Player player) {
         ItemMeta meta = item.getItemMeta();
         if (meta != null && meta.getLore() != null) {
             List<String> lore = new ArrayList<>();
 
             for (String line : meta.getLore()) {
-                lore.add(line.replace("%fancyglow_status%", getPlayerGlowingStatus(player)));
+                lore.add(PlaceholderAPI.setPlaceholders(player, line));
             }
 
             meta.setLore(lore);
