@@ -13,7 +13,7 @@
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
 # DO NOT CHANGE THIS.
-config-version: 2
+config-version: 3
 
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
