@@ -12,6 +12,7 @@ repositories {
     mavenLocal()
     mavenCentral()
 
+    maven("https://jitpack.io/")
     maven("https://libraries.minecraft.net/")
     maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-releases/")
@@ -24,6 +25,7 @@ dependencies {
     compileOnly(libs.com.mojang.authlib)
     compileOnly(libs.me.clip.placeholderapi)
     compileOnly(libs.org.spigotmc.spigot.api)
+    compileOnly(libs.com.github.neznamy.tab.api)
     compileOnly(libs.com.github.retrooper.packetevents.spigot)
 
     zap(libs.net.kyori.adventure.api)
@@ -76,7 +78,7 @@ tasks {
         prefix = name
         version = project.version.toString()
         main = project.group.toString() + ".FancyGlow"
-        apiVersion = "1.20"
+        apiVersion = "1.19"
         authors = listOf("hhitt")
         contributors = listOf("Sliide_")
         softDepend = listOf(
