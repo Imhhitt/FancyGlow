@@ -31,7 +31,7 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.3.1";
+        return "1.4.0";
     }
 
     @Override
@@ -53,26 +53,32 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
         String enabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanTrue();
         String disabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanFalse();
 
-        switch (params) {
-            case "color" -> {
-                return playerGlowManager.getPlayerGlowColor(player);
-            }
-            case "status" -> {
-                return (player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? enabled : disabled;
-            }
-            case "status_formatted" -> {
-                return playerGlowManager.getPlayerGlowingStatus(player);
-            }
-            case "color_name" -> {
-                if (glowManager.isFlashingTaskActive(player)) {
-                    return "FLASHING";
-                }
-                if (glowManager.isMulticolorTaskActive(player)) {
-                    return "RAINBOW";
-                }
-                return playerGlowManager.getPlayerGlowColorName(player);
+        // %fancyglow_status_<color>%
+        if (params.startsWith("status_")) {
+            String[] paramsArgs = params.split("_", 2);
+            String paramsArg = paramsArgs[1];
+
+            if (paramsArgs.length == 2 && !paramsArg.equalsIgnoreCase("formatted")) {
+                String colorName = playerGlowManager.getPlayerGlowColorName(player);
+                return colorName.equalsIgnoreCase(paramsArg) ? enabled : disabled;
             }
         }
-        return "";
+
+        return switch (params) {
+            case "color" -> playerGlowManager.getPlayerGlowColor(player);
+            case "status" -> (player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? enabled : disabled;
+            case "status_formatted" -> playerGlowManager.getPlayerGlowingStatus(player);
+
+            case "color_name" -> {
+                if (glowManager.isFlashingTaskActive(player)) {
+                    yield "FLASHING";
+                }
+                if (glowManager.isMulticolorTaskActive(player)) {
+                    yield "RAINBOW";
+                }
+                yield playerGlowManager.getPlayerGlowColorName(player);
+            }
+            default -> "";
+        };
     }
 }
