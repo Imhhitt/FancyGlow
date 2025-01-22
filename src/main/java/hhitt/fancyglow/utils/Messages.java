@@ -14,6 +14,8 @@ public enum Messages {
     COLOR_LORE("Inventory.Items.Color_Lore"),
 
     ENABLE_GLOW("Messages.Enable_Glow"), DISABLE_GLOW("Messages.Disable_Glow"),
+    COLOR_ALREADY_SELECTED("Messages.Color_Already_Selected"),
+    FLASHING_WITH_RAINBOW("Messages.Flashing_With_Rainbow"),
 
     DISABLED_WORLD("Messages.Disabled_World_Message"),
     DISABLE_GLOW_EVERYONE("Messages.Disable_Glow_Everyone"),

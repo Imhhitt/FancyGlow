@@ -135,9 +135,8 @@ public class MainCommand {
                 return;
             }
 
-            //TODO: Create message.
             if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(player)) {
-                messageHandler.sendManualMessage(player, "Please disable rainbow before using flashing mode.");
+                messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
                 return;
             }
 
