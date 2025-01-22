@@ -39,6 +39,7 @@ public class GlowManager {
 
     public void toggleMulticolorGlow(Player player) {
         if (isMulticolorTaskActive(player)) {
+            multicolorPlayerSet.remove(player.getUniqueId());
             removeGlow(player);
             messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             return;
