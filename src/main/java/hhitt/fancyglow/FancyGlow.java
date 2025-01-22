@@ -11,12 +11,14 @@ import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
+import hhitt.fancyglow.listeners.UpdateJoinLitener;
 import hhitt.fancyglow.managers.CommandManager;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.UpdateChecker;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -82,8 +84,9 @@ public final class FancyGlow extends ZapperJavaPlugin {
         // Register events
         registerEvents();
 
-        // Actually register placeholderapi extension.
-        new FancyGlowPlaceholder(this).register();
+        // Check for plugin updates.
+        checkUpdates();
+
         // Attempts to hook into placeholderapi.
         hookPlaceholderAPI();
     }
@@ -108,10 +111,21 @@ public final class FancyGlow extends ZapperJavaPlugin {
     public void registerEvents() {
         PluginManager pluginManager = getServer().getPluginManager();
 
+        pluginManager.registerEvents(new UpdateJoinLitener(this), this);
         pluginManager.registerEvents(new MenuClickListener(this), this);
         pluginManager.registerEvents(new HeadClickListener(this), this);
         pluginManager.registerEvents(new PlayerQuitListener(this), this);
         pluginManager.registerEvents(new PlayerChangeWorldListener(this), this);
+    }
+
+    private void checkUpdates() {
+        if (!configuration.getBoolean("Notify_Updates")) return;
+        UpdateChecker.init(this, 116326).requestUpdateCheck().whenComplete((result, exception) -> {
+            if (result.requiresUpdate()) {
+                this.getLogger().info(String.format("There is a new update available! FancyGlow %s may be downloaded on SpigotMC", result.getNewestVersion()));
+                this.getLogger().info("Download it at https://www.spigotmc.org/resources/116326/updates");
+            }
+        });
     }
 
     private void hookPlaceholderAPI() {

@@ -13,7 +13,7 @@
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
 # DO NOT CHANGE THIS.
-config-version: 1
+config-version: 2
 
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
@@ -32,6 +32,9 @@ Open_Glow_Menu: true
 # Use flash mode when player is also using rainbow mode.
 # If you experience problems when using this option please notify plugin developers.
 Flash_Rainbow: false
+
+# Notify players with permission and the server if player has an available update.
+Notify_Updates: true
 
 Messages:
   # All translations for plugin messages
