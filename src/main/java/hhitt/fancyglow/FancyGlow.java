@@ -49,15 +49,6 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
     @Override
     public void onEnable() {
-        // Check if PlaceholderAPI is available.
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            getLogger().warning("Could not find PlaceholderAPI! This plugin is required.");
-
-            // Disable if not found.
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
-
         // bStats hook / metrics
         new Metrics(this, 22057);
 
@@ -93,6 +84,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         // Actually register placeholderapi extension.
         new FancyGlowPlaceholder(this).register();
+        // Attempts to hook into placeholderapi.
+        hookPlaceholderAPI();
     }
 
     @Override
@@ -119,6 +112,17 @@ public final class FancyGlow extends ZapperJavaPlugin {
         pluginManager.registerEvents(new HeadClickListener(this), this);
         pluginManager.registerEvents(new PlayerQuitListener(this), this);
         pluginManager.registerEvents(new PlayerChangeWorldListener(this), this);
+    }
+
+    private void hookPlaceholderAPI() {
+        // Check if PlaceholderAPI is available.
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
+            getLogger().warning("Could not find PlaceholderAPI!");
+            getLogger().warning("This plugin is required if you want to use its placeholders.");
+        } else {
+            // Actually register placeholderapi extension.
+            new FancyGlowPlaceholder(this).register();
+        }
     }
 
     public YamlDocument getConfiguration() {
