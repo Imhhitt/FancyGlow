@@ -94,7 +94,7 @@ public class CreatingInventory implements InventoryHolder {
         flashingHead.setItemMeta(flashingHeadMeta);
 
         if (player.isGlowing() || playerGlowManager.findPlayerTeam(player) != null) {
-            inventory.setItem(config.getInt("Inventory.Rainbow.Slot", 40), flashingHead);
+            inventory.setItem(config.getInt("Inventory.Flashing.Slot", 40), flashingHead);
         }
     }
 
