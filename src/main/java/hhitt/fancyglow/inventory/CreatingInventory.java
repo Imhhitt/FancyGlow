@@ -29,7 +29,6 @@ public class CreatingInventory implements InventoryHolder {
     private final MessageHandler messageHandler;
     private final PlayerGlowManager playerGlowManager;
 
-    @SuppressWarnings("DataFlowIssue")
     public CreatingInventory(FancyGlow plugin, Player player) {
         this.config = plugin.getConfiguration();
         this.glowManager = plugin.getGlowManager();
@@ -44,7 +43,7 @@ public class CreatingInventory implements InventoryHolder {
         int i = 9;
         for (ChatColor availableColor : glowManager.getAvailableColors()) {
             ItemStack colorItem = new ItemStack(Material.LEATHER_CHESTPLATE);
-            LeatherArmorMeta colorMeta = (LeatherArmorMeta) colorItem.getItemMeta();
+            LeatherArmorMeta colorMeta = (LeatherArmorMeta) Objects.requireNonNull(colorItem.getItemMeta());
 
             colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             colorMeta.addItemFlags(ItemFlag.HIDE_DYE);
@@ -60,7 +59,6 @@ public class CreatingInventory implements InventoryHolder {
             inventory.setItem(i++, colorItem);
         }
 
-        // TODO: Allow them to set their own slots.
         setRainbowItem();
         setFlashingItem(player);
         setPlayerStatusItem(player);
