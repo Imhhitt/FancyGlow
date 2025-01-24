@@ -109,7 +109,7 @@ public class CreatingInventory implements InventoryHolder {
     private void setRainbowItem() {
         // Rainbow head
         ItemStack rainbowHead = HeadUtils.getCustomSkull(config.getString("Inventory.Rainbow.Texture", DEFAULT_TEXTURE));
-        ItemMeta rainbowHeadMeta = Objects.requireNonNull(rainbowHead.getItemMeta());
+        ItemMeta rainbowHeadMeta = rainbowHead.getItemMeta();
 
         rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         rainbowHeadMeta.setDisplayName(messageHandler.getMessage(Messages.RAINBOW_HEAD_NAME));
@@ -121,7 +121,7 @@ public class CreatingInventory implements InventoryHolder {
 
     private void setPlayerStatusItem(Player player) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) Objects.requireNonNull(head.getItemMeta());
+        SkullMeta meta = (SkullMeta) head.getItemMeta();
         meta.setDisplayName(messageHandler.getMessage(Messages.HEAD_NAME));
         meta.setLore(messageHandler.getMessages(Messages.HEAD_LORE));
 
