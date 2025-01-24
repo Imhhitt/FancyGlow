@@ -198,8 +198,7 @@ public final class UpdateChecker {
      * A functional interface to compare two version Strings with similar version schemes.
      */
     @FunctionalInterface
-    public static interface VersionScheme {
-
+    public interface VersionScheme {
         /**
          * Compare two versions and return the higher of the two. If null is returned, it
          * is assumed that at least one of the two versions are unsupported by this
@@ -210,15 +209,14 @@ public final class UpdateChecker {
          *
          * @return the greater of the two versions. null if unsupported version schemes
          */
-        @Nullable
-        public String compareVersions(@NotNull String first, @NotNull String second);
+        @Nullable String compareVersions(@NotNull String first, @NotNull String second);
 
     }
 
     /**
      * A constant reason for the result of {@link UpdateResult}.
      */
-    public static enum UpdateReason {
+    public enum UpdateReason {
 
         /**
          * A new update is available for download on SpigotMC.
