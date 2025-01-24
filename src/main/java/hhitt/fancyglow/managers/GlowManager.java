@@ -83,7 +83,11 @@ public class GlowManager {
         removeGlow(player);
         // Add the player to the team and enable glowing
         // Avoid object-alloc by use directly reference returned and provide entry-value directly.
-        getOrCreateTeam(color).addEntry(ChatColor.stripColor(player.getName()));
+        final Team team = getOrCreateTeam(color);
+        if (team == null) {
+            return;
+        }
+        team.addEntry(ChatColor.stripColor(player.getName()));
         player.setGlowing(true);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
@@ -134,6 +138,9 @@ public class GlowManager {
     }
 
     public Team createTeam(ChatColor color) {
+        if (plugin.getServer().getScoreboardManager() == null) {
+            return null;
+        }
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         Team team = board.getTeam(color.name());
         if (team == null) {
@@ -196,6 +203,9 @@ public class GlowManager {
     }
 
     public List<Team> getGlowTeams() {
+        if (plugin.getServer().getScoreboardManager() == null) {
+            return List.of();
+        }
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         final List<Team> teamList = new ArrayList<>(board.getTeams().size());
         final List<String> colorsNames = getAvailableColorsNames();
