@@ -13,7 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-
 public class HeadClickListener implements Listener {
 
     private final FancyGlow plugin;
@@ -31,50 +30,47 @@ public class HeadClickListener implements Listener {
         Inventory clickedInventory = event.getClickedInventory();
         if (clickedInventory == null || !(clickedInventory.getHolder() instanceof CreatingInventory)) return;
 
-        Player player = (Player) event.getWhoClicked();
         ItemStack currentItem = event.getCurrentItem();
-        if (currentItem == null) return;
+        if (currentItem == null || currentItem.getType() != Material.PLAYER_HEAD) return;
 
-        Material itemType = currentItem.getType();
-        int slot = event.getSlot();
+        Player player = (Player) event.getWhoClicked();
+        switch (event.getSlot()) {
+            case 39 -> {
+                // Multicolor head
+                if (!player.hasPermission("fancyglow.rainbow") || !player.hasPermission("fancyglow.all_colors")) {
+                    messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                    player.closeInventory();
+                    return;
+                }
 
-        // Disable color head
-        if (itemType == Material.PLAYER_HEAD && slot == 41) {
-            glowManager.removeGlow(player);
-            player.closeInventory();
-
-            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-        }
-
-        // Multicolor head
-        if (itemType == Material.PLAYER_HEAD && slot == 39) {
-            if (!player.hasPermission("fancyglow.rainbow") || !player.hasPermission("fancyglow.all_colors")) {
-                messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                // Toggle multicolor mode
+                glowManager.toggleMulticolorGlow(player);
                 player.closeInventory();
-                return;
             }
+            case 40 -> {
+                // Flashing head
+                if (!player.hasPermission("fancyglow.flashing")) {
+                    messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                    player.closeInventory();
+                    return;
+                }
 
-            // Toggle multicolor mode
-            glowManager.toggleMulticolorGlow(player);
-            player.closeInventory();
-        }
+                if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(player)) {
+                    messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
+                    return;
+                }
 
-        // Flashing head
-        if (itemType == Material.PLAYER_HEAD && slot == 40) {
-            if (!player.hasPermission("fancyglow.flashing")) {
-                messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                // Toggle flashing mode
+                glowManager.toggleFlashingGlow(player);
                 player.closeInventory();
-                return;
             }
+            case 41 -> {
+                // Disable color head
+                glowManager.removeGlow(player);
+                player.closeInventory();
 
-            if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(player)) {
-                messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
-                return;
+                messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             }
-
-            // Toggle flashing mode
-            glowManager.toggleFlashingGlow(player);
-            player.closeInventory();
         }
     }
 }
