@@ -11,7 +11,6 @@ import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
-import hhitt.fancyglow.listeners.UpdateJoinLitener;
 import hhitt.fancyglow.managers.CommandManager;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
@@ -37,8 +36,10 @@ import revxrsal.zapper.ZapperJavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public final class FancyGlow extends ZapperJavaPlugin {
+    private final Logger logger = super.getLogger();
 
     private BukkitAudiences adventure;
 
@@ -121,7 +122,6 @@ public final class FancyGlow extends ZapperJavaPlugin {
     public void registerEvents() {
         PluginManager pluginManager = getServer().getPluginManager();
 
-        pluginManager.registerEvents(new UpdateJoinLitener(this), this);
         pluginManager.registerEvents(new MenuClickListener(this), this);
         pluginManager.registerEvents(new HeadClickListener(this), this);
         pluginManager.registerEvents(new PlayerQuitListener(this), this);
@@ -132,8 +132,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
         if (!configuration.getBoolean("Notify_Updates")) return;
         UpdateChecker.init(this, 116326).requestUpdateCheck().whenComplete((result, exception) -> {
             if (result.requiresUpdate()) {
-                this.getLogger().info(String.format("There is a new update available! FancyGlow %s may be downloaded on SpigotMC", result.getNewestVersion()));
-                this.getLogger().info("Download it at https://www.spigotmc.org/resources/116326/updates");
+                this.logger.info(String.format("There is a new update available! FancyGlow %s may be downloaded on SpigotMC", result.getNewestVersion()));
+                this.logger.info("Download it at https://www.spigotmc.org/resources/116326/updates");
             }
         });
     }
@@ -141,8 +141,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
     private void hookPlaceholderAPI() {
         // Check if PlaceholderAPI is available.
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
-            getLogger().warning("Could not find PlaceholderAPI!");
-            getLogger().warning("This plugin is required if you want to use its placeholders.");
+            this.logger.warning("Could not find PlaceholderAPI!");
+            this.logger.warning("This plugin is required if you want to use its placeholders.");
         } else {
             // Actually register placeholderapi extension.
             new FancyGlowPlaceholder(this).register();
@@ -158,17 +158,17 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         try {
             if (!isCompatibleTAB(tabVersion, desiredVersion)) {
-                getLogger().warning("This function only works with TAB version 5.0.4 or newer.");
+                this.logger.warning("This function only works with TAB version 5.0.4 or newer.");
                 return;
             }
 
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            getLogger().warning("Failed to parse TAB version numbers: " + tabVersion);
-            getLogger().warning("Function will not work due to version parsing errors.");
+            this.logger.warning("Failed to parse TAB version numbers: " + tabVersion);
+            this.logger.warning("Function will not work due to version parsing errors.");
             return;
         }
 
-        getLogger().info("TAB " + tabVersion + " has been found, using it.");
+        this.logger.info("TAB " + tabVersion + " has been found, using it.");
 
         // Register player placeholder directly to tab.
         EventBus eventBus = Objects.requireNonNull(TabAPI.getInstance().getEventBus(), "TAB EventBus is not available.");
