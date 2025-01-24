@@ -1,7 +1,5 @@
 package hhitt.fancyglow.utils;
 
-import java.util.Arrays;
-
 public enum Messages {
 
     COLOR_COMMAND_USAGE("Messages.Color_Command_Usage"),
@@ -55,9 +53,10 @@ public enum Messages {
     }
 
     public static Messages match(String string) {
-        return Arrays.stream(values())
-                .filter(type -> type.name().equalsIgnoreCase(string))
-                .findFirst()
-                .orElse(MESSAGE_NOT_FOUND);
+        for (final Messages message : values()) {
+            if (!message.name().equalsIgnoreCase(string)) continue;
+            return message;
+        }
+        return MESSAGE_NOT_FOUND;
     }
 }
