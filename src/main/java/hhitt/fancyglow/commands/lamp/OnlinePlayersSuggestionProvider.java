@@ -7,21 +7,19 @@ import revxrsal.commands.autocomplete.SuggestionProvider;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 import revxrsal.commands.node.ExecutionContext;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class OnlinePlayersSuggestionProvider implements SuggestionProvider<BukkitCommandActor> {
 
     @Override
     public @NotNull List<String> getSuggestions(@NotNull ExecutionContext<BukkitCommandActor> context) {
 
-        List<String> suggestions = Bukkit.getOnlinePlayers()
-                .stream()
-                .map(Player::getName)
-                .collect(Collectors.toList());
-
+        List<String> suggestions = new ArrayList<>(Bukkit.getOnlinePlayers().size());
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            suggestions.add(player.getName());
+        }
         suggestions.add("all");
-
         return suggestions;
     }
 }
