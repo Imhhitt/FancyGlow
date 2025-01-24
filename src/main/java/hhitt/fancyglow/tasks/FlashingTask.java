@@ -8,17 +8,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class FlashingTask extends BukkitRunnable {
-
-    private final FancyGlow plugin;
     private final GlowManager glowManager;
     private final PlayerGlowManager playerGlowManager;
 
     public FlashingTask(FancyGlow plugin) {
-        this.plugin = plugin;
         this.glowManager = plugin.getGlowManager();
         this.playerGlowManager = plugin.getPlayerGlowManager();
     }
@@ -28,11 +24,14 @@ public class FlashingTask extends BukkitRunnable {
         // Cancel task if none at this set
         if (glowManager.getFlashingPlayerSet().isEmpty()) cancel();
 
+        Player player;
+        Team glowTeam;
         for (UUID uuid : glowManager.getFlashingPlayerSet()) {
-            Player player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
+            // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
+            player = Bukkit.getPlayer(uuid);
 
             // Get player current glowing team.
-            Team glowTeam = playerGlowManager.findPlayerTeam(player);
+            glowTeam = playerGlowManager.findPlayerTeam(player);
 
             // If team null or player is in respawn screen return.
             if (glowTeam == null || player.isDead()) {
@@ -43,7 +42,9 @@ public class FlashingTask extends BukkitRunnable {
             player.setGlowing(!player.isGlowing());
 
             // Update the scoreboard if necessary
-            player.setScoreboard(Objects.requireNonNull(glowTeam.getScoreboard()));
+            if (glowTeam.getScoreboard() != null) {
+                player.setScoreboard(glowTeam.getScoreboard());
+            }
         }
     }
 }
