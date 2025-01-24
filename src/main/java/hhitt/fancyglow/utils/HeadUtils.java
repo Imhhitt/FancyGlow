@@ -11,7 +11,6 @@ import org.bukkit.profile.PlayerTextures;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Base64;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -41,7 +40,7 @@ public class HeadUtils {
         profile.setTextures(textures); // Set the textures back to the profile
 
         SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        Objects.requireNonNull(meta).setOwnerProfile(profile); // Set the owning player of the head to the player profile
+        meta.setOwnerProfile(profile); // Set the owning player of the head to the player profile
         skull.setItemMeta(meta);
 
         return skull;
