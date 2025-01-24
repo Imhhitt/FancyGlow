@@ -22,19 +22,25 @@ import revxrsal.commands.bukkit.annotation.CommandPermission;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class MainCommand {
-
     private final FancyGlow plugin;
+    private final Logger logger;
     private final GlowManager glowManager;
     private final MessageHandler messageHandler;
     private final PlayerGlowManager playerGlowManager;
+    private CreatingInventory inventory;
 
     public MainCommand(FancyGlow plugin) {
         this.plugin = plugin;
+        this.logger = plugin.getLogger();
         this.glowManager = plugin.getGlowManager();
         this.messageHandler = plugin.getMessageHandler();
         this.playerGlowManager = plugin.getPlayerGlowManager();
+        // Avoid create a new instance per every command-execution.
+        this.inventory = new CreatingInventory(plugin);
+        this.inventory.setupContent();
     }
 
     @Command({"glow", "fancyglow"})
@@ -70,8 +76,9 @@ public class MainCommand {
             return;
         }
 
-        // Open the gui
-        player.openInventory(new CreatingInventory(plugin, player).getInventory());
+        // Prepare and open the gui
+        inventory.prepareForPlayer(player);
+        player.openInventory(inventory.getInventory());
     }
 
     @Command({"glow reload", "fancyglow reload"})
@@ -87,8 +94,11 @@ public class MainCommand {
         try {
             plugin.getConfiguration().reload();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            logger.severe("Unexpected exception during configuration-reload with the following message: " + e.getMessage());
         } finally {
+            // Re-initialize inventory only when reloading, probably not the best way to do it.
+            inventory = new CreatingInventory(plugin);
+            inventory.setupContent();
             messageHandler.sendMessage(sender, Messages.RELOADED);
         }
     }
@@ -117,10 +127,7 @@ public class MainCommand {
         ChatColor color = ColorUtils.findColor(arg.toUpperCase());
 
         if (arg.equalsIgnoreCase("rainbow")) {
-            if (!(
-                    player.hasPermission("fancyglow.rainbow") ||
-                            player.hasPermission("fancyglow.all_colors")
-            )) {
+            if (!(player.hasPermission("fancyglow.rainbow") || player.hasPermission("fancyglow.all_colors"))) {
                 messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                 return;
             }
@@ -128,9 +135,7 @@ public class MainCommand {
             return;
         }
         if (arg.equalsIgnoreCase("flashing") || arg.equalsIgnoreCase("flash")) {
-            if (!(
-                    player.hasPermission("fancyglow.flashing")
-            )) {
+            if (!(player.hasPermission("fancyglow.flashing"))) {
                 messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                 return;
             }
