@@ -11,15 +11,27 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class GlowManager {
-
+    public static final ChatColor[] COLORS_ARRAY = new ChatColor[]{
+            ChatColor.BLACK,
+            ChatColor.DARK_BLUE,
+            ChatColor.DARK_GREEN,
+            ChatColor.DARK_AQUA,
+            ChatColor.DARK_RED,
+            ChatColor.DARK_PURPLE,
+            ChatColor.GOLD,
+            ChatColor.GRAY,
+            ChatColor.DARK_GRAY,
+            ChatColor.BLUE,
+            ChatColor.GREEN,
+            ChatColor.AQUA,
+            ChatColor.RED,
+            ChatColor.LIGHT_PURPLE,
+            ChatColor.YELLOW,
+            ChatColor.WHITE
+    };
     private final FancyGlow plugin;
     private final MessageHandler messageHandler;
 
@@ -38,41 +50,40 @@ public class GlowManager {
     }
 
     public void toggleMulticolorGlow(Player player) {
+        final UUID playerId = player.getUniqueId();
         if (isMulticolorTaskActive(player)) {
-            multicolorPlayerSet.remove(player.getUniqueId());
+            multicolorPlayerSet.remove(playerId);
             removeGlow(player);
             messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             return;
         }
 
         scheduleMulticolorTask();
-        multicolorPlayerSet.add(player.getUniqueId());
+        multicolorPlayerSet.add(playerId);
         player.setGlowing(true);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public void toggleFlashingGlow(Player player) {
+        final UUID playerId = player.getUniqueId();
         if (isFlashingTaskActive(player)) {
             player.setGlowing(true);
-            flashingPlayerSet.remove(player.getUniqueId());
+            flashingPlayerSet.remove(playerId);
             messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             return;
         }
 
         scheduleFlashingTask();
-        flashingPlayerSet.add(player.getUniqueId());
+        flashingPlayerSet.add(playerId);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public void toggleGlow(Player player, ChatColor color) {
-        Team glowTeam = getOrCreateTeam(color);
-        String cleanName = ChatColor.stripColor(player.getName());
-
         // Remove any existing glow
         removeGlow(player);
-
         // Add the player to the team and enable glowing
-        glowTeam.addEntry(cleanName);
+        // Avoid object-alloc by use directly reference returned and provide entry-value directly.
+        getOrCreateTeam(color).addEntry(ChatColor.stripColor(player.getName()));
         player.setGlowing(true);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
@@ -85,7 +96,10 @@ public class GlowManager {
     }
 
     public void removePlayerFromAllTeams(Player player) {
-        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
+        if (plugin.getServer().getScoreboardManager() == null) {
+            return;
+        }
+        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         String cleanName = ChatColor.stripColor(player.getName());
 
         // Handle remove if rainbow selected
@@ -101,32 +115,26 @@ public class GlowManager {
         }
 
         // Attempt to remove player from any color team
-        Arrays.stream(ChatColor.values())
-                // Allowed team names. (Color names from ChatColor...)
-                .map(color -> board.getTeam(color.name()))
-                // Make sure team exists
-                .filter(Objects::nonNull)
-                // Filter if player is in the team
-                .filter(team -> team.hasEntry(cleanName))
-                // Remove from the team
-                .forEach(team -> team.removeEntry(cleanName));
-
+        Team team;
+        for (final ChatColor color : ChatColor.values()) {
+            team = board.getTeam(color.name());
+            if (team == null) {
+                continue;
+            }
+            team.removeEntry(cleanName);
+        }
     }
 
     public Team getOrCreateTeam(ChatColor color) {
-        if (getGlowTeams().contains(color.name())) {
-            for (Team team : getGlowTeams()) {
-                if (team.getName().equalsIgnoreCase(color.name())) {
-                    return team;
-                }
-            }
+        for (Team team : getGlowTeams()) {
+            if (!team.getName().equalsIgnoreCase(color.name())) continue;
+            return team;
         }
-
         return createTeam(color);
     }
 
     public Team createTeam(ChatColor color) {
-        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
+        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         Team team = board.getTeam(color.name());
         if (team == null) {
             team = board.registerNewTeam(color.name());
@@ -187,36 +195,27 @@ public class GlowManager {
         return multicolorPlayerSet;
     }
 
-    public Set<Team> getGlowTeams() {
-        Scoreboard board = Objects.requireNonNull(plugin.getServer().getScoreboardManager()).getMainScoreboard();
-        return board.getTeams()
-                .stream()
-                .filter(team -> getAvailableColorsSet().contains(team.getName()))
-                .collect(Collectors.toSet());
+    public List<Team> getGlowTeams() {
+        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        final List<Team> teamList = new ArrayList<>(board.getTeams().size());
+        final List<String> colorsNames = getAvailableColorsNames();
+        for (final Team team : board.getTeams()) {
+            if (!colorsNames.contains(team.getName())) continue;
+            teamList.add(team);
+        }
+        return teamList;
     }
 
-    public Set<String> getAvailableColorsSet() {
-        return Arrays.stream(getAvailableColors()).map(Enum::name).collect(Collectors.toSet());
+    public List<String> getAvailableColorsNames() {
+        final List<String> colorNames = new ArrayList<>(getAvailableColors().length);
+        for (final ChatColor color : COLORS_ARRAY) {
+            if (colorNames.contains(color.name())) continue;
+            colorNames.add(color.name());
+        }
+        return colorNames;
     }
 
     public ChatColor[] getAvailableColors() {
-        return new ChatColor[]{
-                ChatColor.BLACK,
-                ChatColor.DARK_BLUE,
-                ChatColor.DARK_GREEN,
-                ChatColor.DARK_AQUA,
-                ChatColor.DARK_RED,
-                ChatColor.DARK_PURPLE,
-                ChatColor.GOLD,
-                ChatColor.GRAY,
-                ChatColor.DARK_GRAY,
-                ChatColor.BLUE,
-                ChatColor.GREEN,
-                ChatColor.AQUA,
-                ChatColor.RED,
-                ChatColor.LIGHT_PURPLE,
-                ChatColor.YELLOW,
-                ChatColor.WHITE
-        };
+        return COLORS_ARRAY;
     }
 }
