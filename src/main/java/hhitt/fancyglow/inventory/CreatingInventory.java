@@ -22,28 +22,31 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.Objects;
 
 public class CreatingInventory implements InventoryHolder {
-
+    private static final String DEFAULT_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0";
     private final YamlDocument config;
     private final Inventory inventory;
-    private final GlowManager glowManager;
     private final MessageHandler messageHandler;
     private final PlayerGlowManager playerGlowManager;
 
-    public CreatingInventory(FancyGlow plugin, Player player) {
+    public CreatingInventory(FancyGlow plugin) {
         this.config = plugin.getConfiguration();
-        this.glowManager = plugin.getGlowManager();
         this.messageHandler = plugin.getMessageHandler();
         this.playerGlowManager = plugin.getPlayerGlowManager();
         this.inventory = plugin.getServer().createInventory(this, 45, messageHandler.getMessage(Messages.INVENTORY_TITLE));
+    }
 
+    public void setupContent() {
         // Set fill items.
         setFiller();
 
         // Set color items.
         int i = 9;
-        for (ChatColor availableColor : glowManager.getAvailableColors()) {
-            ItemStack colorItem = new ItemStack(Material.LEATHER_CHESTPLATE);
-            LeatherArmorMeta colorMeta = (LeatherArmorMeta) Objects.requireNonNull(colorItem.getItemMeta());
+        ItemStack colorItem;
+        LeatherArmorMeta colorMeta;
+        for (ChatColor availableColor : GlowManager.COLORS_ARRAY) {
+            colorItem = new ItemStack(Material.LEATHER_CHESTPLATE);
+            // Shouldn't be null due to material.
+            colorMeta = (LeatherArmorMeta) colorItem.getItemMeta();
 
             colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             colorMeta.addItemFlags(ItemFlag.HIDE_DYE);
@@ -60,6 +63,9 @@ public class CreatingInventory implements InventoryHolder {
         }
 
         setRainbowItem();
+    }
+
+    public void prepareForPlayer(final Player player) {
         setFlashingItem(player);
         setPlayerStatusItem(player);
     }
@@ -68,23 +74,27 @@ public class CreatingInventory implements InventoryHolder {
         // Return if filler is not enabled.
         if (!config.getBoolean("Inventory.Filler.Enabled")) return;
 
-        String fillerMaterial = config.getString("Inventory.Filler.Material", "GRAY_STAINED_GLASS_PANE");
-        Material material = Material.matchMaterial(fillerMaterial);
-        ItemStack fill = new ItemStack(Objects.requireNonNull(material));
-        ItemMeta fillMeta = Objects.requireNonNull(fill.getItemMeta());
+        // Define filler-material.
+        Material material = Material.getMaterial(config.getString("Inventory.Filler.Material", "GRAY_STAINED_GLASS_PANE"));
+        if (material == null) {
+            return;
+        }
+        ItemStack fill = new ItemStack(material);
+        ItemMeta fillMeta = fill.getItemMeta();
         fillMeta.setDisplayName(messageHandler.getMessage(Messages.FILLER_NAME));
         fill.setItemMeta(fillMeta);
 
-        for (int i = 0; i < inventory.getSize(); i++) {
+        // Avoid call to getSize() on every iteration.
+        final int size = inventory.getSize();
+        for (int i = 0; i < size; i++) {
             inventory.setItem(i, fill);
         }
     }
 
     private void setFlashingItem(Player player) {
         // Flashing head
-        String flashingTexture = config.getString("Inventory.Flashing.Texture", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTFjNTgxYThiNTk3NjkyYjViOTRkM2I4YmViOWM1MmY1Njk5OWQ2MmY3Mzk1NjY4ZmFjNTdhYzk1MmZlNGRjNCJ9fX0=");
-        ItemStack flashingHead = HeadUtils.getCustomSkull(flashingTexture);
-        ItemMeta flashingHeadMeta = Objects.requireNonNull(flashingHead.getItemMeta());
+        ItemStack flashingHead = HeadUtils.getCustomSkull(config.getString("Inventory.Flashing.Texture", DEFAULT_TEXTURE));
+        ItemMeta flashingHeadMeta = flashingHead.getItemMeta();
 
         flashingHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         flashingHeadMeta.setDisplayName(messageHandler.getMessage(Messages.FLASHING_HEAD_NAME));
@@ -98,8 +108,7 @@ public class CreatingInventory implements InventoryHolder {
 
     private void setRainbowItem() {
         // Rainbow head
-        String rainbowTexture = config.getString("Inventory.Rainbow.Texture", "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0");
-        ItemStack rainbowHead = HeadUtils.getCustomSkull(rainbowTexture);
+        ItemStack rainbowHead = HeadUtils.getCustomSkull(config.getString("Inventory.Rainbow.Texture", DEFAULT_TEXTURE));
         ItemMeta rainbowHeadMeta = Objects.requireNonNull(rainbowHead.getItemMeta());
 
         rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
