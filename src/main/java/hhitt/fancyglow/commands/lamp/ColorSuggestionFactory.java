@@ -11,9 +11,9 @@ import revxrsal.commands.autocomplete.SuggestionProvider;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 public final class ColorSuggestionFactory implements SuggestionProvider.Factory<BukkitCommandActor> {
 
@@ -30,32 +30,34 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
             @NotNull AnnotationList annotations,
             @NotNull Lamp<BukkitCommandActor> lamp
     ) {
-        ColorSuggestion colorSuggestion = annotations.get(ColorSuggestion.class);
-        if (colorSuggestion == null) return null;
+        // Verify if annotation is present.
+        if (annotations.get(ColorSuggestion.class) == null) return null;
 
-        List<String> availableColors = ColorUtils.getChatColorValues()
-                .stream()
-                .map(String::toLowerCase)
-                .collect(Collectors.toList());
-
+        List<String> availableColors = new ArrayList<>(ColorUtils.getChatColorValues().size());
+        for (final String value : ColorUtils.getChatColorValues()) {
+            availableColors.add(value.toLowerCase(Locale.ROOT));
+        }
         return context -> {
             BukkitCommandActor actor = context.actor();
 
-            if (actor.isPlayer()) {
-                Player player = Objects.requireNonNull(actor.asPlayer());
+            if (!actor.isPlayer()) {
+                return availableColors;
+            }
+            Player player = actor.asPlayer();
+            if (player == null) {
+                return availableColors;
+            }
 
-                if (glowManager.hasGlowPermission(player, "rainbow")) {
-                    availableColors.add("rainbow");
-                }
-                if (glowManager.hasGlowPermission(player, "flashing")) {
-                    availableColors.add("flash");
-                    availableColors.add("flashing");
-                }
-
-                return availableColors
-                        .stream()
-                        .filter(name -> glowManager.hasGlowPermission(player, name))
-                        .collect(Collectors.toList());
+            if (glowManager.hasGlowPermission(player, "rainbow")) {
+                availableColors.add("rainbow");
+            }
+            if (glowManager.hasGlowPermission(player, "flashing")) {
+                availableColors.add("flash");
+                availableColors.add("flashing");
+            }
+            for (final String name : availableColors) {
+                if (glowManager.hasGlowPermission(player, name)) continue;
+                availableColors.remove(name);
             }
             return availableColors;
         };
