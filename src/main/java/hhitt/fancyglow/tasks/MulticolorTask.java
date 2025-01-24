@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
@@ -34,15 +33,17 @@ public class MulticolorTask extends BukkitRunnable {
         // Get or create the team corresponding to the current color
         Team glowTeam = glowManager.getOrCreateTeam(currentColor);
 
+        Player player;
+        Team team;
         for (UUID uuid : glowManager.getMulticolorPlayerSet()) {
-            Player player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
-
+            // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
+            player = Bukkit.getPlayer(uuid);
             if (player.isDead()) continue;
 
             // Remove the player from all teams except the current one
             for (ChatColor color : colorArray) {
                 if (color != currentColor) {
-                    Team team = glowManager.getOrCreateTeam(color);
+                    team = glowManager.getOrCreateTeam(color);
                     if (team.hasEntry(player.getName())) {
                         team.removeEntry(player.getName());
                     }
@@ -55,7 +56,10 @@ public class MulticolorTask extends BukkitRunnable {
             }
 
             // Update the scoreboard if necessary
-            player.setScoreboard(Objects.requireNonNull(glowTeam.getScoreboard()));
+            // Avoid extra call and exception throw if scoreboard is unavailable.
+            if (glowTeam.getScoreboard() != null) {
+                player.setScoreboard(glowTeam.getScoreboard());
+            }
         }
 
         // Increment the index for the next color
