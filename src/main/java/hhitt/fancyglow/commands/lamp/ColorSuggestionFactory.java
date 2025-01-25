@@ -38,16 +38,10 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
             availableColors.add(value.toLowerCase(Locale.ROOT));
         }
         return context -> {
-            BukkitCommandActor actor = context.actor();
-
-            if (!actor.isPlayer()) {
-                return availableColors;
-            }
-            Player player = actor.asPlayer();
+            Player player = context.actor().asPlayer();
             if (player == null) {
                 return availableColors;
             }
-
             if (glowManager.hasGlowPermission(player, "rainbow")) {
                 availableColors.add("rainbow");
             }
