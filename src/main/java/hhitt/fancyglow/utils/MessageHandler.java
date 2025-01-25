@@ -6,11 +6,11 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.HashMap;
 
 public class MessageHandler {
 
@@ -63,8 +63,9 @@ public class MessageHandler {
      * @return Raw message at config or a message if not found.
      */
     public String getRawMessage(String path) {
-        if (messages.isList(path) && !messages.getStringList(path).isEmpty()) {
-            return String.join(" ", messages.getStringList(path));
+        final List<String> stringList = messages.getStringList(path);
+        if (!stringList.isEmpty()) {
+            return String.join(" ", stringList);
         }
         return messages.getString(path, String.format("Message not found in path %s", path));
     }
@@ -104,10 +105,14 @@ public class MessageHandler {
      * @return Messages list with color applied.
      */
     public List<String> getMessages(Messages message) {
-        List<String> rawMessages = messages.isList(message.getPath()) ? messages.getStringList(message.getPath()) : Collections.singletonList(getRawMessage(message.getPath()));
-        return rawMessages.stream()
-                .map(MessageUtils::miniMessageParse)
-                .collect(Collectors.toList());
+        final List<String> messages = new ArrayList<>();
+        for (final String rawMessage : this.messages.isList(message.getPath())
+                ? this.messages.getStringList(message.getPath())
+                : Collections.singletonList(getRawMessage(message.getPath()))
+        ) {
+            messages.add(MessageUtils.miniMessageParse(rawMessage));
+        }
+        return messages;
     }
 
     /**
@@ -127,10 +132,14 @@ public class MessageHandler {
      * @return Messages list with placeholder parsed and color applied using message path.
      */
     public List<String> getMessages(CommandSender sender, String path) {
-        List<String> rawMessages = messages.isList(path) ? messages.getStringList(path) : Collections.singletonList(getRawMessage(path));
-        return rawMessages.stream()
-                .map(message -> intercept(sender, message))
-                .collect(Collectors.toList());
+        final List<String> messages = new ArrayList<>();
+        for (final String rawMessage : this.messages.isList(path)
+                ? this.messages.getStringList(path)
+                : Collections.singletonList(getRawMessage(path))
+        ) {
+            messages.add(intercept(sender, rawMessage));
+        }
+        return messages;
     }
 
     /**

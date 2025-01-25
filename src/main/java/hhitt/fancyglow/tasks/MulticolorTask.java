@@ -8,41 +8,43 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
-
-    private final ChatColor[] colorArray;
-    private int currentIndex;
     private final GlowManager glowManager;
+    private int currentIndex;
 
     public MulticolorTask(FancyGlow plugin) {
         this.glowManager = plugin.getGlowManager();
-        this.colorArray = glowManager.getAvailableColors();
         this.currentIndex = 0;
     }
 
     @Override
     public void run() {
         // Cancel task if none at this set
-        if (glowManager.getMulticolorPlayerSet().isEmpty()) cancel();
+        if (glowManager.getMulticolorPlayerSet().isEmpty()) return;
 
         // Get current color iteration.
-        ChatColor currentColor = colorArray[currentIndex];
+        ChatColor currentColor = GlowManager.COLORS_ARRAY[currentIndex];
 
         // Get or create the team corresponding to the current color
         Team glowTeam = glowManager.getOrCreateTeam(currentColor);
+        // Will check if the scoreboard is available.
+        if (glowTeam == null) {
+            return;
+        }
 
+        Player player;
+        Team team;
         for (UUID uuid : glowManager.getMulticolorPlayerSet()) {
-            Player player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
-
+            // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
+            player = Bukkit.getPlayer(uuid);
             if (player.isDead()) continue;
 
             // Remove the player from all teams except the current one
-            for (ChatColor color : colorArray) {
+            for (ChatColor color : GlowManager.COLORS_ARRAY) {
                 if (color != currentColor) {
-                    Team team = glowManager.getOrCreateTeam(color);
+                    team = glowManager.getOrCreateTeam(color);
                     if (team.hasEntry(player.getName())) {
                         team.removeEntry(player.getName());
                     }
@@ -55,12 +57,14 @@ public class MulticolorTask extends BukkitRunnable {
             }
 
             // Update the scoreboard if necessary
-            player.setScoreboard(Objects.requireNonNull(glowTeam.getScoreboard()));
+            if (glowTeam.getScoreboard() != null) {
+                player.setScoreboard(glowTeam.getScoreboard());
+            }
         }
 
         // Increment the index for the next color
         currentIndex++;
-        if (currentIndex >= colorArray.length) {
+        if (currentIndex >= GlowManager.COLORS_ARRAY.length) {
             currentIndex = 0;
         }
     }

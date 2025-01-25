@@ -9,8 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 
-import java.util.List;
-
 public class PlayerChangeWorldListener implements Listener {
 
     private final YamlDocument config;
@@ -24,10 +22,8 @@ public class PlayerChangeWorldListener implements Listener {
     @EventHandler
     public void onPlayerWorldChange(PlayerChangedWorldEvent e) {
         Player player = e.getPlayer();
-        String actualWorld = player.getWorld().getName();
-
-        List<String> noAllowedWorlds = config.getStringList("Disabled_Worlds");
-        if (noAllowedWorlds.contains(actualWorld)) {
+        String worldName = player.getWorld().getName();
+        if (config.getStringList("Disabled_Worlds").contains(worldName)) {
             player.setGlowing(false);
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
         }

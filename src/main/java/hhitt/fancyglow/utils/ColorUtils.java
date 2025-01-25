@@ -54,11 +54,11 @@ public class ColorUtils {
     }
 
     public static ChatColor findColor(String value) {
-        return colorValues.entrySet().stream()
-                .filter(entry -> entry.getKey().equalsIgnoreCase(value))
-                .map(Map.Entry::getValue)
-                .findFirst()
-                .orElse(null);
+        for (final Map.Entry<String, ChatColor> entry : colorValues.entrySet()) {
+            if (!entry.getKey().equalsIgnoreCase(value)) continue;
+            return entry.getValue();
+        }
+        return null;
     }
 
 }
