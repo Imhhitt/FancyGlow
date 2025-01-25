@@ -84,6 +84,9 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         // Init managers
         this.glowManager = new GlowManager(this);
+        // Initialize tasks for glow-effects and avoid do it at every glow-effect toggle.
+        this.glowManager.scheduleFlashingTask();
+        this.glowManager.scheduleMulticolorTask();
         this.playerGlowManager = new PlayerGlowManager(this);
 
         // Register command and suggestions

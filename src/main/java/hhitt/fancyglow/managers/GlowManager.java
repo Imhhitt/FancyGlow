@@ -58,7 +58,6 @@ public class GlowManager {
             return;
         }
 
-        scheduleMulticolorTask();
         multicolorPlayerSet.add(playerId);
         player.setGlowing(true);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
@@ -73,7 +72,6 @@ public class GlowManager {
             return;
         }
 
-        scheduleFlashingTask();
         flashingPlayerSet.add(playerId);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
