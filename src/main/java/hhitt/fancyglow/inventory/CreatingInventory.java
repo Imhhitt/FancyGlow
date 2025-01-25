@@ -89,7 +89,10 @@ public class CreatingInventory implements InventoryHolder {
         }
     }
 
-    private void setFlashingItem(Player player) {
+    private void setFlashingItem(final Player player) {
+        if (playerGlowManager.findPlayerTeam(player) == null && !player.isGlowing()) {
+            return;
+        }
         // Flashing head
         ItemStack flashingHead = HeadUtils.getCustomSkull(config.getString("Inventory.Flashing.Texture", DEFAULT_TEXTURE));
         ItemMeta flashingHeadMeta = flashingHead.getItemMeta();
@@ -99,9 +102,7 @@ public class CreatingInventory implements InventoryHolder {
         flashingHeadMeta.setLore(messageHandler.getMessages(Messages.FLASHING_HEAD_LORE));
         flashingHead.setItemMeta(flashingHeadMeta);
 
-        if (player.isGlowing() || playerGlowManager.findPlayerTeam(player) != null) {
-            inventory.setItem(config.getInt("Inventory.Flashing.Slot", 40), flashingHead);
-        }
+        inventory.setItem(config.getInt("Inventory.Flashing.Slot", 40), flashingHead);
     }
 
     private void setRainbowItem() {
