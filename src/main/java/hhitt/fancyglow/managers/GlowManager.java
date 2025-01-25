@@ -80,7 +80,6 @@ public class GlowManager {
         // Remove any existing glow
         removeGlow(player);
         // Add the player to the team and enable glowing
-        // Avoid object-alloc by use directly reference returned and provide entry-value directly.
         final Team team = getOrCreateTeam(color);
         if (team == null) {
             return;
