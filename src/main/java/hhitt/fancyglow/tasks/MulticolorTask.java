@@ -11,24 +11,21 @@ import org.bukkit.scoreboard.Team;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
-
-    private final ChatColor[] colorArray;
-    private int currentIndex;
     private final GlowManager glowManager;
+    private int currentIndex;
 
     public MulticolorTask(FancyGlow plugin) {
         this.glowManager = plugin.getGlowManager();
-        this.colorArray = glowManager.getAvailableColors();
         this.currentIndex = 0;
     }
 
     @Override
     public void run() {
         // Cancel task if none at this set
-        if (glowManager.getMulticolorPlayerSet().isEmpty()) cancel();
+        if (glowManager.getMulticolorPlayerSet().isEmpty()) return;
 
         // Get current color iteration.
-        ChatColor currentColor = colorArray[currentIndex];
+        ChatColor currentColor = GlowManager.COLORS_ARRAY[currentIndex];
 
         // Get or create the team corresponding to the current color
         Team glowTeam = glowManager.getOrCreateTeam(currentColor);
@@ -45,7 +42,7 @@ public class MulticolorTask extends BukkitRunnable {
             if (player.isDead()) continue;
 
             // Remove the player from all teams except the current one
-            for (ChatColor color : colorArray) {
+            for (ChatColor color : GlowManager.COLORS_ARRAY) {
                 if (color != currentColor) {
                     team = glowManager.getOrCreateTeam(color);
                     if (team.hasEntry(player.getName())) {
@@ -67,7 +64,7 @@ public class MulticolorTask extends BukkitRunnable {
 
         // Increment the index for the next color
         currentIndex++;
-        if (currentIndex >= colorArray.length) {
+        if (currentIndex >= GlowManager.COLORS_ARRAY.length) {
             currentIndex = 0;
         }
     }
