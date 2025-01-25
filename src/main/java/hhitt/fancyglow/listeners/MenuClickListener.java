@@ -30,15 +30,15 @@ public class MenuClickListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        ItemStack clickedItem = e.getCurrentItem();
-        if (clickedItem == null || clickedItem.getType() != Material.LEATHER_CHESTPLATE) return;
-
         Inventory inventoryClicked = e.getClickedInventory();
         if (inventoryClicked == null || !(inventoryClicked.getHolder() instanceof CreatingInventory)) {
             return;
         } else {
             e.setCancelled(true);
         }
+
+        ItemStack clickedItem = e.getCurrentItem();
+        if (clickedItem == null || clickedItem.getType() != Material.LEATHER_CHESTPLATE) return;
 
         LeatherArmorMeta meta = (LeatherArmorMeta) clickedItem.getItemMeta();
         if (meta == null) return;
