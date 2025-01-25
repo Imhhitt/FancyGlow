@@ -22,7 +22,7 @@ public class FlashingTask extends BukkitRunnable {
     @Override
     public void run() {
         // Cancel task if none at this set
-        if (glowManager.getFlashingPlayerSet().isEmpty()) cancel();
+        if (glowManager.getFlashingPlayerSet().isEmpty()) return;
 
         Player player;
         Team glowTeam;
