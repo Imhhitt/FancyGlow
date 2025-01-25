@@ -29,14 +29,14 @@ public class FlashingTask extends BukkitRunnable {
         for (UUID uuid : glowManager.getFlashingPlayerSet()) {
             // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
             player = Bukkit.getPlayer(uuid);
+            // Check player is in respawn screen.
+            if (player.isDead()) continue;
 
             // Get player current glowing team.
             glowTeam = playerGlowManager.findPlayerTeam(player);
 
-            // If team null or player is in respawn screen return.
-            if (glowTeam == null || player.isDead()) {
-                continue;
-            }
+            // Check if the team exists.
+            if (glowTeam == null) continue;
 
             // Toggle glowing state.
             player.setGlowing(!player.isGlowing());
