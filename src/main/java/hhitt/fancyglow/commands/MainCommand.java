@@ -46,22 +46,15 @@ public class MainCommand {
     @Command({"glow", "fancyglow"})
     @Description("Main command for FancyGlow")
     public void command(BukkitCommandActor actor) {
-        CommandSender sender = actor.sender();
-
         if (actor.isConsole()) {
             //TODO: Console command usages.
             return;
         }
-
+        Player player = actor.asPlayer();
         // Prevent command usage in target worlds
         List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
-        if (actor.isPlayer()) {
-            Player player = (Player) sender;
-
-            // Check the world
-            if (noAllowedWorlds.contains(player.getWorld().getName())) {
-                messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
-            }
+        if (noAllowedWorlds.contains(player.getWorld().getName())) {
+            messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
         }
 
         // Returns if disabled so player use its own menus.
@@ -70,7 +63,6 @@ public class MainCommand {
         }
 
         // Check gui permissions
-        Player player = (Player) sender;
         if (!player.hasPermission("fancyglow.command.gui")) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
@@ -171,15 +163,13 @@ public class MainCommand {
     @Description("Allow player to disable its own glow.")
     @CommandPermission("fancyglow.command.disable")
     public void disableCommand(BukkitCommandActor actor) {
-        CommandSender sender = actor.sender();
-
         if (actor.isConsole()) {
-            messageHandler.sendMessage(sender, Messages.DISABLE_COMMAND_USAGE);
+            messageHandler.sendMessage(actor.sender(), Messages.DISABLE_COMMAND_USAGE);
             return;
         }
 
         // Check if the player has permission to disable their own glow
-        Player player = (Player) sender;
+        Player player = actor.asPlayer();
         if (!player.hasPermission("fancyglow.command.disable")) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
