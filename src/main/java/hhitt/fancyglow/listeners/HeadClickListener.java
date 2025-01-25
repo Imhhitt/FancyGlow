@@ -33,7 +33,6 @@ public class HeadClickListener implements Listener {
         ItemStack currentItem = event.getCurrentItem();
         if (currentItem == null || currentItem.getType() != Material.PLAYER_HEAD) return;
 
-        event.setCancelled(true);
         Player player = (Player) event.getWhoClicked();
         switch (event.getSlot()) {
             case 39 -> {
