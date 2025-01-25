@@ -32,6 +32,10 @@ public class MulticolorTask extends BukkitRunnable {
 
         // Get or create the team corresponding to the current color
         Team glowTeam = glowManager.getOrCreateTeam(currentColor);
+        // Will check if the scoreboard is available.
+        if (glowTeam == null) {
+            return;
+        }
 
         Player player;
         Team team;
@@ -56,7 +60,6 @@ public class MulticolorTask extends BukkitRunnable {
             }
 
             // Update the scoreboard if necessary
-            // Avoid extra call and exception throw if scoreboard is unavailable.
             if (glowTeam.getScoreboard() != null) {
                 player.setScoreboard(glowTeam.getScoreboard());
             }
