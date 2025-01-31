@@ -45,12 +45,7 @@ public class MainCommand {
 
     @Command({"glow", "fancyglow"})
     @Description("Main command for FancyGlow")
-    public void command(BukkitCommandActor actor) {
-        if (actor.isConsole()) {
-            //TODO: Console command usages.
-            return;
-        }
-        Player player = actor.asPlayer();
+    public void command(Player player) {
         // Prevent command usage in target worlds
         List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
         if (noAllowedWorlds.contains(player.getWorld().getName())) {
