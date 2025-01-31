@@ -39,7 +39,7 @@ dependencies {
 
 group = "hhitt.fancyglow"
 description = "FancyGlow"
-version = "2.9.1-RELEASE"
+version = "2.9.4"
 
 zapper {
     libsFolder = "libraries"
@@ -81,21 +81,90 @@ tasks {
         apiVersion = "1.19"
         authors = listOf("hhitt")
         contributors = listOf("Sliide_")
+        load = BukkitPluginDescription.PluginLoadOrder.POSTWORLD
+        defaultPermission = BukkitPluginDescription.Permission.Default.FALSE
         softDepend = listOf(
             "TAB",
             "PlaceholderAPI",
         )
 
         permissions {
+            // Admin permission
             register("fancyglow.admin") {
                 default = BukkitPluginDescription.Permission.Default.OP
                 description = "Gives permission to every FancyGlow command and feature."
                 children = listOf(
                     "fancyglow.rainbow", "fancyglow.flashing", "fancyglow.all_colors", "fancyglow.command.gui",
                     "fancyglow.command.color", "fancyglow.command.reload", "fancyglow.command.disable",
-                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others", "fancyglow.update"
+                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others"
                 )
             }
+            // Commands related permissions
+            register("fancyglow.command.gui") {
+                default = BukkitPluginDescription.Permission.Default.FALSE
+                description = "Gives access to color selector inventory."
+            }
+            register("fancyglow.command.disable") {
+                default = BukkitPluginDescription.Permission.Default.TRUE
+                description = "Gives access to disable player own color."
+            }
+            register("fancyglow.command.color") {
+                default = BukkitPluginDescription.Permission.Default.TRUE
+                description = "Gives access to select player own glow."
+            }
+            register("fancyglow.command.disable.others") {
+                default = BukkitPluginDescription.Permission.Default.OP
+                description = "Gives access to disable other players glow."
+            }
+            register("fancyglow.command.disable.everyone") {
+                default = BukkitPluginDescription.Permission.Default.OP
+                description = "Gives access to disable the whole server glow."
+            }
+            register("fancyglow.command.reload") {
+                default = BukkitPluginDescription.Permission.Default.OP
+                description = "Gives access to reload plugin config."
+            }
+            // Color related permissions
+            register("fancyglow.all_colors") {
+                default = BukkitPluginDescription.Permission.Default.FALSE
+                description = "Gives permission to every color."
+                children = listOf(
+                    "fancyglow.rainbow", "fancyglow.flashing",
+                    "fancyglow.black", "fancyglow.white",
+                    "fancyglow.red", "fancyglow.dark_red",
+                    "fancyglow.gray", "fancyglow.dark_gray",
+                    "fancyglow.blue", "fancyglow.dark_blue",
+                    "fancyglow.aqua", "fancyglow.dark_aqua",
+                    "fancyglow.green", "fancyglow.dark_green",
+                    "fancyglow.yellow", "fancyglow.gold",
+                    "fancyglow.light_purple", "fancyglow.dark_purple"
+                )
+            }
+            register("fancyglow.rainbow") {
+                default = BukkitPluginDescription.Permission.Default.FALSE
+                description = "Gives access to rainbow mode."
+            }
+            register("fancyglow.flashing") {
+                default = BukkitPluginDescription.Permission.Default.FALSE
+                description = "Gives access to flashing mode."
+            }
+            // Color permissions
+            register("fancyglow.red")
+            register("fancyglow.gold")
+            register("fancyglow.gray")
+            register("fancyglow.blue")
+            register("fancyglow.aqua")
+            register("fancyglow.black")
+            register("fancyglow.white")
+            register("fancyglow.green")
+            register("fancyglow.yellow")
+            register("fancyglow.dark_red")
+            register("fancyglow.dark_blue")
+            register("fancyglow.dark_gray")
+            register("fancyglow.dark_aqua")
+            register("fancyglow.dark_green")
+            register("fancyglow.dark_purple")
+            register("fancyglow.light_purple")
         }
     }
 }

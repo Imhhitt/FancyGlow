@@ -17,18 +17,11 @@ import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.MessageUtils;
+import hhitt.fancyglow.utils.TabImplementation;
 import hhitt.fancyglow.utils.UpdateChecker;
-import me.neznamy.tab.api.TabAPI;
-import me.neznamy.tab.api.TabPlayer;
-import me.neznamy.tab.api.event.EventBus;
-import me.neznamy.tab.api.event.player.PlayerLoadEvent;
-import me.neznamy.tab.api.event.plugin.TabLoadEvent;
-import me.neznamy.tab.api.nametag.NameTagManager;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import revxrsal.zapper.ZapperJavaPlugin;
@@ -101,8 +94,9 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         // Attempts to hook into placeholderapi.
         hookPlaceholderAPI();
+
         // Attempts to hook onto TAB.
-        hookTAB();
+        new TabImplementation(this).initialize();
     }
 
     @Override
@@ -146,84 +140,11 @@ public final class FancyGlow extends ZapperJavaPlugin {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) {
             this.logger.warning("Could not find PlaceholderAPI!");
             this.logger.warning("This plugin is required if you want to use its placeholders.");
-        } else {
-            // Actually register placeholderapi extension.
-            new FancyGlowPlaceholder(this).register();
-        }
-    }
-
-    private void hookTAB() {
-        Plugin tabPlugin = getServer().getPluginManager().getPlugin("TAB");
-        if (tabPlugin == null || !tabPlugin.isEnabled()) return;
-
-        String desiredVersion = "5.0.4";
-        String tabVersion = tabPlugin.getDescription().getVersion();
-
-        try {
-            if (!isCompatibleTAB(tabVersion, desiredVersion)) {
-                this.logger.warning("This function only works with TAB version 5.0.4 or newer.");
-                return;
-            }
-
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            this.logger.warning("Failed to parse TAB version numbers: " + tabVersion);
-            this.logger.warning("Function will not work due to version parsing errors.");
             return;
         }
 
-        this.logger.info("TAB " + tabVersion + " has been found, using it.");
-
-        // Register player placeholder directly to tab.
-        EventBus eventBus = Objects.requireNonNull(TabAPI.getInstance().getEventBus(), "TAB EventBus is not available.");
-
-        eventBus.register(TabLoadEvent.class, event -> {
-            Bukkit.getScheduler().runTask(this, () -> {
-                TabAPI.getInstance().getPlaceholderManager()
-                        .registerPlayerPlaceholder(
-                                "%fancyglow_tab_color%",
-                                50,
-                                player -> playerGlowManager.getPlayerGlowColor((Player) player.getPlayer()));
-            });
-        });
-
-        // Register tab listener.
-        eventBus.register(PlayerLoadEvent.class, event -> {
-            // Ignore if option not enabled.
-            if (!configuration.getBoolean("Auto_Tag")) return;
-
-            Bukkit.getScheduler().runTask(this, () -> {
-                TabPlayer player = event.getPlayer();
-
-                NameTagManager nameTagManager = Objects.requireNonNull(TabAPI.getInstance().getNameTagManager(), "TAB NameTagManager is unavailable.");
-                String originalPrefix = nameTagManager.getOriginalPrefix(player);
-
-                String modifiedPrefix = originalPrefix + "%fancyglow_tab_color%";
-                nameTagManager.setPrefix(player, modifiedPrefix);
-            });
-        });
-    }
-
-    // TODO: Maybe use regex?
-    private boolean isCompatibleTAB(String tabVersion, String desiredVersion) {
-        if (tabVersion.contains("-")) {
-            tabVersion = tabVersion.split("-")[0];
-        }
-
-        String[] versionParts = tabVersion.split("\\.");
-        String[] desiredVersionParts = desiredVersion.split("\\.");
-
-        int major = Integer.parseInt(versionParts[0]);
-        int minor = Integer.parseInt(versionParts[1]);
-        int patch = Integer.parseInt(versionParts[2]);
-
-        int desiredMajor = Integer.parseInt(desiredVersionParts[0]);
-        int desiredMinor = Integer.parseInt(desiredVersionParts[1]);
-        int desiredPatch = Integer.parseInt(desiredVersionParts[2]);
-
-        // Check version compatibility
-        return major > desiredMajor ||
-                (major == desiredMajor && minor > desiredMinor) ||
-                (major == desiredMajor && minor == desiredMinor && patch >= desiredPatch);
+        // Actually register placeholderapi extension.
+        new FancyGlowPlaceholder(this).register();
     }
 
     public YamlDocument getConfiguration() {

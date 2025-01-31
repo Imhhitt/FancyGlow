@@ -2,21 +2,25 @@ package hhitt.fancyglow.tasks;
 
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.managers.GlowManager;
+import hhitt.fancyglow.managers.PlayerGlowManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
+
+    private int currentIndex = 0;
     private final GlowManager glowManager;
-    private int currentIndex;
+    private final PlayerGlowManager playerGlowManager;
 
     public MulticolorTask(FancyGlow plugin) {
         this.glowManager = plugin.getGlowManager();
-        this.currentIndex = 0;
+        this.playerGlowManager = plugin.getPlayerGlowManager();
     }
 
     @Override
@@ -28,44 +32,32 @@ public class MulticolorTask extends BukkitRunnable {
         ChatColor currentColor = GlowManager.COLORS_ARRAY[currentIndex];
 
         // Get or create the team corresponding to the current color
-        Team glowTeam = glowManager.getOrCreateTeam(currentColor);
-        // Will check if the scoreboard is available.
-        if (glowTeam == null) {
-            return;
-        }
+        Team currentTeam = glowManager.getOrCreateTeam(currentColor);
 
         Player player;
-        Team team;
+        Team lastTeam;
         for (UUID uuid : glowManager.getMulticolorPlayerSet()) {
             // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
-            player = Bukkit.getPlayer(uuid);
+            player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
+            // Ignore if player is on respawn screen.
             if (player.isDead()) continue;
 
-            // Remove the player from all teams except the current one
-            for (ChatColor color : GlowManager.COLORS_ARRAY) {
-                if (color != currentColor) {
-                    team = glowManager.getOrCreateTeam(color);
-                    if (team.hasEntry(player.getName())) {
-                        team.removeEntry(player.getName());
-                    }
-                }
-            }
+            // Find and define player last team
+            lastTeam = playerGlowManager.findPlayerTeam(player);
 
-            // Add the player to the new team
-            if (!glowTeam.hasEntry(player.getName())) {
-                glowTeam.addEntry(player.getName());
-            }
+            // Straight away add the player to the new team
+            currentTeam.addEntry(player.getName());
+
+            // Remove the player from last team
+            lastTeam.removeEntry(player.getName());
 
             // Update the scoreboard if necessary
-            if (glowTeam.getScoreboard() != null) {
-                player.setScoreboard(glowTeam.getScoreboard());
+            if (currentTeam.getScoreboard() != null) {
+                player.setScoreboard(currentTeam.getScoreboard());
             }
         }
 
         // Increment the index for the next color
-        currentIndex++;
-        if (currentIndex >= GlowManager.COLORS_ARRAY.length) {
-            currentIndex = 0;
-        }
+        currentIndex = (currentIndex + 1) % GlowManager.COLORS_ARRAY.length;
     }
 }
