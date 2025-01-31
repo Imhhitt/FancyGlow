@@ -117,7 +117,7 @@ public class GlowManager {
 
         // Attempt to remove player from any color team
         Team team;
-        for (final ChatColor color : ChatColor.values()) {
+        for (final ChatColor color : COLORS_ARRAY) {
             team = board.getTeam(color.name());
             if (team == null) {
                 continue;
