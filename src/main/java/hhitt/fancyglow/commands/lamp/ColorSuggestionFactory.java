@@ -12,8 +12,10 @@ import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
+import java.util.Objects;
+import java.util.Set;
 
 public final class ColorSuggestionFactory implements SuggestionProvider.Factory<BukkitCommandActor> {
 
@@ -33,27 +35,24 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
         // Verify if annotation is present.
         if (annotations.get(ColorSuggestion.class) == null) return null;
 
-        List<String> availableColors = new ArrayList<>(ColorUtils.getChatColorValues().size());
-        for (final String value : ColorUtils.getChatColorValues()) {
-            availableColors.add(value.toLowerCase(Locale.ROOT));
-        }
+        Set<String> availableColors = new HashSet<>(ColorUtils.getAvailableColorsSet());
+
+        // Add optional modes.
+        availableColors.add("rainbow");
+        availableColors.add("flashing");
+
         return context -> {
-            Player player = context.actor().asPlayer();
-            if (player == null) {
-                return availableColors;
+            BukkitCommandActor actor = context.actor();
+            if (actor.isConsole()) return availableColors;
+
+            Player player = Objects.requireNonNull(actor.asPlayer());
+            List<String> list = new ArrayList<>();
+            for (String name : availableColors) {
+                if (glowManager.hasGlowPermission(player, name)) {
+                    list.add(name);
+                }
             }
-            if (glowManager.hasGlowPermission(player, "rainbow")) {
-                availableColors.add("rainbow");
-            }
-            if (glowManager.hasGlowPermission(player, "flashing")) {
-                availableColors.add("flash");
-                availableColors.add("flashing");
-            }
-            for (final String name : availableColors) {
-                if (glowManager.hasGlowPermission(player, name)) continue;
-                availableColors.remove(name);
-            }
-            return availableColors;
+            return list;
         };
     }
 }
