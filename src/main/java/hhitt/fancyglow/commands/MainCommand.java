@@ -117,19 +117,22 @@ public class MainCommand {
             return;
         }
 
-        ChatColor color = ColorUtils.findColor(arg.toUpperCase());
-
         if (arg.equalsIgnoreCase("rainbow")) {
-            if (!(player.hasPermission("fancyglow.rainbow") || player.hasPermission("fancyglow.all_colors"))) {
+            if (!player.hasPermission("fancyglow.rainbow")) {
                 messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                 return;
             }
             glowManager.toggleMulticolorGlow(player);
             return;
         }
-        if (arg.equalsIgnoreCase("flashing") || arg.equalsIgnoreCase("flash")) {
+        if (arg.equalsIgnoreCase("flashing")) {
             if (!(player.hasPermission("fancyglow.flashing"))) {
                 messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                return;
+            }
+
+            if (playerGlowManager.findPlayerTeam(player) == null && glowManager.isFlashingTaskActive(player)) {
+                messageHandler.sendMessage(player, Messages.NOT_GLOWING);
                 return;
             }
 
@@ -138,21 +141,17 @@ public class MainCommand {
                 return;
             }
 
-            if (playerGlowManager.findPlayerTeam(player) == null) {
-                messageHandler.sendManualMessage(player, "You need to select a color first!");
-                return;
-            }
-
             glowManager.toggleFlashingGlow(player);
             return;
         }
 
-        if (color == null) {
+        if (ColorUtils.findColor(arg.toUpperCase()) == null) {
             messageHandler.sendMessage(player, Messages.INVALID_COLOR);
             return;
         }
 
-        if (!(glowManager.hasGlowPermission(player, color) || player.hasPermission("fancyglow.all_colors") || player.hasPermission("fancyglow.admin"))) {
+        ChatColor color = ColorUtils.findColor(arg.toUpperCase());
+        if (!(glowManager.hasGlowPermission(player, color) || player.hasPermission("fancyglow.all_colors"))) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
         }
