@@ -54,7 +54,9 @@ public class CreatingInventory implements InventoryHolder {
             colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
             colorMeta.addItemFlags(ItemFlag.HIDE_DYE);
             colorMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
-            colorMeta.setDisplayName(messageHandler.getMessage(Messages.match(availableColor.name() + "_NAME")));
+            // Might cause IllegalArgumentException if message doesn't exist.
+            Messages colorMessage = Messages.valueOf(availableColor.name().toUpperCase() + "_NAME");
+            colorMeta.setDisplayName(messageHandler.getMessage(colorMessage));
             colorMeta.setColor(ColorUtils.getArmorColorFromChatColor(availableColor));
             colorItem.setItemMeta(colorMeta);
 

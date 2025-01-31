@@ -63,12 +63,4 @@ public enum Messages {
     public String getPath() {
         return path;
     }
-
-    public static Messages match(String string) {
-        for (final Messages message : values()) {
-            if (!message.name().equalsIgnoreCase(string)) continue;
-            return message;
-        }
-        return MESSAGE_NOT_FOUND;
-    }
 }
