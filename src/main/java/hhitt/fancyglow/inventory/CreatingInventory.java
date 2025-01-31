@@ -23,7 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public class CreatingInventory implements InventoryHolder {
-    private static final String DEFAULT_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0";
+
+    private static final String DEFAULT_RAINBOW_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI0OTMyYmI5NDlkMGM2NTcxN2IxMjFjOGNkOWEyMWI2OWU4NmMwZjdlMzQyMWFlOWI4YzY0ZDhiOTkwZWI2MCJ9fX0";
+    private static final String DEFAULT_FLASHING_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTFjNTgxYThiNTk3NjkyYjViOTRkM2I4YmViOWM1MmY1Njk5OWQ2MmY3Mzk1NjY4ZmFjNTdhYzk1MmZlNGRjNCJ9fX0=";
+
     private final YamlDocument config;
     private final Inventory inventory;
     private final MessageHandler messageHandler;
@@ -96,8 +99,7 @@ public class CreatingInventory implements InventoryHolder {
         if (playerGlowManager.findPlayerTeam(player) == null && !player.isGlowing()) return;
 
         // Flashing head
-        ItemStack flashingHead = HeadUtils.getCustomSkull(config.getString("Inventory.Flashing.Texture", DEFAULT_TEXTURE));
-        ItemMeta flashingHeadMeta = flashingHead.getItemMeta();
+        ItemStack flashingHead = HeadUtils.getCustomSkull(config.getString("Inventory.Flashing.Texture", DEFAULT_FLASHING_TEXTURE));
         ItemMeta flashingHeadMeta = Objects.requireNonNull(flashingHead.getItemMeta());
 
         flashingHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
@@ -110,8 +112,7 @@ public class CreatingInventory implements InventoryHolder {
 
     private void setRainbowItem() {
         // Rainbow head
-        ItemStack rainbowHead = HeadUtils.getCustomSkull(config.getString("Inventory.Rainbow.Texture", DEFAULT_TEXTURE));
-        ItemMeta rainbowHeadMeta = rainbowHead.getItemMeta();
+        ItemStack rainbowHead = HeadUtils.getCustomSkull(config.getString("Inventory.Rainbow.Texture", DEFAULT_RAINBOW_TEXTURE));
         ItemMeta rainbowHeadMeta = Objects.requireNonNull(rainbowHead.getItemMeta());
 
         rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
