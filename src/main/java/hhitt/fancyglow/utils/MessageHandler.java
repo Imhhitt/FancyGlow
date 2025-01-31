@@ -251,8 +251,7 @@ public class MessageHandler {
          */
         public void send() {
             String rawMessage = getRawMessage(message.getPath());
-            String parsedMessage = applyPlaceholders(rawMessage, placeholders);
-            String finalMessage = intercept(sender, parsedMessage);
+            String finalMessage = applyPlaceholders(rawMessage, placeholders);
             sendManualMessage(sender, finalMessage);
         }
 
