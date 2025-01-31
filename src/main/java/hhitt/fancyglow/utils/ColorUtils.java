@@ -3,13 +3,16 @@ package hhitt.fancyglow.utils;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 public class ColorUtils {
 
     // Implementation for the logic to map leather armor colors to colors
+    private static final Set<String> availableColorSet = new HashSet<>();
     private static final Map<String, ChatColor> colorValues = new HashMap<>();
     private static final Map<Color, ChatColor> colorMap = new HashMap<>();
     private static final Map<ChatColor, Color> reverseColorMap = new HashMap<>();
@@ -32,25 +35,63 @@ public class ColorUtils {
         colorMap.put(Color.PURPLE, ChatColor.DARK_PURPLE);
         colorMap.put(Color.ORANGE, ChatColor.GOLD);
 
-        //Add available colors
-        colorMap.values().forEach(color -> colorValues.put(color.name(), color));
+        colorMap.forEach((color, chatColor) -> {
+            // Reverse colorMap into its own map.
+            reverseColorMap.put(chatColor, color);
+
+            // Populate color values.
+            colorValues.put(chatColor.name(), chatColor);
+
+            // Populate available color set.
+            availableColorSet.add(chatColor.name().toLowerCase(Locale.ROOT));
+        });
+
         //Manually add common used color names
         colorValues.put("PINK", ChatColor.LIGHT_PURPLE);
         colorValues.put("PURPLE", ChatColor.DARK_PURPLE);
-
-        colorMap.forEach((key, value) -> reverseColorMap.put(value, key));
+        availableColorSet.add("pink");
+        availableColorSet.add("purple");
     }
 
+    /**
+     * Gets the ChatColor corresponding to the given armor color.
+     *
+     * @param armorColor The armor color.
+     *
+     * @return The corresponding ChatColor, or WHITE if not found.
+     */
     public static ChatColor getColorFromArmorColor(org.bukkit.Color armorColor) {
         return colorMap.getOrDefault(armorColor, ChatColor.WHITE);
     }
 
+
+    /**
+     * Gets the Color corresponding to the given ChatColor.
+     *
+     * @param chatColor The ChatColor.
+     *
+     * @return The corresponding Color, or WHITE if not found.
+     */
     public static Color getArmorColorFromChatColor(ChatColor chatColor) {
         return reverseColorMap.getOrDefault(chatColor, Color.WHITE);
     }
 
-    public static Collection<String> getChatColorValues() {
-        return colorValues.keySet();
+    /**
+     * Gets a set of all available color names.
+     *
+     * @return A set of color names.
+     */
+    public static Set<String> getAvailableColorsSet() {
+        return availableColorSet;
+    }
+
+    /**
+     * @param name String name to check for.
+     *
+     * @return Returns if passed value is a valid color from available ones.
+     */
+    public static boolean isAvailableColor(String name) {
+        return availableColorSet.contains(name.toLowerCase(Locale.ROOT));
     }
 
     /**
