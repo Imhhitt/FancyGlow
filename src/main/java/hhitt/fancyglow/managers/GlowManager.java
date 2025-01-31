@@ -14,6 +14,7 @@ import org.bukkit.scoreboard.Team;
 import java.util.*;
 
 public class GlowManager {
+
     public static final ChatColor[] COLORS_ARRAY = new ChatColor[]{
             ChatColor.BLACK,
             ChatColor.DARK_BLUE,
@@ -32,6 +33,7 @@ public class GlowManager {
             ChatColor.YELLOW,
             ChatColor.WHITE
     };
+
     private final FancyGlow plugin;
     private final MessageHandler messageHandler;
 
@@ -80,10 +82,7 @@ public class GlowManager {
         // Remove any existing glow
         removeGlow(player);
         // Add the player to the team and enable glowing
-        final Team team = getOrCreateTeam(color);
-        if (team == null) {
-            return;
-        }
+        Team team = getOrCreateTeam(color);
         team.addEntry(ChatColor.stripColor(player.getName()));
         player.setGlowing(true);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
@@ -97,9 +96,8 @@ public class GlowManager {
     }
 
     public void removePlayerFromAllTeams(Player player) {
-        if (plugin.getServer().getScoreboardManager() == null) {
-            return;
-        }
+        if (plugin.getServer().getScoreboardManager() == null) return;
+
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         String cleanName = ChatColor.stripColor(player.getName());
 
@@ -128,8 +126,9 @@ public class GlowManager {
 
     public Team getOrCreateTeam(ChatColor color) {
         for (Team team : getGlowTeams()) {
-            if (!team.getName().equalsIgnoreCase(color.name())) continue;
-            return team;
+            if (team.getName().equalsIgnoreCase(color.name())) {
+                return team;
+            }
         }
         return createTeam(color);
     }
