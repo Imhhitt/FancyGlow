@@ -50,12 +50,11 @@ public class MainCommand {
         List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
         if (noAllowedWorlds.contains(player.getWorld().getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
+            return;
         }
 
         // Returns if disabled so player use its own menus.
-        if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) {
-            return;
-        }
+        if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) return;
 
         // Check gui permissions
         if (!player.hasPermission("fancyglow.command.gui")) {
@@ -92,7 +91,7 @@ public class MainCommand {
 
     @Command({"glow color", "fancyglow color"})
     @CommandPermission("fancyglow.command.color")
-    @Description("FancyGlow color sub-command, also opens a GUI if no argument.")
+    @Description("FancyGlow color sub-command.")
     public void colorCommand(BukkitCommandActor actor, @ColorSuggestion @Optional String arg) {
         if (actor.isConsole()) {
             // TODO: Allow console to change player glowing color.
@@ -194,7 +193,6 @@ public class MainCommand {
 
         Player target = Bukkit.getPlayer(targetName);
         if (target == null) {
-            messageHandler.sendMessage(sender, Messages.DISABLE_GLOW);
             messageHandler.sendMessageBuilder(sender, Messages.UNKNOWN_TARGET)
                     .placeholder("%player_name%", targetName)
                     .send();
