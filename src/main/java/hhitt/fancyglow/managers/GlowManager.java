@@ -3,6 +3,7 @@ package hhitt.fancyglow.managers;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.tasks.FlashingTask;
 import hhitt.fancyglow.tasks.MulticolorTask;
+import hhitt.fancyglow.utils.ColorUtils;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.Messages;
 import org.bukkit.ChatColor;
@@ -11,7 +12,9 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public class GlowManager {
 
@@ -198,30 +201,18 @@ public class GlowManager {
         return multicolorPlayerSet;
     }
 
-    public List<Team> getGlowTeams() {
+    public Set<Team> getGlowTeams() {
         if (plugin.getServer().getScoreboardManager() == null) {
-            return List.of();
+            return Set.of();
         }
+
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        final List<Team> teamList = new ArrayList<>(board.getTeams().size());
-        final List<String> colorsNames = getAvailableColorsNames();
-        for (final Team team : board.getTeams()) {
-            if (!colorsNames.contains(team.getName())) continue;
-            teamList.add(team);
+        Set<Team> teamList = new HashSet<>();
+        for (Team team : board.getTeams()) {
+            if (ColorUtils.isAvailableColor(team.getName())) {
+                teamList.add(team);
+            }
         }
         return teamList;
-    }
-
-    public List<String> getAvailableColorsNames() {
-        final List<String> colorNames = new ArrayList<>(getAvailableColors().length);
-        for (final ChatColor color : COLORS_ARRAY) {
-            if (colorNames.contains(color.name())) continue;
-            colorNames.add(color.name());
-        }
-        return colorNames;
-    }
-
-    public ChatColor[] getAvailableColors() {
-        return COLORS_ARRAY;
     }
 }
