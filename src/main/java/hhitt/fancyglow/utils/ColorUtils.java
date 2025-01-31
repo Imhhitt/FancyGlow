@@ -53,12 +53,15 @@ public class ColorUtils {
         return colorValues.keySet();
     }
 
+    /**
+     * Finds a ChatColor by its name.
+     *
+     * @param value The name of the color.
+     *
+     * @return The corresponding ChatColor, or null if not found.
+     */
     public static ChatColor findColor(String value) {
-        for (final Map.Entry<String, ChatColor> entry : colorValues.entrySet()) {
-            if (!entry.getKey().equalsIgnoreCase(value)) continue;
-            return entry.getValue();
-        }
-        return null;
+        return colorValues.get(value.toUpperCase(Locale.ROOT));
     }
 
 }
