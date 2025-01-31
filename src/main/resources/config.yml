@@ -13,7 +13,7 @@
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
 # DO NOT CHANGE THIS.
-config-version: 3
+config-version: 4
 
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
@@ -38,8 +38,6 @@ Notify_Updates: true
 
 # This option only works if TAB v5.0.4 by NEZNAMY is on the server.
 # This will automatically set the player tag prefix to use the glow placeholder.
-# We recommend you to manually set the placeholder at groups.yml
-# since this feature presents some failure when reloading the plugin. (TAB)
 Auto_Tag: false
 
 Messages:
