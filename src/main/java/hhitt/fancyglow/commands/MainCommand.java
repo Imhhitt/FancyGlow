@@ -77,6 +77,9 @@ public class MainCommand {
             return;
         }
 
+        glowManager.stopFlashingTask();
+        glowManager.stopMulticolorTask();
+
         try {
             plugin.getConfiguration().reload();
         } catch (IOException e) {
@@ -85,6 +88,10 @@ public class MainCommand {
             // Re-initialize inventory only when reloading, probably not the best way to do it.
             inventory = new CreatingInventory(plugin);
             inventory.setupContent();
+
+            glowManager.scheduleFlashingTask();
+            glowManager.scheduleMulticolorTask();
+
             messageHandler.sendMessage(sender, Messages.RELOADED);
         }
     }
