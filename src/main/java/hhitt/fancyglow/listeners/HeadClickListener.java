@@ -37,7 +37,7 @@ public class HeadClickListener implements Listener {
         switch (event.getSlot()) {
             case 39 -> {
                 // Multicolor head
-                if (!player.hasPermission("fancyglow.rainbow") || !player.hasPermission("fancyglow.all_colors")) {
+                if (!player.hasPermission("fancyglow.rainbow")) {
                     messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                     player.closeInventory();
                     return;
