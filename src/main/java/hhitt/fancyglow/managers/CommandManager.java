@@ -10,10 +10,14 @@ import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 public final class CommandManager {
 
     private final FancyGlow plugin;
-    private final Lamp<BukkitCommandActor> lamp;
+    private Lamp<BukkitCommandActor> lamp;
 
     public CommandManager(FancyGlow plugin) {
         this.plugin = plugin;
+        initializeLamp();
+    }
+
+    private void initializeLamp() {
         this.lamp = BukkitLamp.builder(plugin)
                 .suggestionProviders(suggestions ->
                         suggestions.addProviderFactory(new ColorSuggestionFactory(plugin)))
@@ -21,10 +25,14 @@ public final class CommandManager {
     }
 
     public void registerCommands() {
-        lamp.register(new MainCommand(plugin));
+        if (lamp != null) {
+            lamp.register(new MainCommand(plugin));
+        }
     }
 
-    public void unregisterAll() {
-        lamp.unregisterAllCommands();
+    public void unregisterAllCommands() {
+        if (lamp != null) {
+            lamp.unregisterAllCommands();
+        }
     }
 }
