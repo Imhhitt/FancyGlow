@@ -40,33 +40,8 @@ public class CreatingInventory implements InventoryHolder {
     }
 
     public void setupContent() {
-        // Set fill items.
         setFiller();
-
-        // Set color items.
-        int i = 9;
-        ItemStack colorItem;
-        LeatherArmorMeta colorMeta;
-        for (ChatColor availableColor : GlowManager.COLORS_ARRAY) {
-            colorItem = new ItemStack(Material.LEATHER_CHESTPLATE);
-            colorMeta = (LeatherArmorMeta) Objects.requireNonNull(colorItem.getItemMeta());
-
-            colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            colorMeta.addItemFlags(ItemFlag.HIDE_DYE);
-            colorMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
-            // Might cause IllegalArgumentException if message doesn't exist.
-            Messages colorMessage = Messages.valueOf(availableColor.name().toUpperCase() + "_NAME");
-            colorMeta.setDisplayName(messageHandler.getMessage(colorMessage));
-            colorMeta.setColor(ColorUtils.getArmorColorFromChatColor(availableColor));
-            colorItem.setItemMeta(colorMeta);
-
-            // Skip slot 18.
-            if (i == 18) {
-                i++;
-            }
-            inventory.setItem(i++, colorItem);
-        }
-
+        setColorItems();
         setRainbowItem();
     }
 
@@ -81,60 +56,75 @@ public class CreatingInventory implements InventoryHolder {
 
         // Define filler-material.
         Material material = Material.getMaterial(config.getString("Inventory.Filler.Material", "GRAY_STAINED_GLASS_PANE"));
-        if (material == null) {
-            return;
-        }
+        if (material == null) return;
+
         ItemStack fill = new ItemStack(material);
         ItemMeta fillMeta = Objects.requireNonNull(fill.getItemMeta());
         fillMeta.setDisplayName(messageHandler.getMessage(Messages.FILLER_NAME));
         fill.setItemMeta(fillMeta);
 
         // Avoid call to getSize() on every iteration.
-        final int size = inventory.getSize();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, fill);
         }
     }
 
+    private void setColorItems() {
+        int i = 9;
+        for (ChatColor availableColor : GlowManager.COLORS_ARRAY) {
+            ItemStack colorItem = createColorItem(availableColor);
+            if (i == 18) i++; // Skip slot 18
+            inventory.setItem(i++, colorItem);
+        }
+    }
+
+    private ItemStack createColorItem(ChatColor availableColor) {
+        ItemStack colorItem = new ItemStack(Material.LEATHER_CHESTPLATE);
+        LeatherArmorMeta colorMeta = (LeatherArmorMeta) colorItem.getItemMeta();
+        assert colorMeta != null;
+        
+        colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE);
+        colorMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
+        colorMeta.setDisplayName(messageHandler.getMessage(Messages.valueOf(availableColor.name() + "_NAME")));
+        colorMeta.setColor(ColorUtils.getArmorColorFromChatColor(availableColor));
+        
+        colorItem.setItemMeta(colorMeta);
+        return colorItem;
+    }
+
     private void setFlashingItem(final Player player) {
-        // Returns if player doesn't have any team or isn't glowing.
         if (playerGlowManager.findPlayerTeam(player) == null && !player.isGlowing()) return;
 
-        // Flashing head
-        ItemStack flashingHead = HeadUtils.getCustomSkull(config.getString("Inventory.Flashing.Texture", DEFAULT_FLASHING_TEXTURE));
-        ItemMeta flashingHeadMeta = Objects.requireNonNull(flashingHead.getItemMeta());
-
-        flashingHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        flashingHeadMeta.setDisplayName(messageHandler.getMessage(Messages.FLASHING_HEAD_NAME));
-        flashingHeadMeta.setLore(messageHandler.getMessages(Messages.FLASHING_HEAD_LORE));
-        flashingHead.setItemMeta(flashingHeadMeta);
-
+        ItemStack flashingHead = createHeadItem(config.getString("Inventory.Flashing.Texture", DEFAULT_FLASHING_TEXTURE), Messages.FLASHING_HEAD_NAME, Messages.FLASHING_HEAD_LORE);
         inventory.setItem(config.getInt("Inventory.Flashing.Slot", 40), flashingHead);
     }
 
     private void setRainbowItem() {
-        // Rainbow head
-        ItemStack rainbowHead = HeadUtils.getCustomSkull(config.getString("Inventory.Rainbow.Texture", DEFAULT_RAINBOW_TEXTURE));
-        ItemMeta rainbowHeadMeta = Objects.requireNonNull(rainbowHead.getItemMeta());
-
-        rainbowHeadMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-        rainbowHeadMeta.setDisplayName(messageHandler.getMessage(Messages.RAINBOW_HEAD_NAME));
-        rainbowHeadMeta.setLore(messageHandler.getMessages(Messages.RAINBOW_HEAD_LORE));
-        rainbowHead.setItemMeta(rainbowHeadMeta);
-
+        ItemStack rainbowHead = createHeadItem(config.getString("Inventory.Rainbow.Texture", DEFAULT_RAINBOW_TEXTURE), Messages.RAINBOW_HEAD_NAME, Messages.RAINBOW_HEAD_LORE);
         inventory.setItem(config.getInt("Inventory.Rainbow.Slot", 39), rainbowHead);
+    }
+
+    private ItemStack createHeadItem(String texture, Messages nameMessage, Messages loreMessage) {
+        ItemStack headItem = HeadUtils.getCustomSkull(texture);
+        ItemMeta meta = Objects.requireNonNull(headItem.getItemMeta());
+        
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.setDisplayName(messageHandler.getMessage(nameMessage));
+        meta.setLore(messageHandler.getMessages(loreMessage));
+        
+        headItem.setItemMeta(meta);
+        return headItem;
     }
 
     private void setPlayerStatusItem(Player player) {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) Objects.requireNonNull(head.getItemMeta());
+        
         meta.setDisplayName(messageHandler.getMessage(Messages.HEAD_NAME));
         meta.setLore(messageHandler.getMessages(Messages.HEAD_LORE));
-
         meta.setOwningPlayer(player);
-        head.setItemMeta(meta);
+        
         playerGlowManager.updateItemLore(head, player);
-
         inventory.setItem(config.getInt("Inventory.Status.Slot", 41), head);
     }
 
