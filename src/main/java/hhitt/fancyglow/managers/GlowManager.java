@@ -12,177 +12,112 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class GlowManager {
 
-    public static final ChatColor[] COLORS_ARRAY = new ChatColor[]{
-            ChatColor.BLACK,
-            ChatColor.DARK_BLUE,
-            ChatColor.DARK_GREEN,
-            ChatColor.DARK_AQUA,
-            ChatColor.DARK_RED,
-            ChatColor.DARK_PURPLE,
-            ChatColor.GOLD,
-            ChatColor.GRAY,
-            ChatColor.DARK_GRAY,
-            ChatColor.BLUE,
-            ChatColor.GREEN,
-            ChatColor.AQUA,
-            ChatColor.RED,
-            ChatColor.LIGHT_PURPLE,
-            ChatColor.YELLOW,
-            ChatColor.WHITE
-    };
+    private static final ChatColor[] COLORS_ARRAY = ChatColor.values();
 
     private final FancyGlow plugin;
     private final MessageHandler messageHandler;
-
-    private final Set<UUID> flashingPlayerSet;
-    private final Set<UUID> multicolorPlayerSet;
-
-    private BukkitTask flashingTask;
-    private BukkitTask multicolorTask;
+    private final Set<UUID> flashingPlayerSet = new HashSet<>();
+    private final Set<UUID> multicolorPlayerSet = new HashSet<>();
+    private BukkitTask flashingTask, multicolorTask;
 
     public GlowManager(FancyGlow plugin) {
         this.plugin = plugin;
         this.messageHandler = plugin.getMessageHandler();
-
-        this.flashingPlayerSet = new HashSet<>();
-        this.multicolorPlayerSet = new HashSet<>();
     }
 
     public void toggleMulticolorGlow(Player player) {
-        final UUID playerId = player.getUniqueId();
-        if (isMulticolorTaskActive(player)) {
-            multicolorPlayerSet.remove(playerId);
+        disableOtherGlows(player);
+        if (multicolorPlayerSet.remove(player.getUniqueId())) {
             removeGlow(player);
             messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-            return;
+        } else {
+            multicolorPlayerSet.add(player.getUniqueId());
+            player.setGlowing(true);
+            messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
         }
-
-        multicolorPlayerSet.add(playerId);
-        player.setGlowing(true);
-        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public void toggleFlashingGlow(Player player) {
-        final UUID playerId = player.getUniqueId();
-        if (isFlashingTaskActive(player)) {
-            player.setGlowing(true);
-            flashingPlayerSet.remove(playerId);
+        disableOtherGlows(player);
+        if (flashingPlayerSet.remove(player.getUniqueId())) {
+            removeGlow(player);
             messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-            return;
+        } else {
+            flashingPlayerSet.add(player.getUniqueId());
+            player.setGlowing(true);
+            messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
         }
+    }
 
-        flashingPlayerSet.add(playerId);
-        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
+    private void disableOtherGlows(Player player) {
+        multicolorPlayerSet.remove(player.getUniqueId());
+        flashingPlayerSet.remove(player.getUniqueId());
     }
 
     public void toggleGlow(Player player, ChatColor color) {
-        // Remove any existing glow
         removeGlow(player);
-        // Add the player to the team and enable glowing
-        Team team = getOrCreateTeam(color);
-        team.addEntry(ChatColor.stripColor(player.getName()));
+        getOrCreateTeam(color).addEntry(player.getName());
         player.setGlowing(true);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public void removeGlow(Player player) {
-        // Remove glow from player
         player.setGlowing(false);
-        // Remove from any existing color team
         removePlayerFromAllTeams(player);
     }
 
     public void removePlayerFromAllTeams(Player player) {
-        if (plugin.getServer().getScoreboardManager() == null) return;
+        Optional.ofNullable(plugin.getServer().getScoreboardManager())
+                .map(manager -> manager.getMainScoreboard())
+                .ifPresent(board -> Arrays.stream(COLORS_ARRAY)
+                        .map(color -> board.getTeam(color.name()))
+                        .filter(Objects::nonNull)
+                        .forEach(team -> team.removeEntry(player.getName())));
 
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        String cleanName = ChatColor.stripColor(player.getName());
-
-        // Handle remove if rainbow selected
-        if (isMulticolorTaskActive(player)) {
-            // Remove from multicolor set.
-            multicolorPlayerSet.remove(player.getUniqueId());
-        }
-
-        // Same as above but for flashing task 😎
-        if (isFlashingTaskActive(player)) {
-            // Remove from flashing set.
-            flashingPlayerSet.remove(player.getUniqueId());
-        }
-
-        // Attempt to remove player from any color team
-        Team team;
-        for (final ChatColor color : COLORS_ARRAY) {
-            team = board.getTeam(color.name());
-            if (team == null) {
-                continue;
-            }
-            team.removeEntry(cleanName);
-        }
+        multicolorPlayerSet.remove(player.getUniqueId());
+        flashingPlayerSet.remove(player.getUniqueId());
     }
 
     public Team getOrCreateTeam(ChatColor color) {
-        for (Team team : getGlowTeams()) {
-            if (team.getName().equalsIgnoreCase(color.name())) {
-                return team;
-            }
-        }
-        return createTeam(color);
+        return Optional.ofNullable(plugin.getServer().getScoreboardManager())
+                .map(manager -> manager.getMainScoreboard().getTeam(color.name()))
+                .orElseGet(() -> createTeam(color));
     }
 
     public Team createTeam(ChatColor color) {
-        if (plugin.getServer().getScoreboardManager() == null) {
-            return null;
-        }
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        Team team = board.getTeam(color.name());
-        if (team == null) {
-            team = board.registerNewTeam(color.name());
-            team.setColor(color);
-        }
-        return team;
-    }
-
-    public boolean hasGlowPermission(Player player, ChatColor color) {
-        return hasGlowPermission(player, color.name());
-    }
-
-    public boolean hasGlowPermission(Player player, String colorName) {
-        return player.hasPermission("fancyglow." + colorName.toLowerCase());
+        return Optional.ofNullable(plugin.getServer().getScoreboardManager())
+                .map(manager -> manager.getMainScoreboard())
+                .map(board -> board.getTeam(color.name()) != null ? board.getTeam(color.name()) : board.registerNewTeam(color.name()))
+                .map(team -> {
+                    team.setColor(color);
+                    return team;
+                }).orElse(null);
     }
 
     public void scheduleMulticolorTask() {
         if (multicolorTask == null || multicolorTask.isCancelled()) {
-            int ticks = plugin.getConfiguration().getInt("Rainbow_Update_Interval");
-            this.multicolorTask = new MulticolorTask(plugin)
-                    .runTaskTimer(plugin, 5L, ticks);
+            multicolorTask = new MulticolorTask(plugin)
+                    .runTaskTimer(plugin, 5L, plugin.getConfiguration().getInt("Rainbow_Update_Interval"));
         }
     }
 
     public void stopMulticolorTask() {
-        if (multicolorTask != null && !multicolorTask.isCancelled()) {
-            multicolorTask.cancel();
-        }
+        Optional.ofNullable(multicolorTask).ifPresent(BukkitTask::cancel);
     }
 
     public void scheduleFlashingTask() {
         if (flashingTask == null || flashingTask.isCancelled()) {
-            int ticks = plugin.getConfiguration().getInt("Flashing_Update_Interval");
-            this.flashingTask = new FlashingTask(plugin)
-                    .runTaskTimerAsynchronously(plugin, 5L, ticks);
+            flashingTask = new FlashingTask(plugin)
+                    .runTaskTimerAsynchronously(plugin, 5L, plugin.getConfiguration().getInt("Flashing_Update_Interval"));
         }
     }
 
     public void stopFlashingTask() {
-        if (flashingTask != null && !flashingTask.isCancelled()) {
-            flashingTask.cancel();
-        }
+        Optional.ofNullable(flashingTask).ifPresent(BukkitTask::cancel);
     }
 
     public boolean isFlashingTaskActive(Player player) {
@@ -202,17 +137,8 @@ public class GlowManager {
     }
 
     public Set<Team> getGlowTeams() {
-        if (plugin.getServer().getScoreboardManager() == null) {
-            return Set.of();
-        }
-
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        Set<Team> teamList = new HashSet<>();
-        for (Team team : board.getTeams()) {
-            if (ColorUtils.isAvailableColor(team.getName())) {
-                teamList.add(team);
-            }
-        }
-        return teamList;
+        return Optional.ofNullable(plugin.getServer().getScoreboardManager())
+                .map(manager -> manager.getMainScoreboard().getTeams())
+                .orElse(Collections.emptySet());
     }
 }
