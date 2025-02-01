@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
@@ -25,39 +24,38 @@ public class MulticolorTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        // Cancel task if none at this set
+        // Cancel task if there are no players in the multicolor set
         if (glowManager.getMulticolorPlayerSet().isEmpty()) return;
 
-        // Get current color iteration.
+        // Get the current color for this iteration
         ChatColor currentColor = GlowManager.COLORS_ARRAY[currentIndex];
 
         // Get or create the team corresponding to the current color
         Team currentTeam = glowManager.getOrCreateTeam(currentColor);
+        if (currentTeam == null) return;
 
-        Player player;
-        Team lastTeam;
         for (UUID uuid : glowManager.getMulticolorPlayerSet()) {
-            // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
-            player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
-            // Ignore if player is on respawn screen.
-            if (player.isDead()) continue;
+            Player player = Bukkit.getPlayer(uuid);
+            if (player == null || player.isDead()) continue;
 
-            // Find and define player last team
-            lastTeam = playerGlowManager.findPlayerTeam(player);
+            // Get the player's last team, if any
+            Team lastTeam = playerGlowManager.findPlayerTeam(player);
 
-            // Straight away add the player to the new team
+            // Assign the player to the new team
             currentTeam.addEntry(player.getName());
 
-            // Remove the player from last team
-            lastTeam.removeEntry(player.getName());
+            // Remove from the last team, if applicable
+            if (lastTeam != null && lastTeam != currentTeam) {
+                lastTeam.removeEntry(player.getName());
+            }
 
-            // Update the scoreboard if necessary
-            if (currentTeam.getScoreboard() != null) {
+            // Update the scoreboard only if necessary
+            if (player.getScoreboard() != currentTeam.getScoreboard()) {
                 player.setScoreboard(currentTeam.getScoreboard());
             }
         }
 
-        // Increment the index for the next color
+        // Move to the next color in the sequence
         currentIndex = (currentIndex + 1) % GlowManager.COLORS_ARRAY.length;
     }
 }
