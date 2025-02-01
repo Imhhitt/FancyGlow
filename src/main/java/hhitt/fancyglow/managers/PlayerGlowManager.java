@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Team;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerGlowManager {
@@ -23,28 +22,32 @@ public class PlayerGlowManager {
     }
 
     /**
-     * @param player Player to search to.
+     * Retrieves the player's glow status in a formatted message.
      *
-     * @return Returns player formatted glowing status.
+     * @param player The player to check.
+     * @return Formatted message indicating if the player is glowing.
      */
     public String getPlayerGlowingStatus(Player player) {
-        return messageHandler.getMessage((player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
+        boolean isGlowing = player.isGlowing() || glowManager.isFlashingTaskActive(player);
+        return messageHandler.getMessage(isGlowing ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
     }
 
     /**
-     * @param player Player to search to.
+     * Gets the player's glow color name.
      *
-     * @return Player glow color name, if not glowing returns none status.
+     * @param player The player to check.
+     * @return The player's glow color name, or a "none" status if not glowing.
      */
     public String getPlayerGlowColorName(Player player) {
         Team team = findPlayerTeam(player);
-        return (player.isGlowing() && team != null) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
+        return (team != null && player.isGlowing()) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
     }
 
     /**
-     * @param player Player to search to.
+     * Gets the player's glow color code.
      *
-     * @return Player glow color format if not glowing returns an empty string.
+     * @param player The player to check.
+     * @return The player's glow color code, or an empty string if not glowing.
      */
     public String getPlayerGlowColor(Player player) {
         Team team = findPlayerTeam(player);
@@ -52,36 +55,35 @@ public class PlayerGlowManager {
     }
 
     /**
-     * @param player Player to search to.
+     * Finds the team a player belongs to.
      *
-     * @return Team where player has a registry on, if none returns null
+     * @param player The player to check.
+     * @return The team the player is registered in, or null if none.
      */
     public Team findPlayerTeam(Player player) {
-        for (Team team : glowManager.getGlowTeams()) {
-            if (team.hasEntry(player.getName())) {
-                return team;
-            }
-        }
-        return null;
+        return glowManager.getGlowTeams().stream()
+                .filter(team -> team.hasEntry(player.getName()))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
-     * Updates head lore placeholders.
+     * Updates the item's lore with placeholders.
      *
-     * @param item   Item to update to.
-     * @param player Player whose inventory if from.
+     * @param item   The item to update.
+     * @param player The player whose placeholders will be used.
      */
     public void updateItemLore(ItemStack item, Player player) {
+        if (item == null || player == null) return;
+
         ItemMeta meta = item.getItemMeta();
-        if (meta != null && meta.getLore() != null) {
-            List<String> lore = new ArrayList<>();
+        if (meta == null || meta.getLore() == null) return;
 
-            for (String line : meta.getLore()) {
-                lore.add(PlaceholderAPI.setPlaceholders(player, line));
-            }
+        List<String> updatedLore = meta.getLore().stream()
+                .map(line -> PlaceholderAPI.setPlaceholders(player, line))
+                .toList();
 
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-        }
+        meta.setLore(updatedLore);
+        item.setItemMeta(meta);
     }
 }
