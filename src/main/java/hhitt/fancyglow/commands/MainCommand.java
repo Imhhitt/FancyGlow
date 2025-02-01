@@ -38,7 +38,6 @@ public class MainCommand {
         this.glowManager = plugin.getGlowManager();
         this.messageHandler = plugin.getMessageHandler();
         this.playerGlowManager = plugin.getPlayerGlowManager();
-        // Avoid create a new instance per every command-execution.
         this.inventory = new CreatingInventory(plugin);
         this.inventory.setupContent();
     }
@@ -53,23 +52,23 @@ public class MainCommand {
             return;
         }
 
-        // Returns if disabled so player use its own menus.
+        // Returns if disabled so player uses their own menus.
         if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) return;
 
-        // Check gui permissions
+        // Check GUI permissions
         if (!player.hasPermission("fancyglow.command.gui")) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
         }
 
-        // Prepare and open the gui
+        // Prepare and open the GUI
         inventory.prepareForPlayer(player);
         player.openInventory(inventory.getInventory());
     }
 
     @Command({"glow reload", "fancyglow reload"})
     @CommandPermission("fancyglow.command.reload")
-    @Description("FancyGlow reload sub-command.")
+    @Description("Reload FancyGlow configuration.")
     public void reloadCommand(BukkitCommandActor actor) {
         CommandSender sender = actor.sender();
         if (!sender.hasPermission("fancyglow.command.reload")) {
@@ -83,9 +82,9 @@ public class MainCommand {
         try {
             plugin.getConfiguration().reload();
         } catch (IOException e) {
-            logger.severe("Unexpected exception during configuration-reload with the following message: " + e.getMessage());
+            logger.severe("Unexpected exception during configuration reload: " + e.getMessage());
         } finally {
-            // Re-initialize inventory only when reloading, probably not the best way to do it.
+            // Re-initialize inventory only when reloading
             inventory = new CreatingInventory(plugin);
             inventory.setupContent();
 
@@ -98,10 +97,9 @@ public class MainCommand {
 
     @Command({"glow color", "fancyglow color"})
     @CommandPermission("fancyglow.command.color")
-    @Description("FancyGlow color sub-command.")
+    @Description("Change FancyGlow color.")
     public void colorCommand(BukkitCommandActor actor, @ColorSuggestion @Optional String arg) {
         if (actor.isConsole()) {
-            // TODO: Allow console to change player glowing color.
             actor.sender().sendMessage("That command can only be performed by players!");
             return;
         }
@@ -125,8 +123,9 @@ public class MainCommand {
             glowManager.toggleMulticolorGlow(player);
             return;
         }
+        
         if (arg.equalsIgnoreCase("flashing")) {
-            if (!(player.hasPermission("fancyglow.flashing"))) {
+            if (!player.hasPermission("fancyglow.flashing")) {
                 messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                 return;
             }
@@ -160,7 +159,7 @@ public class MainCommand {
     }
 
     @Command({"glow disable", "fancyglow disable"})
-    @Description("Allow player to disable its own glow.")
+    @Description("Allow player to disable their own glow.")
     @CommandPermission("fancyglow.command.disable")
     public void disableCommand(BukkitCommandActor actor) {
         if (actor.isConsole()) {
@@ -168,20 +167,17 @@ public class MainCommand {
             return;
         }
 
-        // Check if the player has permission to disable their own glow
         Player player = actor.asPlayer();
         if (!player.hasPermission("fancyglow.command.disable")) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
         }
 
-        // Check if the player is glowing
         if (!player.isGlowing() && !glowManager.isFlashingTaskActive(player)) {
             messageHandler.sendMessage(player, Messages.NOT_GLOWING);
             return;
         }
 
-        // Disable the player's glow
         glowManager.removeGlow(player);
         messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
     }
@@ -218,12 +214,11 @@ public class MainCommand {
     }
 
     private void handleDisableAll(CommandSender sender) {
-        // Check permissions
         if (!sender.hasPermission("fancyglow.command.disable.everyone") && !sender.hasPermission("fancyglow.admin")) {
             messageHandler.sendMessage(sender, Messages.NO_PERMISSION);
+            return;
         }
 
-        // Disable glow for all online players
         Bukkit.getOnlinePlayers().forEach(player -> {
             glowManager.removeGlow(player);
             messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
@@ -231,5 +226,4 @@ public class MainCommand {
 
         messageHandler.sendMessage(sender, Messages.DISABLE_GLOW_EVERYONE);
     }
-
 }
