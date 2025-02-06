@@ -3,14 +3,8 @@ package hhitt.fancyglow.managers;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.Messages;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scoreboard.Team;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class PlayerGlowManager {
 
@@ -86,25 +80,5 @@ public class PlayerGlowManager {
             }
         }
         return null;
-    }
-
-    /**
-     * Updates head lore placeholders.
-     *
-     * @param item   Item to update to.
-     * @param player Player whose inventory if from.
-     */
-    public void updateItemLore(ItemStack item, Player player) {
-        ItemMeta meta = item.getItemMeta();
-        if (meta != null && meta.getLore() != null) {
-            List<String> lore = new ArrayList<>();
-
-            for (String line : meta.getLore()) {
-                lore.add(PlaceholderAPI.setPlaceholders(player, line));
-            }
-
-            meta.setLore(lore);
-            item.setItemMeta(meta);
-        }
     }
 }

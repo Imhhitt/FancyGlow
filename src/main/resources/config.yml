@@ -65,7 +65,7 @@ Messages:
   Disabled_World_Message: "<red>Glow is disabled in this world!"
   # Translations for status placeholder. (%fancyglow_status_formatted%)
   Glow_Status_False: "<red>Not glowing! ❌"
-  Glow_Status_True: "<green>Glowing! ✔</green> <gray>Click to disable!"
+  Glow_Status_True: "<green>Glowing! ✔</green>"
   Glow_Status_None: "NONE"
   # Internal usage.
   Message_Not_Found: "Message not found a messages enum."
@@ -104,7 +104,11 @@ Inventory:
     Slot: 41
     Name: "<color:#6effa3>Your glowing status:</color>"
     Lore:
-      - "<white>%fancyglow_status_formatted%</white>"
+      Selected:
+        - "<white>You are currently have selected %mode% <white>glow."
+        - "<gray>Click to disable!"
+      Click:
+        - "<white>Select a glow color!"
   Rainbow:
     Slot: 39
     Name: "<rainbow>Rainbow Mode!</rainbow>"

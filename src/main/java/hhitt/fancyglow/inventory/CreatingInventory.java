@@ -7,6 +7,7 @@ import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.ColorUtils;
 import hhitt.fancyglow.utils.HeadUtils;
 import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.MessageUtils;
 import hhitt.fancyglow.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -20,6 +21,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class CreatingInventory implements InventoryHolder {
@@ -131,11 +134,19 @@ public class CreatingInventory implements InventoryHolder {
         ItemStack head = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) Objects.requireNonNull(head.getItemMeta());
         meta.setDisplayName(messageHandler.getMessage(Messages.HEAD_NAME));
-        meta.setLore(messageHandler.getMessages(Messages.HEAD_LORE));
+
+        String mode = playerGlowManager.getPlayerGlowingMode(player);
+        if (mode.equals("NONE")) {
+            meta.setLore(messageHandler.getMessages(Messages.HEAD_LORE_CLICK));
+        } else {
+            List<String> parsedMessage = new ArrayList<>();
+            List<String> list = messageHandler.sendMessageBuilder(player, Messages.HEAD_LORE_SELECTED).placeholder("%mode%", mode).parseList();
+            list.forEach(line -> parsedMessage.add(MessageUtils.miniMessageParse(line)));
+            meta.setLore(parsedMessage);
+        }
 
         meta.setOwningPlayer(player);
         head.setItemMeta(meta);
-        playerGlowManager.updateItemLore(head, player);
 
         inventory.setItem(config.getInt("Inventory.Status.Slot", 41), head);
     }
