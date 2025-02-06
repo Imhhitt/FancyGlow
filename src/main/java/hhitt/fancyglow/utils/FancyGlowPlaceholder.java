@@ -31,7 +31,7 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return "1.4.0";
+        return "1.4.1";
     }
 
     @Override
@@ -66,18 +66,10 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
         return switch (params) {
             case "color" -> playerGlowManager.getPlayerGlowColor(player);
-            case "status" -> (player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? enabled : disabled;
+            case "color_name" -> playerGlowManager.getPlayerGlowingMode(player);
             case "status_formatted" -> playerGlowManager.getPlayerGlowingStatus(player);
-
-            case "color_name" -> {
-                if (glowManager.isFlashingTaskActive(player)) {
-                    yield "FLASHING";
-                }
-                if (glowManager.isMulticolorTaskActive(player)) {
-                    yield "RAINBOW";
-                }
-                yield playerGlowManager.getPlayerGlowColorName(player);
-            }
+            case "status" ->
+                    !playerGlowManager.getPlayerGlowingMode(player).equalsIgnoreCase("NONE") ? enabled : disabled;
             default -> "";
         };
     }
