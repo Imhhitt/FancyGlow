@@ -43,8 +43,13 @@ public class HeadClickListener implements Listener {
                     return;
                 }
 
-                // Toggle multicolor mode
-                glowManager.toggleMulticolorGlow(player);
+                // Disables combined modes if set on config.
+                if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isFlashingTaskActive(player)) {
+                    messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
+                    return;
+                }
+
+                // Toggle rainbow mode
                 player.closeInventory();
                 boolean toggled = glowManager.toggleMulticolorGlow(player);
                 messageHandler.sendMessage(player, toggled ? Messages.ENABLE_RAINBOW : Messages.DISABLE_RAINBOW);
@@ -57,6 +62,7 @@ public class HeadClickListener implements Listener {
                     return;
                 }
 
+                // Disables combined modes if set on config.
                 if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(player)) {
                     messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
                     return;

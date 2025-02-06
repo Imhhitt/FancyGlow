@@ -60,7 +60,7 @@ Messages:
   Target_Not_Glowing: "<red>Target is not glowing!"
   Invalid_Sub_Command: "<red>Unknown sub-command \"%sub_command%\"."
   Color_Already_Selected: "<red>You already have selected that color."
-  Flashing_With_Rainbow: "<red>Please disable rainbow before using flashing mode."
+  Flashing_With_Rainbow: "<red>Rainbow and Flashing combined is disabled."
   # Message that player gets when entering a world where glow is disabled
   Disabled_World_Message: "<red>Glow is disabled in this world!"
   # Translations for status placeholder. (%fancyglow_status_formatted%)

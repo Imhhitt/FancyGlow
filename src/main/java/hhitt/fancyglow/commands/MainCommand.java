@@ -116,6 +116,11 @@ public class MainCommand {
                 return;
             }
 
+            if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isFlashingTaskActive(player)) {
+                messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
+                return;
+            }
+
             boolean toggled = glowManager.toggleMulticolorGlow(player);
             messageHandler.sendMessage(player, toggled ? Messages.ENABLE_RAINBOW : Messages.DISABLE_RAINBOW);
             return;
