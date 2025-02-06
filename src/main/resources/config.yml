@@ -13,7 +13,7 @@
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
 # DO NOT CHANGE THIS.
-config-version: 4
+config-version: 5
 
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
@@ -56,6 +56,7 @@ Messages:
   Not_Glowing: "<red>You are not currently glowing!"
   Not_Valid_Color: "<red>Not a valid glow color!"
   Color_Command_Usage: "<red>Incorrect command usage! Use /glow color <color>."
+  Color_Set_Command_Usage: "<red>Incorrect command usage! Use /glow set <player> <color>."
   Unknown_Target: "<red>Player %player_name% is not online!"
   Target_Not_Glowing: "<red>Target is not glowing!"
   Invalid_Sub_Command: "<red>Unknown sub-command \"%sub_command%\"."

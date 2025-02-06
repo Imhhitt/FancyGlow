@@ -15,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Description;
+import revxrsal.commands.annotation.Flag;
 import revxrsal.commands.annotation.Optional;
 import revxrsal.commands.annotation.SuggestWith;
 import revxrsal.commands.bukkit.actor.BukkitCommandActor;
@@ -23,6 +24,7 @@ import revxrsal.commands.bukkit.annotation.CommandPermission;
 import java.io.IOException;
 import java.util.List;
 
+@SuppressWarnings("ConstantValue")
 public class MainCommand {
 
     private final FancyGlow plugin;
@@ -167,6 +169,73 @@ public class MainCommand {
 
         glowManager.setGlow(player, color);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
+    }
+
+    @Command({"glow set", "fancyglow set"})
+    @CommandPermission("fancyglow.command.set")
+    @Description("FancyGlow set sub-command, applies colors to target.")
+    public void setCommand(BukkitCommandActor actor, @Optional @SuggestWith(OnlinePlayersSuggestionProvider.class) String targetName, @Optional @ColorSuggestion String colorName, @Optional @Flag(value = "silent", shorthand = 's') boolean silent) {
+        CommandSender sender = actor.sender();
+        if (!sender.hasPermission("fancyglow.command.set")) {
+            messageHandler.sendMessage(sender, Messages.NO_PERMISSION);
+            messageHandler.sendManualMessage(sender, "testing.");
+            return;
+        }
+
+        if (targetName == null || colorName == null) {
+            messageHandler.sendMessage(sender, Messages.COLOR_SET_COMMAND_USAGE);
+            return;
+        }
+
+        Player target = Bukkit.getPlayer(targetName);
+        if (Bukkit.getPlayer(targetName) == null) {
+            messageHandler.sendMessageBuilder(sender, Messages.UNKNOWN_TARGET)
+                    .placeholder("%player_name%", targetName)
+                    .send();
+            return;
+        }
+
+        // Handle rainbow mode.
+        if (colorName.equalsIgnoreCase("rainbow")) {
+            boolean toggled = glowManager.toggleMulticolorGlow(target);
+            if (!silent) {
+                messageHandler.sendMessage(target, toggled ? Messages.ENABLE_RAINBOW : Messages.DISABLE_RAINBOW);
+                messageHandler.sendManualMessage(sender, "You have " + (toggled ? "enabled" : "disabled") + " player " + target.getName() + " rainbow mode.");
+            }
+            return;
+        }
+        // Handle flashing mode
+        if (colorName.equalsIgnoreCase("flashing")) {
+            if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(target)) {
+                messageHandler.sendMessage(sender, Messages.FLASHING_WITH_RAINBOW);
+                return;
+            }
+
+            if (playerGlowManager.findPlayerTeam(target) == null) {
+                messageHandler.sendManualMessage(sender, "Target needs to have a color first!");
+                return;
+            }
+
+            boolean toggled = glowManager.toggleFlashingGlow(target);
+            if (!silent) {
+                messageHandler.sendMessage(target, toggled ? Messages.ENABLE_FLASHING : Messages.DISABLE_FLASHING);
+                messageHandler.sendManualMessage(sender, "You have " + (toggled ? "enabled" : "disabled") + " player " + target.getName() + " flashing mode.");
+            }
+            return;
+        }
+
+        // Handles normal colors.
+        if (ColorUtils.findColor(colorName.toUpperCase()) == null) {
+            messageHandler.sendMessage(sender, Messages.INVALID_COLOR);
+            return;
+        }
+
+        ChatColor color = ColorUtils.findColor(colorName.toUpperCase());
+        glowManager.setGlow(target, color);
+        if (!silent) {
+            messageHandler.sendMessage(target, Messages.ENABLE_GLOW);
+            messageHandler.sendManualMessage(sender, "You have applied the glow color " + colorName + " to " + target.getName());
+        }
     }
 
 

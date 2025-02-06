@@ -96,13 +96,17 @@ tasks {
                 children = listOf(
                     "fancyglow.rainbow", "fancyglow.flashing", "fancyglow.all_colors", "fancyglow.command.gui",
                     "fancyglow.command.color", "fancyglow.command.reload", "fancyglow.command.disable",
-                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others"
+                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others", "fancyglow.command.set"
                 )
             }
             // Commands related permissions
             register("fancyglow.command.gui") {
                 default = BukkitPluginDescription.Permission.Default.FALSE
                 description = "Gives access to color selector inventory."
+            }
+            register("fancyglow.command.set") {
+                default = BukkitPluginDescription.Permission.Default.FALSE
+                description = "Gives access to set another player glowing color."
             }
             register("fancyglow.command.disable") {
                 default = BukkitPluginDescription.Permission.Default.TRUE
