@@ -81,22 +81,24 @@ public class CreatingInventory implements InventoryHolder {
 
         // Define filler-material.
         Material material = Material.getMaterial(config.getString("Inventory.Filler.Material", "GRAY_STAINED_GLASS_PANE"));
-        if (material == null) {
-            return;
-        }
+        if (material == null) return;
+
         ItemStack fill = new ItemStack(material);
         ItemMeta fillMeta = Objects.requireNonNull(fill.getItemMeta());
         fillMeta.setDisplayName(messageHandler.getMessage(Messages.FILLER_NAME));
         fill.setItemMeta(fillMeta);
 
         // Avoid call to getSize() on every iteration.
-        final int size = inventory.getSize();
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, fill);
         }
     }
 
     private void setFlashingItem(final Player player) {
+        // Clear flashing item since plugin no longer
+        int slot = config.getInt("Inventory.Flashing.Slot", 40);
+        inventory.setItem(slot, null);
+
         // Returns if player doesn't have any team or isn't glowing.
         if (playerGlowManager.findPlayerTeam(player) == null && !player.isGlowing()) return;
 
@@ -109,7 +111,7 @@ public class CreatingInventory implements InventoryHolder {
         flashingHeadMeta.setLore(messageHandler.getMessages(Messages.FLASHING_HEAD_LORE));
         flashingHead.setItemMeta(flashingHeadMeta);
 
-        inventory.setItem(config.getInt("Inventory.Flashing.Slot", 40), flashingHead);
+        inventory.setItem(slot, flashingHead);
     }
 
     private void setRainbowItem() {
