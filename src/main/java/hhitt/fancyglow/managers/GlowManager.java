@@ -128,18 +128,8 @@ public class GlowManager {
     }
 
     public Team getOrCreateTeam(ChatColor color) {
-        for (Team team : getGlowTeams()) {
-            if (team.getName().equalsIgnoreCase(color.name())) {
-                return team;
-            }
-        }
-        return createTeam(color);
-    }
+        if (plugin.getServer().getScoreboardManager() == null) return null;
 
-    public Team createTeam(ChatColor color) {
-        if (plugin.getServer().getScoreboardManager() == null) {
-            return null;
-        }
         Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
         Team team = board.getTeam(color.name());
         if (team == null) {
