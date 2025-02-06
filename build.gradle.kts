@@ -3,6 +3,7 @@ import revxrsal.zapper.gradle.zapper
 
 plugins {
     id("java")
+    id("maven-publish")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("io.github.revxrsal.zapper") version "1.0.3"
