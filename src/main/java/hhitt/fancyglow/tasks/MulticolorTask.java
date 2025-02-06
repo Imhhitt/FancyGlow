@@ -54,7 +54,7 @@ public class MulticolorTask extends BukkitRunnable {
             }
 
             // Update the scoreboard if necessary
-            if (currentTeam.getScoreboard() != null) {
+            if (currentTeam.getScoreboard() != null && player.getScoreboard() != currentTeam.getScoreboard()) {
                 player.setScoreboard(currentTeam.getScoreboard());
             }
         }
