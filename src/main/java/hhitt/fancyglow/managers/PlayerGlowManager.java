@@ -28,7 +28,8 @@ public class PlayerGlowManager {
      * @return Returns player formatted glowing status.
      */
     public String getPlayerGlowingStatus(Player player) {
-        return messageHandler.getMessage((player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
+        return messageHandler.getMessage(!getPlayerGlowingMode(player).equalsIgnoreCase("NONE") ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
+    }
 
     /**
      * @param player Player to search to.
