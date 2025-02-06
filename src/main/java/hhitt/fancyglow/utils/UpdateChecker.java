@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
  * A utility class to assist in checking for updates for plugins uploaded to
  * <a href="https://spigotmc.org/resources/">SpigotMC</a>. Before any members of this
  * class are accessed, {@link #init(JavaPlugin, int)} must be invoked by the plugin,
- * preferrably in its {@link JavaPlugin#onEnable()} method, though that is not a
+ * preferably in its {@link JavaPlugin#onEnable()} method, though that is not a
  * requirement.
  * <p>
  * This class performs asynchronous queries to Spigot's API. If the results of
@@ -87,9 +87,8 @@ public final class UpdateChecker {
                 connection.addRequestProperty("User-Agent", USER_AGENT);
                 responseCode = connection.getResponseCode();
 
-                JsonParser parser = new JsonParser();
                 JsonReader reader = new JsonReader(new InputStreamReader(connection.getInputStream()));
-                JsonElement json = parser.parse(reader);
+                JsonElement json = JsonParser.parseReader(reader);
                 reader.close();
 
                 if (!json.isJsonObject()) {
@@ -139,7 +138,7 @@ public final class UpdateChecker {
      *
      * @param plugin        the plugin for which to check updates. Cannot be null
      * @param pluginID      the ID of the plugin as identified in the SpigotMC resource link.
-     *                      For example, "https://www.spigotmc.org/resources/veinminer.<b>12038</b>/" would
+     *                      For example, "<a href="https://www.spigotmc.org/resources/veinminer">Veinminer</a>.<b>12038</b>/" would
      *                      expect "12038" as a value. The value must be greater than 0
      * @param versionScheme a custom version scheme parser. Cannot be null
      *
@@ -161,7 +160,7 @@ public final class UpdateChecker {
      *
      * @param plugin   the plugin for which to check updates. Cannot be null
      * @param pluginID the ID of the plugin as identified in the SpigotMC resource link.
-     *                 For example, "https://www.spigotmc.org/resources/veinminer.<b>12038</b>/" would
+     *                 For example, "<a href="https://www.spigotmc.org/resources/veinminer">Veinminer</a>.<b>12038</b>/" would
      *                 expect "12038" as a value. The value must be greater than 0
      *
      * @return the UpdateChecker instance
@@ -299,9 +298,9 @@ public final class UpdateChecker {
         }
 
         /**
-         * Check whether or not this result requires the user to update.
+         * Check whether this result requires the user to update.
          *
-         * @return true if requires update, false otherwise
+         * @return true if it requires update, false otherwise
          */
         public boolean requiresUpdate() {
             return reason == UpdateReason.NEW_UPDATE;
