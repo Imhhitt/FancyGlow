@@ -7,6 +7,8 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import hhitt.fancyglow.api.FancyGlowAPI;
+import hhitt.fancyglow.api.FancyGlowAPIImpl;
 import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
@@ -23,6 +25,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import revxrsal.zapper.ZapperJavaPlugin;
 
@@ -32,6 +35,8 @@ import java.util.Objects;
 import java.util.logging.Logger;
 
 public final class FancyGlow extends ZapperJavaPlugin {
+
+    private static FancyGlowAPI API;
     private final Logger logger = super.getLogger();
 
     private BukkitAudiences adventure;
@@ -81,6 +86,11 @@ public final class FancyGlow extends ZapperJavaPlugin {
         // Initialize tasks for glow-effects and avoid do it at every glow-effect toggle.
         this.glowManager.scheduleFlashingTask();
         this.glowManager.scheduleMulticolorTask();
+
+        // Instance API
+        API = new FancyGlowAPIImpl(this);
+        // Register the API as a service
+        getServer().getServicesManager().register(FancyGlowAPI.class, API, this, ServicePriority.Normal);
 
         // Register command and suggestions
         this.commandManager = new CommandManager(this);
@@ -145,6 +155,10 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
         // Actually register placeholderapi extension.
         new FancyGlowPlaceholder(this).register();
+    }
+
+    public static FancyGlowAPI getAPI() {
+        return API;
     }
 
     public YamlDocument getConfiguration() {
