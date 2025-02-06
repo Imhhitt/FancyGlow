@@ -166,40 +166,42 @@ public class MainCommand {
 
 
     @Command({"glow disable", "fancyglow disable"})
-    @Description("Allow player to disable its own glow.")
-    @CommandPermission("fancyglow.command.disable")
-    public void disableCommand(BukkitCommandActor actor) {
-        if (actor.isConsole()) {
+    @Description("Allow player to disable its own glow and others if it has permissions to.")
+    public void disableCommand(BukkitCommandActor actor, @Optional String targetName) {
+        if (actor.isConsole() && targetName == null) {
             messageHandler.sendMessage(actor.sender(), Messages.DISABLE_COMMAND_USAGE);
             return;
         }
 
-        // Check if the player has permission to disable their own glow
-        Player player = actor.asPlayer();
-        if (!player.hasPermission("fancyglow.command.disable")) {
-            messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+        if (actor.isPlayer() && targetName == null) {
+            Player player = actor.asPlayer();
+            // Check if the player has permission to disable their own glow
+            if (!player.hasPermission("fancyglow.command.disable")) {
+                messageHandler.sendMessage(player, Messages.NO_PERMISSION);
+                return;
+            }
+
+            if (!player.isGlowing() && !glowManager.isFlashingTaskActive(player)) {
+                messageHandler.sendMessage(player, Messages.NOT_GLOWING);
+                return;
+            }
+
+            glowManager.removeGlow(player);
+            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             return;
         }
-
-        // Check if the player is glowing
-        if (!player.isGlowing() && !glowManager.isFlashingTaskActive(player)) {
-            messageHandler.sendMessage(player, Messages.NOT_GLOWING);
-            return;
-        }
-
-        // Disable the player's glow
-        glowManager.removeGlow(player);
-        messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-    }
-
-    @Command({"glow disable", "fancyglow disable"})
-    @Description("Allow console or staff member to disable player glow.")
-    @CommandPermission("fancyglow.command.disable.others")
-    public void disableCommand(BukkitCommandActor actor, @SuggestWith(OnlinePlayersSuggestionProvider.class) String targetName) {
-        CommandSender sender = actor.sender();
 
         if (targetName.equalsIgnoreCase("all")) {
-            handleDisableAll(sender);
+            handleDisableAll(actor.sender());
+            return;
+        }
+
+        disableOtherGlow(actor.sender(), targetName);
+    }
+
+    private void disableOtherGlow(CommandSender sender, String targetName) {
+        if (!sender.hasPermission("fancyglow.command.disable.others")) {
+            messageHandler.sendMessage(sender, Messages.NO_PERMISSION);
             return;
         }
 
@@ -225,8 +227,9 @@ public class MainCommand {
 
     private void handleDisableAll(CommandSender sender) {
         // Check permissions
-        if (!sender.hasPermission("fancyglow.command.disable.everyone") && !sender.hasPermission("fancyglow.admin")) {
+        if (!sender.hasPermission("fancyglow.command.disable.everyone")) {
             messageHandler.sendMessage(sender, Messages.NO_PERMISSION);
+            return;
         }
 
         // Disable glow for all online players
@@ -237,5 +240,4 @@ public class MainCommand {
 
         messageHandler.sendMessage(sender, Messages.DISABLE_GLOW_EVERYONE);
     }
-
 }
