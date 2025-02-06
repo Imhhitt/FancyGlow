@@ -120,10 +120,9 @@ public class GlowManager {
         Team team;
         for (final ChatColor color : COLORS_ARRAY) {
             team = board.getTeam(color.name());
-            if (team == null) {
-                continue;
+            if (team != null && team.hasEntry(cleanName)) {
+                team.removeEntry(cleanName);
             }
-            team.removeEntry(cleanName);
         }
     }
 
