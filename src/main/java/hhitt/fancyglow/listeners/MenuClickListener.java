@@ -59,7 +59,8 @@ public class MenuClickListener implements Listener {
             return;
         }
 
-        glowManager.toggleGlow(player, color);
         player.closeInventory();
+        glowManager.setGlow(player, color);
+        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 }

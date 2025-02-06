@@ -22,15 +22,16 @@ public class PlayerQuitListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
 
-        if(glowManager.isFlashingTaskActive(player)) {
-            glowManager.toggleFlashingGlow(player);
+        if (glowManager.isFlashingTaskActive(player)) {
+            glowManager.disableFlashing(player);
         }
 
-        if(glowManager.isMulticolorTaskActive(player)) {
-            glowManager.toggleMulticolorGlow(player);
+        if (glowManager.isMulticolorTaskActive(player)) {
+            glowManager.disableRainbow(player);
         }
 
-        if(!plugin.getConfiguration().getBoolean("Persistent_Mode") && player.isGlowing()){
+        //TODO: Improve this thing?
+        if (!plugin.getConfiguration().getBoolean("Persistent_Mode") && player.isGlowing()) {
             glowManager.removeGlow(player);
         }
     }
