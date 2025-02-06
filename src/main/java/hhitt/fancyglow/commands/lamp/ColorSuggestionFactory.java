@@ -25,7 +25,6 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
         this.glowManager = plugin.getGlowManager();
     }
 
-
     @Override
     public @org.jetbrains.annotations.Nullable SuggestionProvider<BukkitCommandActor> create(
             @NotNull Type type,
@@ -36,10 +35,6 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
         if (annotations.get(ColorSuggestion.class) == null) return null;
 
         Set<String> availableColors = new HashSet<>(ColorUtils.getAvailableColorsSet());
-
-        // Add optional modes.
-        availableColors.add("rainbow");
-        availableColors.add("flashing");
 
         return context -> {
             BukkitCommandActor actor = context.actor();
