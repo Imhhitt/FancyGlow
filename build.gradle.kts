@@ -57,7 +57,7 @@ zapper {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "com.github.yiyoperez"
+            groupId = "com.github.imhhitt"
             artifactId = "FancyGlow"
 
             from(components["java"])
