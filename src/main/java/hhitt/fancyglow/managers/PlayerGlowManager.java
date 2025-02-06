@@ -29,6 +29,28 @@ public class PlayerGlowManager {
      */
     public String getPlayerGlowingStatus(Player player) {
         return messageHandler.getMessage((player.isGlowing() || glowManager.isFlashingTaskActive(player)) ? Messages.GLOW_STATUS_TRUE : Messages.GLOW_STATUS_FALSE);
+
+    /**
+     * @param player Player to search to.
+     *
+     * @return Returns the mode the player is on.
+     */
+    public String getPlayerGlowingMode(Player player) {
+
+        if (!player.isGlowing() && !glowManager.isFlashingTaskActive(player)) {
+            return "NONE";
+        }
+        if (glowManager.isMulticolorTaskActive(player) && glowManager.isFlashingTaskActive(player)) {
+            return "PARTY";
+        }
+        if (glowManager.isFlashingTaskActive(player)) {
+            return "FLASHING";
+        }
+        if (glowManager.isMulticolorTaskActive(player)) {
+            return "RAINBOW";
+        }
+
+        return getPlayerGlowColorName(player.getPlayer());
     }
 
     /**
