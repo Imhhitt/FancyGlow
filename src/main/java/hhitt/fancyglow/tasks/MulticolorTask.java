@@ -53,6 +53,10 @@ public class MulticolorTask extends BukkitRunnable {
                 lastTeam.removeEntry(player.getName());
             }
 
+            // Set player glowing if somehow it gets disabled.
+            if (!player.isGlowing()) {
+                player.setGlowing(true);
+            }
             // Update the scoreboard if necessary
             if (currentTeam.getScoreboard() != null && player.getScoreboard() != currentTeam.getScoreboard()) {
                 player.setScoreboard(currentTeam.getScoreboard());
