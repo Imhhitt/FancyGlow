@@ -4,8 +4,6 @@ import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.tasks.FlashingTask;
 import hhitt.fancyglow.tasks.MulticolorTask;
 import hhitt.fancyglow.utils.ColorUtils;
-import hhitt.fancyglow.utils.MessageHandler;
-import hhitt.fancyglow.utils.Messages;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -38,7 +36,6 @@ public class GlowManager {
     };
 
     private final FancyGlow plugin;
-    private final MessageHandler messageHandler;
 
     private final Set<UUID> flashingPlayerSet;
     private final Set<UUID> multicolorPlayerSet;
@@ -48,47 +45,63 @@ public class GlowManager {
 
     public GlowManager(FancyGlow plugin) {
         this.plugin = plugin;
-        this.messageHandler = plugin.getMessageHandler();
 
         this.flashingPlayerSet = new HashSet<>();
         this.multicolorPlayerSet = new HashSet<>();
     }
 
-    public void toggleMulticolorGlow(Player player) {
-        final UUID playerId = player.getUniqueId();
+    public boolean toggleMulticolorGlow(Player player) {
         if (isMulticolorTaskActive(player)) {
-            multicolorPlayerSet.remove(playerId);
-            removeGlow(player);
-            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-            return;
+            disableRainbow(player);
+            return false;
         }
 
-        multicolorPlayerSet.add(playerId);
+        enableRainbow(player);
+        return true;
+    }
+
+    public void enableRainbow(Player player) {
         player.setGlowing(true);
-        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
+        multicolorPlayerSet.add(player.getUniqueId());
     }
 
-    public void toggleFlashingGlow(Player player) {
-        final UUID playerId = player.getUniqueId();
+    public void disableRainbow(Player player) {
+        removeGlow(player);
+        multicolorPlayerSet.remove(player.getUniqueId());
+    }
+
+    /**
+     * Toggles player flashing mode status.
+     *
+     * @param player Player to change status.
+     *
+     * @return Returns true is mode has been enabled, false if disabled.
+     */
+    public boolean toggleFlashingGlow(Player player) {
         if (isFlashingTaskActive(player)) {
-            player.setGlowing(true);
-            flashingPlayerSet.remove(playerId);
-            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-            return;
+            disableFlashing(player);
+            return false;
         }
 
-        flashingPlayerSet.add(playerId);
-        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
+        enableFlashing(player);
+        return true;
     }
 
-    public void toggleGlow(Player player, ChatColor color) {
+    public void enableFlashing(Player player) {
+        flashingPlayerSet.add(player.getUniqueId());
+    }
+
+    public void disableFlashing(Player player) {
+        flashingPlayerSet.remove(player.getUniqueId());
+    }
+
+    public void setGlow(Player player, ChatColor color) {
         // Remove any existing glow
         removeGlow(player);
         // Add the player to the team and enable glowing
         Team team = getOrCreateTeam(color);
         team.addEntry(ChatColor.stripColor(player.getName()));
         player.setGlowing(true);
-        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 
     public void removeGlow(Player player) {
