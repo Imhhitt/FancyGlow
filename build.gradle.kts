@@ -54,6 +54,17 @@ zapper {
     relocate("dev.dejvokep.boostedyaml", "boostedyaml")
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.github.yiyoperez"
+            artifactId = "FancyGlow"
+
+            from(components["java"])
+        }
+    }
+}
+
 tasks {
 
     java {
