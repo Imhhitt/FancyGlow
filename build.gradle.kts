@@ -129,7 +129,6 @@ tasks {
                 default = BukkitPluginDescription.Permission.Default.FALSE
                 description = "Gives permission to every color."
                 children = listOf(
-                    "fancyglow.rainbow", "fancyglow.flashing",
                     "fancyglow.black", "fancyglow.white",
                     "fancyglow.red", "fancyglow.dark_red",
                     "fancyglow.gray", "fancyglow.dark_gray",
