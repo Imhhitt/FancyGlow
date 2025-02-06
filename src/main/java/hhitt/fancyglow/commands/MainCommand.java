@@ -45,15 +45,15 @@ public class MainCommand {
     @Command({"glow", "fancyglow"})
     @Description("Main command for FancyGlow")
     public void command(Player player) {
+        // Returns if disabled so player use its own menus.
+        if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) return;
+
         // Prevent command usage in target worlds
         List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
         if (noAllowedWorlds.contains(player.getWorld().getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
             return;
         }
-
-        // Returns if disabled so player use its own menus.
-        if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) return;
 
         // Check gui permissions
         if (!player.hasPermission("fancyglow.command.gui")) {
