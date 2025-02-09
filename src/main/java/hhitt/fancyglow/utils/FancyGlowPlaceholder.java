@@ -1,7 +1,6 @@
 package hhitt.fancyglow.utils;
 
 import hhitt.fancyglow.FancyGlow;
-import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
@@ -10,12 +9,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class FancyGlowPlaceholder extends PlaceholderExpansion {
 
-    // PlaceholderAPI hook to create a placeholder (color one)
-    private final GlowManager glowManager;
     private final PlayerGlowManager playerGlowManager;
 
     public FancyGlowPlaceholder(FancyGlow plugin) {
-        this.glowManager = plugin.getGlowManager();
         this.playerGlowManager = plugin.getPlayerGlowManager();
     }
 
@@ -53,7 +49,6 @@ public class FancyGlowPlaceholder extends PlaceholderExpansion {
         String enabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanTrue();
         String disabled = getPlaceholderAPI().getPlaceholderAPIConfig().booleanFalse();
 
-        // %fancyglow_status_<color>%
         if (params.startsWith("status_")) {
             String[] paramsArgs = params.split("_", 2);
             String paramsArg = paramsArgs[1];
