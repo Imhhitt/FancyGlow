@@ -40,7 +40,7 @@ dependencies {
 
 group = "hhitt.fancyglow"
 description = "FancyGlow"
-version = "2.10.0-BETA"
+version = "2.10.0"
 
 zapper {
     libsFolder = "libraries"
