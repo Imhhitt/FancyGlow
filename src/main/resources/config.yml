@@ -13,7 +13,7 @@
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
 # DO NOT CHANGE THIS.
-config-version: 4
+config-version: 5
 
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
@@ -46,22 +46,27 @@ Messages:
   Reload_Message: "<blue>Plugin configuration file reloaded successfully!"
   Enable_Glow: "<green>Glow successfully enabled!"
   Disable_Glow: "<red>Glow successfully disabled!"
+  Enable_Flashing: "<green>Flashing mode has been enabled!"
+  Disable_Flashing: "<red>Flashing has been disabled!"
+  Enable_Rainbow: "<green>Rainbow mode has been enabled!"
+  Disable_Rainbow: "<red>Rainbow mode has been disabled!"
   Disable_Usage: "<red>Incorrect command usage! Use /glow disable <player>."
   Disable_Glow_Others: "<red>Disabled glow of %player_name%!"
   Disable_Glow_Everyone: "<red>Disabled glow of everyone online!"
   Not_Glowing: "<red>You are not currently glowing!"
   Not_Valid_Color: "<red>Not a valid glow color!"
   Color_Command_Usage: "<red>Incorrect command usage! Use /glow color <color>."
+  Color_Set_Command_Usage: "<red>Incorrect command usage! Use /glow set <player> <color>."
   Unknown_Target: "<red>Player %player_name% is not online!"
   Target_Not_Glowing: "<red>Target is not glowing!"
   Invalid_Sub_Command: "<red>Unknown sub-command \"%sub_command%\"."
   Color_Already_Selected: "<red>You already have selected that color."
-  Flashing_With_Rainbow: "<red>Please disable rainbow before using flashing mode."
+  Flashing_With_Rainbow: "<red>Rainbow and Flashing combined is disabled."
   # Message that player gets when entering a world where glow is disabled
   Disabled_World_Message: "<red>Glow is disabled in this world!"
   # Translations for status placeholder. (%fancyglow_status_formatted%)
   Glow_Status_False: "<red>Not glowing! ❌"
-  Glow_Status_True: "<green>Glowing! ✔</green> <gray>Click to disable!"
+  Glow_Status_True: "<green>Glowing! ✔</green>"
   Glow_Status_None: "NONE"
   # Internal usage.
   Message_Not_Found: "Message not found a messages enum."
@@ -100,7 +105,11 @@ Inventory:
     Slot: 41
     Name: "<color:#6effa3>Your glowing status:</color>"
     Lore:
-      - "<white>%fancyglow_status_formatted%</white>"
+      Selected:
+        - "<white>You are currently have selected %mode% <white>glow."
+        - "<gray>Click to disable!"
+      Click:
+        - "<white>Select a glow color!"
   Rainbow:
     Slot: 39
     Name: "<rainbow>Rainbow Mode!</rainbow>"

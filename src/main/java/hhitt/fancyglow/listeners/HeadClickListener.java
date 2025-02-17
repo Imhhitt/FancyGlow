@@ -35,40 +35,48 @@ public class HeadClickListener implements Listener {
 
         Player player = (Player) event.getWhoClicked();
         switch (event.getSlot()) {
+            // Multicolor head
             case 39 -> {
-                // Multicolor head
                 if (!player.hasPermission("fancyglow.rainbow")) {
                     messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                     player.closeInventory();
                     return;
                 }
 
-                // Toggle multicolor mode
-                glowManager.toggleMulticolorGlow(player);
+                // Disables combined modes if set on config.
+                if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isFlashingTaskActive(player)) {
+                    messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
+                    return;
+                }
+
+                // Toggle rainbow mode
                 player.closeInventory();
+                boolean toggled = glowManager.toggleMulticolorGlow(player);
+                messageHandler.sendMessage(player, toggled ? Messages.ENABLE_RAINBOW : Messages.DISABLE_RAINBOW);
             }
+            // Flashing head
             case 40 -> {
-                // Flashing head
                 if (!player.hasPermission("fancyglow.flashing")) {
                     messageHandler.sendMessage(player, Messages.NO_PERMISSION);
                     player.closeInventory();
                     return;
                 }
 
+                // Disables combined modes if set on config.
                 if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isMulticolorTaskActive(player)) {
                     messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
                     return;
                 }
 
                 // Toggle flashing mode
-                glowManager.toggleFlashingGlow(player);
+                boolean toggled = glowManager.toggleFlashingGlow(player);
+                messageHandler.sendMessage(player, toggled ? Messages.ENABLE_FLASHING : Messages.DISABLE_GLOW);
                 player.closeInventory();
             }
+            // Disable color head
             case 41 -> {
-                // Disable color head
-                glowManager.removeGlow(player);
                 player.closeInventory();
-
+                glowManager.removeGlow(player);
                 messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             }
         }

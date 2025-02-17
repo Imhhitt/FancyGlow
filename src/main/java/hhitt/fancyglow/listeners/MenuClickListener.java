@@ -31,11 +31,9 @@ public class MenuClickListener implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         Inventory inventoryClicked = e.getClickedInventory();
-        if (inventoryClicked == null || !(inventoryClicked.getHolder() instanceof CreatingInventory)) {
-            return;
-        } else {
-            e.setCancelled(true);
-        }
+        if (inventoryClicked == null || !(inventoryClicked.getHolder() instanceof CreatingInventory)) return;
+
+        e.setCancelled(true);
 
         ItemStack clickedItem = e.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() != Material.LEATHER_CHESTPLATE) return;
@@ -43,11 +41,11 @@ public class MenuClickListener implements Listener {
         LeatherArmorMeta meta = (LeatherArmorMeta) clickedItem.getItemMeta();
         if (meta == null) return;
 
-        Player player = (Player) e.getWhoClicked();
         ChatColor color = ColorUtils.getColorFromArmorColor(meta.getColor());
-        if (!(color != null && glowManager.hasGlowPermission(player, color) ||
-                color != null && player.hasPermission("fancyglow.all_colors") ||
-                color != null && player.hasPermission("fancyglow.admin"))) {
+        if (color == null) return;
+
+        Player player = (Player) e.getWhoClicked();
+        if (!glowManager.hasGlowPermission(player, color) || !player.hasPermission("fancyglow.all_colors")) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             player.closeInventory();
             return;
@@ -59,7 +57,8 @@ public class MenuClickListener implements Listener {
             return;
         }
 
-        glowManager.toggleGlow(player, color);
         player.closeInventory();
+        glowManager.setGlow(player, color);
+        messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
 }

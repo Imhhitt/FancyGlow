@@ -16,12 +16,10 @@ public class MessageHandler {
 
     private static final String DEFAULT_MESSAGE_NOT_FOUND = "Message not found in path %s";
 
-    private final FancyGlow plugin;
     private final YamlDocument messages;
     private final boolean isPlaceholderAPIEnabled;
 
     public MessageHandler(FancyGlow plugin, YamlDocument messages) {
-        this.plugin = plugin;
         this.messages = messages;
         this.isPlaceholderAPIEnabled = plugin.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
     }
@@ -224,6 +222,7 @@ public class MessageHandler {
     }
 
     public class MessageBuilder {
+
         private final CommandSender sender;
         private final Messages message;
         private final Map<String, String> placeholders = new HashMap<>();
@@ -250,9 +249,29 @@ public class MessageHandler {
          * Sends the message to the CommandSender with all placeholders applied.
          */
         public void send() {
+            sendManualMessage(sender, parse());
+        }
+
+        public String parse() {
             String rawMessage = getRawMessage(message.getPath());
-            String finalMessage = applyPlaceholders(rawMessage, placeholders);
-            sendManualMessage(sender, finalMessage);
+            return applyPlaceholders(rawMessage, placeholders);
+        }
+
+        public List<String> parseList() {
+            List<String> parsedMessage = new ArrayList<>();
+            List<String> rawMessage = getRawStringList(message.getPath());
+
+            if (messages.isList(message.getPath())) {
+                rawMessage.forEach(line -> parsedMessage.add(applyPlaceholders(line, placeholders)));
+            } else {
+                parsedMessage.add(applyPlaceholders(getMessage(message), placeholders));
+            }
+
+            return parsedMessage;
+        }
+
+        public void sendList() {
+            parseList().forEach(message -> sendManualMessage(sender, message));
         }
 
         private String applyPlaceholders(String message, Map<String, String> placeholders) {

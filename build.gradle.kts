@@ -3,6 +3,7 @@ import revxrsal.zapper.gradle.zapper
 
 plugins {
     id("java")
+    id("maven-publish")
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
     id("io.github.revxrsal.zapper") version "1.0.3"
@@ -39,7 +40,7 @@ dependencies {
 
 group = "hhitt.fancyglow"
 description = "FancyGlow"
-version = "2.9.4"
+version = "2.10.0"
 
 zapper {
     libsFolder = "libraries"
@@ -51,6 +52,17 @@ zapper {
     relocate("org.bstats", "bstats")
     relocate("revxrsal.commands", "lamp")
     relocate("dev.dejvokep.boostedyaml", "boostedyaml")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "com.github.imhhitt"
+            artifactId = "FancyGlow"
+
+            from(components["java"])
+        }
+    }
 }
 
 tasks {
@@ -96,13 +108,17 @@ tasks {
                 children = listOf(
                     "fancyglow.rainbow", "fancyglow.flashing", "fancyglow.all_colors", "fancyglow.command.gui",
                     "fancyglow.command.color", "fancyglow.command.reload", "fancyglow.command.disable",
-                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others"
+                    "fancyglow.command.disable.everyone", "fancyglow.command.disable.others", "fancyglow.command.set"
                 )
             }
             // Commands related permissions
             register("fancyglow.command.gui") {
                 default = BukkitPluginDescription.Permission.Default.FALSE
                 description = "Gives access to color selector inventory."
+            }
+            register("fancyglow.command.set") {
+                default = BukkitPluginDescription.Permission.Default.FALSE
+                description = "Gives access to set another player glowing color."
             }
             register("fancyglow.command.disable") {
                 default = BukkitPluginDescription.Permission.Default.TRUE
@@ -129,7 +145,6 @@ tasks {
                 default = BukkitPluginDescription.Permission.Default.FALSE
                 description = "Gives permission to every color."
                 children = listOf(
-                    "fancyglow.rainbow", "fancyglow.flashing",
                     "fancyglow.black", "fancyglow.white",
                     "fancyglow.red", "fancyglow.dark_red",
                     "fancyglow.gray", "fancyglow.dark_gray",
@@ -149,22 +164,54 @@ tasks {
                 description = "Gives access to flashing mode."
             }
             // Color permissions
-            register("fancyglow.red")
-            register("fancyglow.gold")
-            register("fancyglow.gray")
-            register("fancyglow.blue")
-            register("fancyglow.aqua")
-            register("fancyglow.black")
-            register("fancyglow.white")
-            register("fancyglow.green")
-            register("fancyglow.yellow")
-            register("fancyglow.dark_red")
-            register("fancyglow.dark_blue")
-            register("fancyglow.dark_gray")
-            register("fancyglow.dark_aqua")
-            register("fancyglow.dark_green")
-            register("fancyglow.dark_purple")
-            register("fancyglow.light_purple")
+            register("fancyglow.red") {
+                description = "Gives access to color red."
+            }
+            register("fancyglow.gold") {
+                description = "Gives access to color gold."
+            }
+            register("fancyglow.gray") {
+                description = "Gives access to color gray."
+            }
+            register("fancyglow.blue") {
+                description = "Gives access to color blue."
+            }
+            register("fancyglow.aqua") {
+                description = "Gives access to color aqua."
+            }
+            register("fancyglow.black") {
+                description = "Gives access to color black."
+            }
+            register("fancyglow.white") {
+                description = "Gives access to color white."
+            }
+            register("fancyglow.green") {
+                description = "Gives access to color green."
+            }
+            register("fancyglow.yellow") {
+                description = "Gives access to color yellow."
+            }
+            register("fancyglow.dark_red") {
+                description = "Gives access to color dark red."
+            }
+            register("fancyglow.dark_blue") {
+                description = "Gives access to color dark blue."
+            }
+            register("fancyglow.dark_gray") {
+                description = "Gives access to color dark gray."
+            }
+            register("fancyglow.dark_aqua") {
+                description = "Gives access to color dark aqua."
+            }
+            register("fancyglow.dark_green") {
+                description = "Gives access to color dark green."
+            }
+            register("fancyglow.dark_purple") {
+                description = "Gives access to color dark purple o just purple."
+            }
+            register("fancyglow.light_purple") {
+                description = "Gives access to color light_purple aka pink."
+            }
         }
     }
 }

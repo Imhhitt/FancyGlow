@@ -4,12 +4,17 @@ public enum Messages {
 
     // Plugin messages.
     COLOR_COMMAND_USAGE("Messages.Color_Command_Usage"),
+    COLOR_SET_COMMAND_USAGE("Messages.Color_Set_Command_Usage"),
     DISABLE_COMMAND_USAGE("Messages.Disable_Usage"),
     UNKNOWN_TARGET("Messages.Unknown_Target"),
     NOT_GLOWING("Messages.Not_Glowing"),
     INVALID_COLOR("Messages.Not_Valid_Color"),
     ENABLE_GLOW("Messages.Enable_Glow"),
     DISABLE_GLOW("Messages.Disable_Glow"),
+    ENABLE_FLASHING("Messages.Enable_Flashing"),
+    DISABLE_FLASHING("Messages.Disable_Flashing"),
+    ENABLE_RAINBOW("Messages.Enable_Rainbow"),
+    DISABLE_RAINBOW("Messages.Disable_Rainbow"),
     COLOR_ALREADY_SELECTED("Messages.Color_Already_Selected"),
     FLASHING_WITH_RAINBOW("Messages.Flashing_With_Rainbow"),
     DISABLED_WORLD("Messages.Disabled_World_Message"),
@@ -47,7 +52,8 @@ public enum Messages {
     // Inventory
     FILLER_NAME("Inventory.Filler.Name"),
     HEAD_NAME("Inventory.Status.Name"),
-    HEAD_LORE("Inventory.Status.Lore"),
+    HEAD_LORE_CLICK("Inventory.Status.Lore.Click"),
+    HEAD_LORE_SELECTED("Inventory.Status.Lore.Selected"),
     RAINBOW_HEAD_NAME("Inventory.Rainbow.Name"),
     RAINBOW_HEAD_LORE("Inventory.Rainbow.Lore"),
     FLASHING_HEAD_NAME("Inventory.Flashing.Name"),

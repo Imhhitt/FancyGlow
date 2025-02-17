@@ -7,6 +7,7 @@ import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.event.EventBus;
 import me.neznamy.tab.api.event.player.PlayerLoadEvent;
 import me.neznamy.tab.api.nametag.NameTagManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -54,28 +55,37 @@ public class TabImplementation {
             // Ignore if option not enabled.
             if (!configuration.getBoolean("Auto_Tag")) return;
 
-            //Use ticks to ensure PlayerGlowManager#getPlayerGlowColor doesn't get many calls.
-            int ticks = plugin.getConfiguration().getInt("Rainbow_Update_Interval");
-            if (ticks <= 0) {
-                ticks = 1;
+            // Run normally if reloading tab
+            if (!event.isJoin()) {
+                applyTagPrefix(event, instance);
+                return;
             }
 
-            instance.getPlaceholderManager().registerPlayerPlaceholder(
-                    "%fancyglow_tab_color%",
-                    50 * ticks,
-                    player -> playerGlowManager.getPlayerGlowColor((Player) player.getPlayer()));
-
-
-            NameTagManager nameTagManager = Objects.requireNonNull(instance.getNameTagManager(), "TAB NameTagManager is unavailable.");
-
-            String originalPrefix = nameTagManager.getOriginalPrefix(event.getPlayer());
-
-            // Somehow tab still fails sometimes to retrieve player original prefix.
-            if (originalPrefix == null) return;
-
-            String modifiedPrefix = originalPrefix + "%fancyglow_tab_color%";
-            nameTagManager.setPrefix(event.getPlayer(), modifiedPrefix);
+            // Run with a delayed task if player is joining.
+            Bukkit.getScheduler().runTaskLater(plugin, () -> applyTagPrefix(event, instance), 15L);
         });
+    }
+
+    private void applyTagPrefix(PlayerLoadEvent event, TabAPI instance) {
+        //Use ticks to ensure PlayerGlowManager#getPlayerGlowColor doesn't get many calls.
+        int ticks = plugin.getConfiguration().getInt("Rainbow_Update_Interval");
+        if (ticks <= 0) {
+            ticks = 1;
+        }
+
+        instance.getPlaceholderManager().registerPlayerPlaceholder(
+                "%fancyglow_tab_color%",
+                50 * ticks,
+                player -> playerGlowManager.getPlayerGlowColor((Player) player.getPlayer()));
+
+        NameTagManager nameTagManager = Objects.requireNonNull(instance.getNameTagManager(), "TAB NameTagManager is unavailable.");
+        String originalPrefix = nameTagManager.getOriginalPrefix(event.getPlayer());
+
+        // Somehow tab still fails sometimes to retrieve player original prefix.
+        if (originalPrefix == null) return;
+
+        String modifiedPrefix = originalPrefix + "%fancyglow_tab_color%";
+        nameTagManager.setPrefix(event.getPlayer(), modifiedPrefix);
     }
 
 

@@ -51,6 +51,8 @@ public class ColorUtils {
         colorValues.put("PURPLE", ChatColor.DARK_PURPLE);
         availableColorSet.add("pink");
         availableColorSet.add("purple");
+        availableColorSet.add("rainbow");
+        availableColorSet.add("flashing");
     }
 
     /**
@@ -63,7 +65,6 @@ public class ColorUtils {
     public static ChatColor getColorFromArmorColor(org.bukkit.Color armorColor) {
         return colorMap.getOrDefault(armorColor, ChatColor.WHITE);
     }
-
 
     /**
      * Gets the Color corresponding to the given ChatColor.
