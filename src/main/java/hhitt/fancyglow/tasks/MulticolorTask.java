@@ -4,12 +4,10 @@ import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
@@ -28,17 +26,13 @@ public class MulticolorTask extends BukkitRunnable {
         // Cancel task if none at this set
         if (glowManager.getMulticolorPlayerSet().isEmpty()) return;
 
-        // Get current color iteration.
-        ChatColor currentColor = GlowManager.COLORS_ARRAY[currentIndex];
-
         // Get or create the team corresponding to the current color
-        Team currentTeam = glowManager.getOrCreateTeam(currentColor);
+        Team currentTeam = glowManager.getOrCreateTeam(GlowManager.COLORS_ARRAY[currentIndex]);
 
         Player player;
         Team lastTeam;
         for (UUID uuid : glowManager.getMulticolorPlayerSet()) {
-            // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
-            player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
+            player = Bukkit.getPlayer(uuid);
             // Ignore if player is on respawn screen.
             if (player.isDead()) continue;
 
