@@ -38,26 +38,23 @@ public class MenuClickListener implements Listener {
         ItemStack clickedItem = e.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() != Material.LEATHER_CHESTPLATE) return;
 
-        LeatherArmorMeta meta = (LeatherArmorMeta) clickedItem.getItemMeta();
-        if (meta == null) return;
-
-        ChatColor color = ColorUtils.getColorFromArmorColor(meta.getColor());
+        // The clicked-item already is of leather-type, why should we check if also it has an item-meta?
+        // It won´t be null.
+        ChatColor color = ColorUtils.getColorFromArmorColor(((LeatherArmorMeta) clickedItem.getItemMeta()).getColor());
         if (color == null) return;
 
         Player player = (Player) e.getWhoClicked();
+        player.closeInventory();
         if (!glowManager.hasGlowPermission(player, color) || !player.hasPermission("fancyglow.all_colors")) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
-            player.closeInventory();
             return;
         }
 
         if (!glowManager.isMulticolorTaskActive(player) && playerGlowManager.getPlayerGlowColorName(player).equalsIgnoreCase(color.name())) {
             messageHandler.sendMessage(player, Messages.COLOR_ALREADY_SELECTED);
-            player.closeInventory();
             return;
         }
 
-        player.closeInventory();
         glowManager.setGlow(player, color);
         messageHandler.sendMessage(player, Messages.ENABLE_GLOW);
     }
