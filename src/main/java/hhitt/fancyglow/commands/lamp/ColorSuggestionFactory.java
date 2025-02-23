@@ -35,7 +35,7 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
         // Just reuse available-colors set instead of create a new one.
         Set<String> availableColors = ColorUtils.getAvailableColorsSet();
         return context -> {
-            // Basically, we reduce a bit the object-alloc and we avoid us an extra method-call for a
+            // Basically, we reduce a bit the object-alloc and we avoid us an extra calls for a
             // simple [instanceof] check.
             if (!(context.actor().sender() instanceof Player player)) return availableColors;
 
