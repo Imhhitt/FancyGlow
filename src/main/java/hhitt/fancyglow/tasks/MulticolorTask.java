@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.Team;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class MulticolorTask extends BukkitRunnable {
@@ -32,7 +33,7 @@ public class MulticolorTask extends BukkitRunnable {
         Player player;
         Team lastTeam;
         for (UUID uuid : glowManager.getMulticolorPlayerSet()) {
-            player = Bukkit.getPlayer(uuid);
+            player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
             // Ignore if player is on respawn screen.
             if (player.isDead()) continue;
 
