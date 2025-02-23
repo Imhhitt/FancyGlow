@@ -203,9 +203,9 @@ public class GlowManager {
     }
 
     public List<Team> getGlowTeams() {
-        Scoreboard board = scoreboardManager.getMainScoreboard();
-        List<Team> teamsList = new ArrayList<>(board.getTeams().size());
-        for (Team team : board.getTeams()) {
+        Set<Team> scoreboardTeams = scoreboardManager.getMainScoreboard().getTeams();
+        List<Team> teamsList = new ArrayList<>(scoreboardTeams.size());
+        for (Team team : scoreboardTeams) {
             if (ColorUtils.isAvailableColor(team.getName())) {
                 teamsList.add(team);
             }
