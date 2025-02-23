@@ -12,6 +12,7 @@ import hhitt.fancyglow.utils.Messages;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import revxrsal.commands.annotation.Command;
 import revxrsal.commands.annotation.Description;
@@ -150,12 +151,12 @@ public class MainCommand {
         }
 
         // Handles normal colors.
-        if (ColorUtils.findColor(colorName.toUpperCase()) == null) {
+        ChatColor color = ColorUtils.findColor(colorName.toUpperCase());
+        if (color == null) {
             messageHandler.sendMessage(player, Messages.INVALID_COLOR);
             return;
         }
 
-        ChatColor color = ColorUtils.findColor(colorName.toUpperCase());
         if (!(glowManager.hasGlowPermission(player, color) || player.hasPermission("fancyglow.all_colors"))) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
@@ -188,7 +189,7 @@ public class MainCommand {
         }
 
         Player target = Bukkit.getPlayer(targetName);
-        if (Bukkit.getPlayer(targetName) == null) {
+        if (target == null) {
             messageHandler.sendMessageBuilder(sender, Messages.UNKNOWN_TARGET)
                     .placeholder("%player_name%", targetName)
                     .send();
@@ -225,12 +226,12 @@ public class MainCommand {
         }
 
         // Handles normal colors.
-        if (ColorUtils.findColor(colorName.toUpperCase()) == null) {
+        ChatColor color = ColorUtils.findColor(colorName.toUpperCase());
+        if (color == null) {
             messageHandler.sendMessage(sender, Messages.INVALID_COLOR);
             return;
         }
 
-        ChatColor color = ColorUtils.findColor(colorName.toUpperCase());
         glowManager.setGlow(target, color);
         if (!silent) {
             messageHandler.sendMessage(target, Messages.ENABLE_GLOW);
@@ -242,13 +243,12 @@ public class MainCommand {
     @Command({"glow disable", "fancyglow disable"})
     @Description("Allow player to disable its own glow and others if it has permissions to.")
     public void disableCommand(BukkitCommandActor actor, @Optional String targetName) {
-        if (actor.isConsole() && targetName == null) {
-            messageHandler.sendMessage(actor.sender(), Messages.DISABLE_COMMAND_USAGE);
+        final CommandSender sender = actor.sender();
+        if (!(sender instanceof ConsoleCommandSender) && targetName == null) {
+            messageHandler.sendMessage(sender, Messages.DISABLE_COMMAND_USAGE);
             return;
         }
-
-        if (actor.isPlayer() && targetName == null) {
-            Player player = actor.asPlayer();
+        if (sender instanceof Player player && targetName == null) {
             // Check if the player has permission to disable their own glow
             if (!player.hasPermission("fancyglow.command.disable")) {
                 messageHandler.sendMessage(player, Messages.NO_PERMISSION);
@@ -266,11 +266,11 @@ public class MainCommand {
         }
 
         if (targetName.equalsIgnoreCase("all")) {
-            handleDisableAll(actor.sender());
+            handleDisableAll(sender);
             return;
         }
 
-        disableOtherGlow(actor.sender(), targetName);
+        disableOtherGlow(sender, targetName);
     }
 
     private void disableOtherGlow(CommandSender sender, String targetName) {
