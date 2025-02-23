@@ -50,13 +50,14 @@ public class CreatingInventory implements InventoryHolder {
         int i = 9;
         ItemStack colorItem;
         LeatherArmorMeta colorMeta;
+        // Preferably we'll want to avoid us the object-alloc that involves the #getMessages method.
+        List<String> colorLoreMessage = messageHandler.getMessages(Messages.COLOR_LORE);
         for (ChatColor availableColor : GlowManager.COLORS_ARRAY) {
             colorItem = new ItemStack(Material.LEATHER_CHESTPLATE);
             colorMeta = (LeatherArmorMeta) colorItem.getItemMeta();
 
-            colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-            colorMeta.addItemFlags(ItemFlag.HIDE_DYE);
-            colorMeta.setLore(messageHandler.getMessages(Messages.COLOR_LORE));
+            colorMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE);
+            colorMeta.setLore(colorLoreMessage);
             // Might cause IllegalArgumentException if message doesn't exist.
             Messages colorMessage = Messages.valueOf(availableColor.name().toUpperCase() + "_NAME");
             colorMeta.setDisplayName(messageHandler.getMessage(colorMessage));
@@ -91,7 +92,6 @@ public class CreatingInventory implements InventoryHolder {
         fillMeta.setDisplayName(messageHandler.getMessage(Messages.FILLER_NAME));
         fill.setItemMeta(fillMeta);
 
-        // Avoid call to getSize() on every iteration.
         for (int i = 0; i < inventory.getSize(); i++) {
             inventory.setItem(i, fill);
         }
@@ -140,8 +140,10 @@ public class CreatingInventory implements InventoryHolder {
             meta.setLore(messageHandler.getMessages(Messages.HEAD_LORE_CLICK));
         } else {
             List<String> parsedMessage = new ArrayList<>();
-            List<String> list = messageHandler.sendMessageBuilder(player, Messages.HEAD_LORE_SELECTED).placeholder("%mode%", mode).parseList();
-            list.forEach(line -> parsedMessage.add(MessageUtils.miniMessageParse(line)));
+            messageHandler.sendMessageBuilder(player, Messages.HEAD_LORE_SELECTED)
+                    .placeholder("%mode%", mode)
+                    .parseList()
+                    .forEach(line -> parsedMessage.add(MessageUtils.miniMessageParse(line)));
             meta.setLore(parsedMessage);
         }
 
