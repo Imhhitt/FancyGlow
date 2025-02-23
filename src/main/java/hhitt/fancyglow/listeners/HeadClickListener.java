@@ -34,12 +34,12 @@ public class HeadClickListener implements Listener {
         if (currentItem == null || currentItem.getType() != Material.PLAYER_HEAD) return;
 
         Player player = (Player) event.getWhoClicked();
+        player.closeInventory();
         switch (event.getSlot()) {
             // Multicolor head
             case 39 -> {
                 if (!player.hasPermission("fancyglow.rainbow")) {
                     messageHandler.sendMessage(player, Messages.NO_PERMISSION);
-                    player.closeInventory();
                     return;
                 }
 
@@ -50,7 +50,6 @@ public class HeadClickListener implements Listener {
                 }
 
                 // Toggle rainbow mode
-                player.closeInventory();
                 boolean toggled = glowManager.toggleMulticolorGlow(player);
                 messageHandler.sendMessage(player, toggled ? Messages.ENABLE_RAINBOW : Messages.DISABLE_RAINBOW);
             }
@@ -58,7 +57,6 @@ public class HeadClickListener implements Listener {
             case 40 -> {
                 if (!player.hasPermission("fancyglow.flashing")) {
                     messageHandler.sendMessage(player, Messages.NO_PERMISSION);
-                    player.closeInventory();
                     return;
                 }
 
@@ -71,11 +69,9 @@ public class HeadClickListener implements Listener {
                 // Toggle flashing mode
                 boolean toggled = glowManager.toggleFlashingGlow(player);
                 messageHandler.sendMessage(player, toggled ? Messages.ENABLE_FLASHING : Messages.DISABLE_GLOW);
-                player.closeInventory();
             }
             // Disable color head
             case 41 -> {
-                player.closeInventory();
                 glowManager.removeGlow(player);
                 messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
             }
