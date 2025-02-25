@@ -8,11 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class GlowManager {
 
@@ -39,6 +38,7 @@ public class GlowManager {
 
     private final Set<UUID> flashingPlayerSet;
     private final Set<UUID> multicolorPlayerSet;
+    private final ScoreboardManager scoreboardManager;
 
     private BukkitTask flashingTask;
     private BukkitTask multicolorTask;
@@ -48,6 +48,9 @@ public class GlowManager {
 
         this.flashingPlayerSet = new HashSet<>();
         this.multicolorPlayerSet = new HashSet<>();
+
+        // It could be null at this point?
+        this.scoreboardManager = plugin.getServer().getScoreboardManager();
     }
 
     public boolean toggleMulticolorGlow(Player player) {
@@ -99,8 +102,7 @@ public class GlowManager {
         // Remove any existing glow
         removeGlow(player);
         // Add the player to the team and enable glowing
-        Team team = getOrCreateTeam(color);
-        team.addEntry(ChatColor.stripColor(player.getName()));
+        getOrCreateTeam(color).addEntry(ChatColor.stripColor(player.getName()));
         player.setGlowing(true);
     }
 
@@ -112,9 +114,7 @@ public class GlowManager {
     }
 
     public void removePlayerFromAllTeams(Player player) {
-        if (plugin.getServer().getScoreboardManager() == null) return;
-
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
+        Scoreboard board = scoreboardManager.getMainScoreboard();
         String cleanName = ChatColor.stripColor(player.getName());
 
         // Handle remove if rainbow selected
@@ -133,19 +133,18 @@ public class GlowManager {
         Team team;
         for (final ChatColor color : COLORS_ARRAY) {
             team = board.getTeam(color.name());
-            if (team != null && team.hasEntry(cleanName)) {
+            if (team != null) {
                 team.removeEntry(cleanName);
             }
         }
     }
 
     public Team getOrCreateTeam(ChatColor color) {
-        if (plugin.getServer().getScoreboardManager() == null) return null;
-
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        Team team = board.getTeam(color.name());
+        Scoreboard board = scoreboardManager.getMainScoreboard();
+        String colorName = color.name();
+        Team team = board.getTeam(colorName);
         if (team == null) {
-            team = board.registerNewTeam(color.name());
+            team = board.registerNewTeam(colorName);
             team.setColor(color);
         }
         return team;
@@ -203,18 +202,14 @@ public class GlowManager {
         return multicolorPlayerSet;
     }
 
-    public Set<Team> getGlowTeams() {
-        if (plugin.getServer().getScoreboardManager() == null) {
-            return Set.of();
-        }
-
-        Scoreboard board = plugin.getServer().getScoreboardManager().getMainScoreboard();
-        Set<Team> teamList = new HashSet<>();
-        for (Team team : board.getTeams()) {
+    public List<Team> getGlowTeams() {
+        Set<Team> scoreboardTeams = scoreboardManager.getMainScoreboard().getTeams();
+        List<Team> teamsList = new ArrayList<>(scoreboardTeams.size());
+        for (Team team : scoreboardTeams) {
             if (ColorUtils.isAvailableColor(team.getName())) {
-                teamList.add(team);
+                teamsList.add(team);
             }
         }
-        return teamList;
+        return teamsList;
     }
 }

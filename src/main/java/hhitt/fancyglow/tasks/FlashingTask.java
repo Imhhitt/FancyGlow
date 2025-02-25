@@ -24,7 +24,6 @@ public class FlashingTask extends BukkitRunnable {
 
         Player player;
         for (UUID uuid : glowManager.getFlashingPlayerSet()) {
-            // If the uuid is still stored, means the player is online, so the reference shouldn't be null.
             player = Objects.requireNonNull(Bukkit.getPlayer(uuid));
             // Ignore if player is on respawn screen.
             if (player.isDead()) continue;

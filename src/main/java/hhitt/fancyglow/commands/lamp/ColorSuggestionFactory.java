@@ -12,9 +12,7 @@ import revxrsal.commands.bukkit.actor.BukkitCommandActor;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public final class ColorSuggestionFactory implements SuggestionProvider.Factory<BukkitCommandActor> {
@@ -34,14 +32,14 @@ public final class ColorSuggestionFactory implements SuggestionProvider.Factory<
         // Verify if annotation is present.
         if (annotations.get(ColorSuggestion.class) == null) return null;
 
-        Set<String> availableColors = new HashSet<>(ColorUtils.getAvailableColorsSet());
-
+        // Just reuse available-colors set instead of create a new one.
+        Set<String> availableColors = ColorUtils.getAvailableColorsSet();
         return context -> {
-            BukkitCommandActor actor = context.actor();
-            if (actor.isConsole()) return availableColors;
+            // Basically, we reduce a bit the object-alloc and we avoid us an extra calls for a
+            // simple [instanceof] check.
+            if (!(context.actor().sender() instanceof Player player)) return availableColors;
 
-            Player player = Objects.requireNonNull(actor.asPlayer());
-            List<String> list = new ArrayList<>();
+            List<String> list = new ArrayList<>(availableColors.size());
             for (String name : availableColors) {
                 if (glowManager.hasGlowPermission(player, name)) {
                     list.add(name);

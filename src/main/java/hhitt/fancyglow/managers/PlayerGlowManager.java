@@ -55,7 +55,7 @@ public class PlayerGlowManager {
      */
     public String getPlayerGlowColorName(Player player) {
         Team team = findPlayerTeam(player);
-        return (player.isGlowing() && team != null) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
+        return (team != null && player.isGlowing()) ? team.getColor().name() : messageHandler.getMessage(Messages.GLOW_STATUS_NONE);
     }
 
     /**

@@ -253,16 +253,14 @@ public class MessageHandler {
         }
 
         public String parse() {
-            String rawMessage = getRawMessage(message.getPath());
-            return applyPlaceholders(rawMessage, placeholders);
+            return applyPlaceholders(getRawMessage(message.getPath()), placeholders);
         }
 
         public List<String> parseList() {
             List<String> parsedMessage = new ArrayList<>();
-            List<String> rawMessage = getRawStringList(message.getPath());
 
             if (messages.isList(message.getPath())) {
-                rawMessage.forEach(line -> parsedMessage.add(applyPlaceholders(line, placeholders)));
+                getRawStringList(message.getPath()).forEach(line -> parsedMessage.add(applyPlaceholders(line, placeholders)));
             } else {
                 parsedMessage.add(applyPlaceholders(getMessage(message), placeholders));
             }
