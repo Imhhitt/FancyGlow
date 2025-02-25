@@ -64,11 +64,6 @@ public class MessageHandler {
      * @return Raw message at config or a default message if not found.
      */
     public String getRawMessage(String path) {
-        List<String> stringList = messages.getStringList(path);
-        if (!stringList.isEmpty()) {
-            return String.join(" ", stringList);
-        }
-
         return messages.getString(path, String.format(DEFAULT_MESSAGE_NOT_FOUND, path));
     }
 
@@ -115,11 +110,19 @@ public class MessageHandler {
      * @return List of formatted messages with colors applied.
      */
     public List<String> getMessages(Messages message) {
+        return getMessages(message.getPath());
+    }
+
+    /**
+     * Gets a list of formatted messages using the message path.
+     *
+     * @param path Message path to search.
+     *
+     * @return List of formatted messages with colors applied.
+     */
+    public List<String> getMessages(String path) {
         List<String> messages = new ArrayList<>();
-        for (final String rawMessage : this.messages.isList(message.getPath())
-                ? this.messages.getStringList(message.getPath())
-                : Collections.singletonList(getRawMessage(message.getPath()))
-        ) {
+        for (String rawMessage : getRawStringList(path)) {
             messages.add(MessageUtils.miniMessageParse(rawMessage));
         }
         return messages;
