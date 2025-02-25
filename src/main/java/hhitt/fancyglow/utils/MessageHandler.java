@@ -257,15 +257,11 @@ public class MessageHandler {
         }
 
         public List<String> parseList() {
-            List<String> parsedMessage = new ArrayList<>();
-
-            if (messages.isList(message.getPath())) {
-                getRawStringList(message.getPath()).forEach(line -> parsedMessage.add(applyPlaceholders(line, placeholders)));
-            } else {
-                parsedMessage.add(applyPlaceholders(getMessage(message), placeholders));
+            List<String> list = new ArrayList<>();
+            for (String line : getRawStringList(message.getPath())) {
+                list.add(applyPlaceholders(line, placeholders));
             }
-
-            return parsedMessage;
+            return list;
         }
 
         public void sendList() {
