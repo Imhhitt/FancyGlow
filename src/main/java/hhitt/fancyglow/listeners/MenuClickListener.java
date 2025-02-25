@@ -45,7 +45,7 @@ public class MenuClickListener implements Listener {
 
         Player player = (Player) e.getWhoClicked();
         player.closeInventory();
-        if (!glowManager.hasGlowPermission(player, color) || !player.hasPermission("fancyglow.all_colors")) {
+        if (!(glowManager.hasGlowPermission(player, color) || player.hasPermission("fancyglow.all_colors"))) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
             return;
         }
