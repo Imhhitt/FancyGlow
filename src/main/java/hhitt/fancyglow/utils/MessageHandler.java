@@ -166,10 +166,12 @@ public class MessageHandler {
      * @param message Message to send.
      */
     public void sendManualMessage(CommandSender sender, String message) {
-        if (sender instanceof Player) {
-            MessageUtils.miniMessageSender((Player) sender, handlePlaceholders(sender, message));
-        } else {
-            sender.sendMessage(intercept(sender, message));
+        if (!message.isEmpty() && !message.isBlank()) {
+            if (sender instanceof Player) {
+                MessageUtils.miniMessageSender((Player) sender, handlePlaceholders(sender, message));
+            } else {
+                sender.sendMessage(intercept(sender, message));
+            }
         }
     }
 
