@@ -5,7 +5,6 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
-import dev.rollczi.litecommands.annotations.literal.Literal;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import hhitt.fancyglow.FancyGlow;
 import hhitt.fancyglow.managers.GlowManager;
@@ -55,9 +54,9 @@ public class DisableCommand {
                 .send();
     }
 
-    @Execute
+    @Execute(name = "all", aliases = "everyone")
     @Permission("fancyglow.command.disable.everyone")
-    public void disableEveryoneCommand(@Context CommandSender sender, @Literal("all") String literal) {
+    public void disableEveryoneCommand(@Context CommandSender sender) {
 
         // Disable glow for all online players
         Bukkit.getOnlinePlayers().forEach(player -> {
