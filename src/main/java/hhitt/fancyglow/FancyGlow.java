@@ -58,8 +58,16 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
     @Override
     public void onEnable() {
-        // bStats hook / metrics
-        new Metrics(this, 22057);
+        // Run async
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            // bStats hook / metrics
+            new Metrics(this, 22057);
+            // Check for plugin updates.
+            checkUpdates();
+
+            // Attempts to hook onto TAB.
+            new TabImplementation(this).initialize();
+        });
 
         // Try to create adventure audience
         this.adventure = BukkitAudiences.create(this);
@@ -99,14 +107,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
         // Register events
         registerEvents();
 
-        // Check for plugin updates.
-        checkUpdates();
-
         // Attempts to hook into placeholderapi.
         hookPlaceholderAPI();
-
-        // Attempts to hook onto TAB.
-        new TabImplementation(this).initialize();
     }
 
     @Override
