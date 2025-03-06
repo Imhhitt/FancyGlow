@@ -15,6 +15,7 @@ import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.ColorUtils;
 import hhitt.fancyglow.utils.MessageHandler;
 import hhitt.fancyglow.utils.Messages;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -35,7 +36,7 @@ public class SetCommand {
 
     @Execute
     @Permission("fancyglow.command.set")
-    public void setCommand(@Context CommandSender sender, @Arg Player target, @Arg @Key("available-colors") String colorName, @Flag(value = "silent") boolean silent) {
+    public void setCommand(@Context CommandSender sender, @Arg Player target, @Arg @Key("available-colors") String colorName, @Flag(value = "-s") boolean silent) {
         glowManager.setGlow(target, ColorUtils.findColor(colorName));
         if (!silent) {
             messageHandler.sendMessage(target, Messages.ENABLE_GLOW);
@@ -45,7 +46,21 @@ public class SetCommand {
 
     @Execute
     @Permission("fancyglow.command.set")
-    public void setFlashingCommand(@Context CommandSender sender, @Arg Player target, @Literal("flashing") String literal, @Flag(value = "silent") boolean silent) {
+    public void setCommand(@Context CommandSender sender, @Literal("all") String literal, @Arg @Key("available-colors") String colorName, @Flag(value = "-s") boolean silent) {
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            glowManager.setGlow(online, ColorUtils.findColor(colorName));
+            if (!silent) {
+                messageHandler.sendMessage(online, Messages.ENABLE_GLOW);
+            }
+        }
+        if (!silent) {
+            messageHandler.sendManualMessage(sender, "You have applied the glow color " + colorName + " to everyone.");
+        }
+    }
+
+    @Execute
+    @Permission("fancyglow.command.set")
+    public void setFlashingCommand(@Context CommandSender sender, @Arg Player target, @Literal("flashing") String literal, @Flag(value = "-s") boolean silent) {
         if (playerGlowManager.findPlayerTeam(target) == null) {
             messageHandler.sendManualMessage(sender, "Target needs to have a color first!");
             return;
@@ -60,7 +75,7 @@ public class SetCommand {
 
     @Execute
     @Permission("fancyglow.command.set")
-    public void setRainbowCommand(@Context CommandSender sender, @Arg Player target, @Literal("rainbow") String literal, @Flag(value = "silent") boolean silent) {
+    public void setRainbowCommand(@Context CommandSender sender, @Arg Player target, @Literal("rainbow") String literal, @Flag(value = "-s") boolean silent) {
         boolean toggled = glowManager.toggleMulticolorGlow(target);
         if (!silent) {
             messageHandler.sendMessage(target, toggled ? Messages.ENABLE_RAINBOW : Messages.DISABLE_RAINBOW);
