@@ -50,7 +50,7 @@ zapper {
 
     relocate("net.kyori", "kyori")
     relocate("org.bstats", "bstats")
-    relocate("revxrsal.commands", "lamp")
+    relocate("dev.rollczi", "litecommands")
     relocate("dev.dejvokep.boostedyaml", "boostedyaml")
 }
 
