@@ -43,8 +43,15 @@ public class TabImplementation {
     }
 
     private void hook() {
-        // Log message if TAB is now being used.
-        plugin.getLogger().info("TAB " + tabVersion + " has been found, using it.");
+        boolean autoTag = configuration.getBoolean("Auto_Tag", false);
+        if (!autoTag) {
+            // Notify player that compatible version of TAB has been found and can be used.
+            plugin.getLogger().info("Compatible version of TAB has been found.");
+            plugin.getLogger().info("You can enable the Auto_Tag option in your config to use it.");
+        } else {
+            // Log message if TAB is now being used.
+            plugin.getLogger().info("TAB " + tabVersion + " has been found, using it.");
+        }
 
         // Register player placeholder directly to tab.
         TabAPI instance = TabAPI.getInstance();
@@ -53,7 +60,7 @@ public class TabImplementation {
         // Register TAB listener.
         eventBus.register(PlayerLoadEvent.class, event -> {
             // Ignore if option not enabled.
-            if (!configuration.getBoolean("Auto_Tag")) return;
+            if (!autoTag) return;
 
             // Run normally if reloading tab
             if (!event.isJoin()) {
