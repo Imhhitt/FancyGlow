@@ -11,7 +11,11 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class GlowManager {
 
@@ -77,7 +81,6 @@ public class GlowManager {
      * Toggles player flashing mode status.
      *
      * @param player Player to change status.
-     *
      * @return Returns true is mode has been enabled, false if disabled.
      */
     public boolean toggleFlashingGlow(Player player) {
@@ -162,7 +165,7 @@ public class GlowManager {
         if (multicolorTask == null || multicolorTask.isCancelled()) {
             int ticks = plugin.getConfiguration().getInt("Rainbow_Update_Interval");
             this.multicolorTask = new MulticolorTask(plugin)
-                    .runTaskTimer(plugin, 5L, ticks);
+                    .runTaskTimerAsynchronously(plugin, 5L, ticks);
         }
     }
 
