@@ -74,9 +74,14 @@ public class CreatingInventory implements InventoryHolder {
         setRainbowItem();
     }
 
-    public void prepareForPlayer(final Player player) {
+    private void prepareForPlayer(final Player player) {
         setFlashingItem(player);
         setPlayerStatusItem(player);
+    }
+
+    public void openInventory(Player player) {
+        prepareForPlayer(player);
+        player.openInventory(inventory);
     }
 
     private void setFiller() {

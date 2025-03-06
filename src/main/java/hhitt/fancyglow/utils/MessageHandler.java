@@ -33,7 +33,6 @@ public class MessageHandler {
      *
      * @param sender  Command sender.
      * @param message Message with placeholders.
-     *
      * @return Message with parsed placeholders from PlaceholderAPI.
      */
     private String handlePlaceholders(CommandSender sender, String message) {
@@ -48,7 +47,6 @@ public class MessageHandler {
      *
      * @param sender  Command sender.
      * @param message Message to format.
-     *
      * @return Formatted message with placeholders and colors applied.
      */
     public String intercept(CommandSender sender, String message) {
@@ -60,7 +58,6 @@ public class MessageHandler {
      * Gets raw message from the config.
      *
      * @param path Config path to search.
-     *
      * @return Raw message at config or a default message if not found.
      */
     public String getRawMessage(String path) {
@@ -71,7 +68,6 @@ public class MessageHandler {
      * Gets a formatted message using the Messages enum.
      *
      * @param message Message enum to search.
-     *
      * @return Formatted message with colors applied.
      */
     public String getMessage(Messages message) {
@@ -83,7 +79,6 @@ public class MessageHandler {
      *
      * @param sender  Command sender.
      * @param message Message enum to search.
-     *
      * @return Formatted message with placeholders and colors applied.
      */
     public String getMessage(CommandSender sender, Messages message) {
@@ -95,7 +90,6 @@ public class MessageHandler {
      *
      * @param sender Command sender.
      * @param path   Message path to search.
-     *
      * @return Formatted message with placeholders and colors applied.
      */
     public String getMessage(CommandSender sender, String path) {
@@ -106,7 +100,6 @@ public class MessageHandler {
      * Gets a list of formatted messages using the Messages enum.
      *
      * @param message Message enum to search.
-     *
      * @return List of formatted messages with colors applied.
      */
     public List<String> getMessages(Messages message) {
@@ -117,7 +110,6 @@ public class MessageHandler {
      * Gets a list of formatted messages using the message path.
      *
      * @param path Message path to search.
-     *
      * @return List of formatted messages with colors applied.
      */
     public List<String> getMessages(String path) {
@@ -133,7 +125,6 @@ public class MessageHandler {
      *
      * @param sender  Command sender.
      * @param message Message enum to search.
-     *
      * @return List of formatted messages with placeholders and colors applied.
      */
     public List<String> getMessages(CommandSender sender, Messages message) {
@@ -145,7 +136,6 @@ public class MessageHandler {
      *
      * @param sender Command sender.
      * @param path   Message path to search.
-     *
      * @return List of formatted messages with placeholders and colors applied.
      */
     public List<String> getMessages(CommandSender sender, String path) {
@@ -199,7 +189,6 @@ public class MessageHandler {
      * Gets a raw list of messages from the config.
      *
      * @param path Message path to search.
-     *
      * @return List of raw messages.
      */
     public List<String> getRawStringList(String path) {
@@ -242,7 +231,6 @@ public class MessageHandler {
          *
          * @param placeholder Placeholder to replace (e.g., %player%).
          * @param value       Value to replace the placeholder with.
-         *
          * @return The current builder instance.
          */
         public MessageBuilder placeholder(String placeholder, String value) {

@@ -9,11 +9,12 @@ import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import hhitt.fancyglow.api.FancyGlowAPI;
 import hhitt.fancyglow.api.FancyGlowAPIImpl;
+import hhitt.fancyglow.inventory.CreatingInventory;
 import hhitt.fancyglow.listeners.HeadClickListener;
 import hhitt.fancyglow.listeners.MenuClickListener;
 import hhitt.fancyglow.listeners.PlayerChangeWorldListener;
 import hhitt.fancyglow.listeners.PlayerQuitListener;
-import hhitt.fancyglow.managers.CommandManager;
+import hhitt.fancyglow.managers.CommandLoader;
 import hhitt.fancyglow.managers.GlowManager;
 import hhitt.fancyglow.managers.PlayerGlowManager;
 import hhitt.fancyglow.utils.FancyGlowPlaceholder;
@@ -47,7 +48,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
     private GlowManager glowManager;
     private PlayerGlowManager playerGlowManager;
 
-    private CommandManager commandManager;
+    private CommandLoader commandLoader;
+    private CreatingInventory inventory;
 
     public @NonNull BukkitAudiences adventure() {
         if (this.adventure == null) {
@@ -94,6 +96,9 @@ public final class FancyGlow extends ZapperJavaPlugin {
         // Initialize tasks for glow-effects and avoid do it at every glow-effect toggle.
         this.glowManager.scheduleFlashingTask();
         this.glowManager.scheduleMulticolorTask();
+        // Avoid create a new instance per every command-execution.
+        this.inventory = new CreatingInventory(this);
+        this.inventory.setupContent();
 
         // Instance API
         API = new FancyGlowAPIImpl(this);
@@ -101,8 +106,7 @@ public final class FancyGlow extends ZapperJavaPlugin {
         getServer().getServicesManager().register(FancyGlowAPI.class, API, this, ServicePriority.Normal);
 
         // Register command and suggestions
-        this.commandManager = new CommandManager(this);
-        this.commandManager.registerCommands();
+        this.commandLoader = new CommandLoader(this);
 
         // Register events
         registerEvents();
@@ -118,8 +122,8 @@ public final class FancyGlow extends ZapperJavaPlugin {
             this.adventure = null;
         }
 
-        if (this.commandManager != null) {
-            this.commandManager.unregisterAll();
+        if (this.commandLoader != null) {
+            this.commandLoader.unregisterAll();
         }
 
         if (this.glowManager != null) {
@@ -177,5 +181,13 @@ public final class FancyGlow extends ZapperJavaPlugin {
 
     public PlayerGlowManager getPlayerGlowManager() {
         return playerGlowManager;
+    }
+
+    public CreatingInventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(CreatingInventory inventory) {
+        this.inventory = inventory;
     }
 }

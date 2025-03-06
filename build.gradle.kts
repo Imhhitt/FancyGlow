@@ -15,6 +15,7 @@ repositories {
 
     maven("https://jitpack.io/")
     maven("https://libraries.minecraft.net/")
+    maven("https://repo.panda-lang.org/releases/")
     maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-releases/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
@@ -31,9 +32,8 @@ dependencies {
 
     zap(libs.net.kyori.adventure.api)
     zap(libs.org.bstats.bstats.bukkit)
+    zap(libs.dev.rollczi.litecommands)
     zap(libs.dev.dejvokep.boosted.yaml)
-    zap(libs.io.github.revxrsal.lamp.common)
-    zap(libs.io.github.revxrsal.lamp.bukkit)
     zap(libs.net.kyori.adventure.platform.bukkit)
     zap(libs.net.kyori.adventure.text.minimessage)
 }
