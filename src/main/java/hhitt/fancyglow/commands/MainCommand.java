@@ -13,7 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.util.List;
 
 @Command(name = "glow", aliases = "fancyglow")
 @Description("Main command for FancyGlow")
@@ -35,8 +34,7 @@ public class MainCommand {
         if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) return;
 
         // Prevent command usage in target worlds
-        List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
-        if (noAllowedWorlds.contains(player.getWorld().getName())) {
+        if (!glowManager.isAllowedWorld(player.getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
             return;
         }

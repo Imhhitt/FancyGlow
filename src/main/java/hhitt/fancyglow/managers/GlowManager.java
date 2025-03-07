@@ -215,4 +215,9 @@ public class GlowManager {
         }
         return teamsList;
     }
+
+    public boolean isAllowedWorld(String worldName) {
+        List<String> noAllowedWorlds = plugin.getConfiguration().getStringList("Disabled_Worlds");
+        return noAllowedWorlds.contains(worldName);
+    }
 }

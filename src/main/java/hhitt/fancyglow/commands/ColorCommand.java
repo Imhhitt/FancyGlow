@@ -34,6 +34,11 @@ public class ColorCommand {
 
     @Execute
     public void colorCommand(@Context Player player, @Arg @Key("available-colors") String colorName) {
+        if (!glowManager.isAllowedWorld(player.getName())) {
+            messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
+            return;
+        }
+
         ChatColor color = ColorUtils.findColor(colorName.toUpperCase());
         if (!(glowManager.hasGlowPermission(player, color) || player.hasPermission("fancyglow.all_colors"))) {
             messageHandler.sendMessage(player, Messages.NO_PERMISSION);
@@ -53,6 +58,11 @@ public class ColorCommand {
     @Execute(name = "rainbow")
     @Permission("fancyglow.rainbow")
     public void colorRainbowCommand(@Context Player player) {
+        if (!glowManager.isAllowedWorld(player.getName())) {
+            messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
+            return;
+        }
+
         if (!plugin.getConfiguration().getBoolean("Flash_Rainbow") && glowManager.isFlashingTaskActive(player)) {
             messageHandler.sendMessage(player, Messages.FLASHING_WITH_RAINBOW);
             return;
@@ -65,6 +75,11 @@ public class ColorCommand {
     @Execute(name = "flashing")
     @Permission("fancyglow.flashing")
     public void colorFlashingCommand(@Context Player player) {
+        if (!glowManager.isAllowedWorld(player.getName())) {
+            messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
+            return;
+        }
+
         if (playerGlowManager.findPlayerTeam(player) == null && glowManager.isFlashingTaskActive(player)) {
             messageHandler.sendMessage(player, Messages.NOT_GLOWING);
             return;
