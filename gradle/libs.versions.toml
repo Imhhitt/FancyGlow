@@ -23,6 +23,7 @@ org-bstats-bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = 
 dev-dejvokep-boosted-yaml = { module = "dev.dejvokep:boosted-yaml", version.ref = "dev-dejvokep-boosted-yaml" }
 com-github-neznamy-tab-api = { module = "com.github.NEZNAMY:TAB-API", version.ref = "com-github-neznamy-tab-api" }
 dev-rollczi-litecommands = { module = "dev.rollczi:litecommands-bukkit", version.ref = "dev-rollczi-litecommands" }
+dev-rollczi-litecommands-adventure = { module = "dev.rollczi:litecommands-adventure-platform", version.ref = "dev-rollczi-litecommands" }
 net-kyori-adventure-platform-bukkit = { module = "net.kyori:adventure-platform-bukkit", version.ref = "net-kyori-adventure-platform-bukkit" }
 net-kyori-adventure-text-minimessage = { module = "net.kyori:adventure-text-minimessage", version.ref = "net-kyori-adventure-text-minimessage" }
 com-github-retrooper-packetevents-spigot = { module = "com.github.retrooper:packetevents-spigot", version.ref = "com-github-retrooper-packetevents-spigot" }
