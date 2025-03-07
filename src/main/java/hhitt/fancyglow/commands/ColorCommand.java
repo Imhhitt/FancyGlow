@@ -34,7 +34,7 @@ public class ColorCommand {
 
     @Execute
     public void colorCommand(@Context Player player, @Arg @Key("available-colors") String colorName) {
-        if (!glowManager.isAllowedWorld(player.getName())) {
+        if (glowManager.isDeniedWorld(player.getWorld().getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
             return;
         }
@@ -58,7 +58,7 @@ public class ColorCommand {
     @Execute(name = "rainbow")
     @Permission("fancyglow.rainbow")
     public void colorRainbowCommand(@Context Player player) {
-        if (!glowManager.isAllowedWorld(player.getName())) {
+        if (glowManager.isDeniedWorld(player.getWorld().getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
             return;
         }
@@ -75,7 +75,7 @@ public class ColorCommand {
     @Execute(name = "flashing")
     @Permission("fancyglow.flashing")
     public void colorFlashingCommand(@Context Player player) {
-        if (!glowManager.isAllowedWorld(player.getName())) {
+        if (glowManager.isDeniedWorld(player.getWorld().getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
             return;
         }

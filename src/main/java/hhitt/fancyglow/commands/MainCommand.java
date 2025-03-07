@@ -34,7 +34,7 @@ public class MainCommand {
         if (!plugin.getConfiguration().getBoolean("Open_Glow_Menu")) return;
 
         // Prevent command usage in target worlds
-        if (!glowManager.isAllowedWorld(player.getName())) {
+        if (glowManager.isDeniedWorld(player.getWorld().getName())) {
             messageHandler.sendMessage(player, Messages.DISABLED_WORLD);
             return;
         }
