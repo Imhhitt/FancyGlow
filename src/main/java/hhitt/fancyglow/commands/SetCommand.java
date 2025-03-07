@@ -36,16 +36,6 @@ public class SetCommand {
 
     @Execute
     @Permission("fancyglow.command.set")
-    public void setCommand(@Context CommandSender sender, @Arg Player target, @Arg @Key("available-colors") String colorName, @Flag(value = "-s") boolean silent) {
-        glowManager.setGlow(target, ColorUtils.findColor(colorName));
-        if (!silent) {
-            messageHandler.sendMessage(target, Messages.ENABLE_GLOW);
-            messageHandler.sendManualMessage(sender, "You have applied the glow color " + colorName + " to " + target.getName());
-        }
-    }
-
-    @Execute
-    @Permission("fancyglow.command.set")
     public void setCommand(@Context CommandSender sender, @Literal("all") String literal, @Arg @Key("available-colors") String colorName, @Flag(value = "-s") boolean silent) {
         for (Player online : Bukkit.getOnlinePlayers()) {
             glowManager.setGlow(online, ColorUtils.findColor(colorName));
@@ -55,6 +45,16 @@ public class SetCommand {
         }
         if (!silent) {
             messageHandler.sendManualMessage(sender, "You have applied the glow color " + colorName + " to everyone.");
+        }
+    }
+
+    @Execute
+    @Permission("fancyglow.command.set")
+    public void setCommand(@Context CommandSender sender, @Arg Player target, @Arg @Key("available-colors") String colorName, @Flag(value = "-s") boolean silent) {
+        glowManager.setGlow(target, ColorUtils.findColor(colorName));
+        if (!silent) {
+            messageHandler.sendMessage(target, Messages.ENABLE_GLOW);
+            messageHandler.sendManualMessage(sender, "You have applied the glow color " + colorName + " to " + target.getName());
         }
     }
 

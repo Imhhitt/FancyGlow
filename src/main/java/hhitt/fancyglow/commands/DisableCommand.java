@@ -39,6 +39,19 @@ public class DisableCommand {
         messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
     }
 
+    @Execute(name = "all")
+    @Permission("fancyglow.command.disable.everyone")
+    public void disableEveryoneCommand(@Context CommandSender sender) {
+
+        // Disable glow for all online players
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            glowManager.removeGlow(player);
+            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
+        });
+
+        messageHandler.sendMessage(sender, Messages.DISABLE_GLOW_EVERYONE);
+    }
+
     @Execute
     @Permission("fancyglow.command.disable.others")
     public void disableOtherCommand(@Context CommandSender sender, @Arg Player target) {
@@ -52,18 +65,5 @@ public class DisableCommand {
         messageHandler.sendMessageBuilder(sender, Messages.DISABLE_GLOW_OTHERS)
                 .placeholder("%player_name%", target.getName())
                 .send();
-    }
-
-    @Execute(name = "all", aliases = "everyone")
-    @Permission("fancyglow.command.disable.everyone")
-    public void disableEveryoneCommand(@Context CommandSender sender) {
-
-        // Disable glow for all online players
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            glowManager.removeGlow(player);
-            messageHandler.sendMessage(player, Messages.DISABLE_GLOW);
-        });
-
-        messageHandler.sendMessage(sender, Messages.DISABLE_GLOW_EVERYONE);
     }
 }
