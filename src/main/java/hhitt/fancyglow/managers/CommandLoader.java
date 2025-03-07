@@ -1,6 +1,7 @@
 package hhitt.fancyglow.managers;
 
 import dev.rollczi.litecommands.LiteCommands;
+import dev.rollczi.litecommands.adventure.bukkit.platform.LiteAdventurePlatformExtension;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
@@ -47,6 +48,10 @@ public final class CommandLoader {
                 .missingPermission(new FancyMissingPermissionHandler(messageHandler))
 
                 .argument(String.class, ArgumentKey.of("available-colors"), new AvailableColorMode(plugin))
+                .extension(new LiteAdventurePlatformExtension<>(plugin.adventure()), config -> config
+                        .miniMessage(true)
+                        .colorizeArgument(false)
+                )
 
                 .build();
     }
