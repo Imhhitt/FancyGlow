@@ -80,7 +80,7 @@ public class ColorCommand {
             return;
         }
 
-        if (playerGlowManager.findPlayerTeam(player) == null && glowManager.isFlashingTaskActive(player)) {
+        if (playerGlowManager.findPlayerTeam(player) == null && !glowManager.isFlashingTaskActive(player)) {
             messageHandler.sendMessage(player, Messages.NOT_GLOWING);
             return;
         }

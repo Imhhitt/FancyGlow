@@ -99,6 +99,7 @@ public class GlowManager {
 
     public void disableFlashing(Player player) {
         flashingPlayerSet.remove(player.getUniqueId());
+        player.setGlowing(true);
     }
 
     public void setGlow(Player player, ChatColor color) {
