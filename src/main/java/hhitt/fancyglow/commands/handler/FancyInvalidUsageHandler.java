@@ -6,6 +6,7 @@ import dev.rollczi.litecommands.invalidusage.InvalidUsageHandler;
 import dev.rollczi.litecommands.invocation.Invocation;
 import dev.rollczi.litecommands.schematic.Schematic;
 import hhitt.fancyglow.utils.MessageHandler;
+import hhitt.fancyglow.utils.Messages;
 import org.bukkit.command.CommandSender;
 
 public class FancyInvalidUsageHandler implements InvalidUsageHandler<CommandSender> {
@@ -21,14 +22,17 @@ public class FancyInvalidUsageHandler implements InvalidUsageHandler<CommandSend
         CommandSender sender = invocation.sender();
         Schematic schematic = result.getSchematic();
 
-        //TODO: Use own messages.
+        messageHandler.sendMessage(sender, Messages.COMMAND_MANAGER_MESSAGE);
+        messageHandler.sendMessage(sender, Messages.COMMAND_MANAGER_HEADER);
+
+        String prefix = messageHandler.getMessage(Messages.COMMAND_MANAGER_PREFIX);
         if (schematic.isOnlyFirst()) {
-            sender.sendMessage(schematic.first());
+            sender.sendMessage(prefix + schematic.first());
             return;
         }
 
         for (String scheme : schematic.all()) {
-            sender.sendMessage(scheme);
+            sender.sendMessage(prefix + scheme);
         }
     }
 }

@@ -13,7 +13,7 @@
 # MiniMessage tool to preview changes: https://webui.advntr.dev/
 
 # DO NOT CHANGE THIS.
-config-version: 5
+config-version: 6
 
 # Should selected glow mode persist when a player leaves the server?
 Persistent_Mode: true
@@ -122,3 +122,9 @@ Inventory:
     Lore:
       - "<#9e8fff>Click to enable flashing mode!</#9e8fff>"
     Texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTFjNTgxYThiNTk3NjkyYjViOTRkM2I4YmViOWM1MmY1Njk5OWQ2MmY3Mzk1NjY4ZmFjNTdhYzk1MmZlNGRjNCJ9fX0="
+
+COMMAND_MANAGER:
+  USAGE:
+    HEADER: "<color:#9042f5> <bold>FancyGlow</bold> <gray>‣ <white><required> [optional]"
+    MESSAGE: "<red>Invalid usage of command!"
+    PREFIX: "<red> "

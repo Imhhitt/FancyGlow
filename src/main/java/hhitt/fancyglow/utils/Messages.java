@@ -58,7 +58,12 @@ public enum Messages {
     RAINBOW_HEAD_LORE("Inventory.Rainbow.Lore"),
     FLASHING_HEAD_NAME("Inventory.Flashing.Name"),
     FLASHING_HEAD_LORE("Inventory.Flashing.Lore"),
-    INVENTORY_TITLE("Inventory.Title");
+    INVENTORY_TITLE("Inventory.Title"),
+
+    // Command Manager
+    COMMAND_MANAGER_HEADER("COMMAND_MANAGER.USAGE.HEADER"),
+    COMMAND_MANAGER_PREFIX("COMMAND_MANAGER.USAGE.PREFIX"),
+    COMMAND_MANAGER_MESSAGE("COMMAND_MANAGER.USAGE.MESSAGE");
 
     private final String path;
 
