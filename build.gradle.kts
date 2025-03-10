@@ -34,6 +34,7 @@ dependencies {
     zap(libs.org.bstats.bstats.bukkit)
     zap(libs.dev.rollczi.litecommands)
     zap(libs.dev.dejvokep.boosted.yaml)
+    zap(libs.dev.rollczi.litecommands.adventure)
     zap(libs.net.kyori.adventure.platform.bukkit)
     zap(libs.net.kyori.adventure.text.minimessage)
 }
